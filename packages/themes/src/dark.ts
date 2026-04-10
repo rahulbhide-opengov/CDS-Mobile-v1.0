@@ -1,81 +1,74 @@
 import { colors, primitive } from '@opengov/cds-tokens'
 
 /**
- * CDS 37 Dark Theme
- *
- * Uses ONLY colors from the CDS palette (primitive tokens).
- * Dark surfaces use the neutral scale inverted; brand colors
- * shift to the lighter variant for sufficient contrast on dark backgrounds.
+ * CDS 37 Dark Theme — from Figma semantic theme (Dark mode)
  */
 export const darkTheme = {
-  // Backgrounds — using CDS neutral scale (inverted)
-  background: primitive.neutral1000,       // #121212
-  backgroundHover: primitive.neutral900,   // #212121
-  backgroundPress: primitive.neutral800,   // #424242
-  backgroundFocus: primitive.neutral900,   // #212121
-  backgroundStrong: primitive.neutral800,  // #424242
+  // Backgrounds — from Figma dark mode background tokens
+  background: primitive.neutral1000,        // #121212
+  backgroundHover: primitive.neutral900,    // #323334
+  backgroundPress: primitive.neutral800,    // #494A4C
+  backgroundFocus: primitive.neutral900,
+  backgroundStrong: primitive.slate900,     // #2B343D — background/secondary dark
   backgroundTransparent: 'transparent',
 
-  // Text colors — using CDS neutral scale
-  color: primitive.neutral50,              // #FAFAFA
-  colorHover: primitive.white,             // #FFFFFF
-  colorPress: primitive.neutral300,        // #E0E0E0
-  colorFocus: primitive.neutral50,         // #FAFAFA
-  colorSecondary: primitive.neutral400,    // #BDBDBD
-  colorTertiary: primitive.neutral500,     // #9E9E9E
-  colorDisabled: primitive.neutral600,     // #757575
+  // Text — from Figma dark mode text tokens
+  color: '#FFFFFF',                         // text/primary dark
+  colorHover: primitive.white,
+  colorPress: primitive.neutral300,
+  colorFocus: '#FFFFFF',
+  colorSecondary: '#FFFFFFB2',              // text/secondary dark (70% white)
+  colorTertiary: '#FFFFFF61',               // text/disabled dark (38% white)
+  colorDisabled: '#FFFFFF61',
 
-  // Border colors — using CDS neutral scale
-  borderColor: primitive.neutral800,       // #424242
-  borderColorHover: primitive.neutral700,  // #616161
-  borderColorFocus: primitive.brandPrimaryLight,  // #7C73FF
-  borderColorPress: primitive.neutral600,  // #757575
-  borderColorDisabled: primitive.neutral800, // #424242
+  // Borders
+  borderColor: primitive.slate800,          // #3F4C58
+  borderColorHover: primitive.slate700,     // #546574
+  borderColorFocus: primitive.blurple200,   // #D4DDFB — primary/main dark
+  borderColorPress: primitive.neutral600,
+  borderColorDisabled: primitive.neutral800,
 
-  // Brand — lighter variant for dark bg contrast
-  brandBackground: primitive.brandPrimaryLight,   // #7C73FF
-  brandBackgroundHover: primitive.brandPrimary,    // #4B3FFF
-  brandBackgroundPress: primitive.brandPrimaryDark, // #19009B
-  brandColor: primitive.white,
+  // Brand — lighter for dark backgrounds (from Figma dark primary)
+  brandBackground: primitive.blurple200,    // #D4DDFB — primary/main dark mode
+  brandBackgroundHover: primitive.blurple400, // #94A8FF — primary/dark dark mode
+  brandBackgroundPress: primitive.brandPrimaryDark,
+  brandColor: '#000000DE',                  // primary/contrastText dark
 
-  // Semantic — Success (CDS green scale)
-  successBackground: primitive.green50,    // #E8F5E9 (very muted on dark)
-  successColor: primitive.green500,        // #4CAF50
-  successBorderColor: primitive.green500,  // #4CAF50
+  // Semantic — from Figma dark mode values
+  successBackground: '#0C130D',             // success/background dark
+  successColor: '#38EE70',                  // success/main dark
+  successBorderColor: primitive.green500,
 
-  // Semantic — Error (CDS red scale)
-  errorBackground: primitive.red50,        // #FFF0F0
-  errorColor: primitive.red500,            // #FF3333
-  errorBorderColor: primitive.red500,      // #FF3333
+  errorBackground: '#160B0B',               // error/background dark
+  errorColor: primitive.red300,             // #F6B7AE — error/main dark
+  errorBorderColor: primitive.red600,
 
-  // Semantic — Warning (CDS amber scale)
-  warningBackground: primitive.amber50,    // #FFF8E1
-  warningColor: primitive.amber500,        // #FFC107
-  warningBorderColor: primitive.amber500,  // #FFC107
+  warningBackground: '#191207',             // warning/background dark
+  warningColor: '#FBB797',                  // warning/main dark
+  warningBorderColor: primitive.amber500,
 
-  // Semantic — Info (CDS blue scale)
-  infoBackground: primitive.blue50,        // #EBF0FF
-  infoColor: primitive.blue400,            // #4774FF
-  infoBorderColor: primitive.blue500,      // #1E55FF
+  infoBackground: '#071318',               // info/background dark
+  infoColor: primitive.cerulean300,        // #4CDEFA — info/main dark
+  infoBorderColor: primitive.teal500,
 
   // Placeholder & focus
-  placeholderColor: primitive.neutral600,   // #757575
-  outlineColor: primitive.brandPrimaryLight,
-  focusRingColor: primitive.brandPrimaryLight,
+  placeholderColor: '#FFFFFF61',            // text/disabled dark
+  outlineColor: primitive.blurple200,
+  focusRingColor: primitive.blurple200,
 
-  // Selection — using brand primary with opacity
-  selectionBackground: 'rgba(75, 63, 255, 0.12)',
-  selectionBackgroundStrong: 'rgba(75, 63, 255, 0.24)',
+  // Selection
+  selectionBackground: '#FFFFFF14',         // action/hover dark
+  selectionBackgroundStrong: 'rgba(110, 100, 255, 0.24)',
 
   // Shadow
   shadowColor: primitive.black,
 
-  // Icon colors — CDS neutral scale
-  iconDefault: primitive.neutral400,       // #BDBDBD
-  iconSecondary: primitive.neutral500,     // #9E9E9E
-  iconDisabled: primitive.neutral600,      // #757575
-  iconBrand: primitive.brandPrimaryLight,  // #7C73FF
-  iconSuccess: primitive.green500,         // #4CAF50
-  iconError: primitive.red500,             // #FF3333
-  iconWarning: primitive.amber500,         // #FFC107
+  // Icon colors
+  iconDefault: '#FFFFFF8F',                // action/active dark
+  iconSecondary: '#FFFFFFB2',
+  iconDisabled: '#FFFFFF61',
+  iconBrand: primitive.blurple200,
+  iconSuccess: '#38EE70',
+  iconError: primitive.red300,
+  iconWarning: '#FBB797',
 } as const

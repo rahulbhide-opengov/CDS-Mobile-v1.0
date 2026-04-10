@@ -3,21 +3,19 @@ import { primitive } from './primitive'
 /**
  * BORDER RADIUS TOKENS
  *
- * Derived from `primitive.radiusBase` (4px in CDS 37). CDS 37 uses 4px
- * universally for most components, with multiples for larger surfaces
- * like dialogs and bottom sheets.
+ * Matches CDS 37 Figma exactly:
+ *   none=0, small=4, medium=8, large=12, xlarge=16, circular=400
  *
- * All values scale proportionally when `radiusBase` is overridden in a
- * white-label brand configuration.
+ * Note: Figma uses "circular: 400" for pill shapes but we use 9999
+ * which is the standard React Native approach for full rounding.
  */
 export const radii = {
   none: 0,
-  sm: primitive.radiusBase / 2, // 2px
-  md: primitive.radiusBase, // 4px -- CDS 37 default
-  lg: primitive.radiusBase * 2, // 8px -- dialogs, cards
-  xl: primitive.radiusBase * 3, // 12px -- bottom sheets
-  '2xl': primitive.radiusBase * 4, // 16px -- bottom sheet top corners
-  full: 9999, // Pill / circle
+  sm: primitive.radiusBase,         // 4px — Figma "small"
+  md: primitive.radiusBase * 2,     // 8px — Figma "medium"
+  lg: primitive.radiusBase * 3,     // 12px — Figma "large"
+  xl: primitive.radiusBase * 4,     // 16px — Figma "xlarge"
+  full: 9999,                       // Pill / circle (Figma uses 400 but RN needs 9999)
 } as const
 
 export type RadiusToken = keyof typeof radii

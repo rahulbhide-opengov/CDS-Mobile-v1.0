@@ -120,17 +120,17 @@ const ButtonFrame = styled(Pressable, {
       sm: {
         paddingHorizontal: 8,
         paddingVertical: 4,
-        minHeight: 32,
+        minHeight: 28,   // CDS 37 Figma: Small = 28px
       },
       md: {
-        paddingHorizontal: 16,
-        paddingVertical: 8,
-        minHeight: 40,
+        paddingHorizontal: 12,
+        paddingVertical: 4,
+        minHeight: 32,   // CDS 37 Figma: Medium = 32px
       },
       lg: {
-        paddingHorizontal: 24,
-        paddingVertical: 12,
-        minHeight: 48,
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        minHeight: 40,   // CDS 37 Figma: Large = 40px
       },
     },
 
