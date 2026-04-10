@@ -86,42 +86,49 @@ export function createCdsConfig(brandOverrides?: BrandConfig) {
 
       // Semantic tokens (Layer 2) -- background
       bgDefault: s.bgDefault,
-      bgPaper: s.bgPaper,
-      bgStrong: s.bgStrong,
-      bgInverse: s.bgInverse,
+      bgPaper: s.bgPaperElevation0,
+      bgStrong: s.bgTertiary,
+      bgInverse: p.gray900,
 
       // Semantic tokens (Layer 2) -- text
       textPrimary: s.textPrimary,
       textSecondary: s.textSecondary,
       textDisabled: s.textDisabled,
-      textInverse: s.textInverse,
+      textInverse: p.white,
 
-      // Semantic tokens (Layer 2) -- brand
-      brandMain: s.brandMain,
-      brandDark: s.brandDark,
-      brandLight: s.brandLight,
-      brandContrastText: s.brandContrastText,
+      // Semantic tokens (Layer 2) -- brand / primary
+      brandMain: s.primaryMain,
+      brandDark: s.primaryDark,
+      brandLight: s.primaryLight,
+      brandContrastText: s.primaryContrastText,
+      secondaryMain: s.secondaryMain,
+      secondaryDark: s.secondaryDark,
 
       // Semantic tokens (Layer 2) -- status
       errorMain: s.errorMain,
       errorLight: s.errorLight,
       errorDark: s.errorDark,
+      errorColor: s.errorColor,
+      errorBackground: s.errorBackground,
       successMain: s.successMain,
       successLight: s.successLight,
       successDark: s.successDark,
+      successBackground: s.successBackground,
       warningMain: s.warningMain,
       warningLight: s.warningLight,
       warningDark: s.warningDark,
+      warningBackground: s.warningBackground,
       infoMain: s.infoMain,
       infoLight: s.infoLight,
       infoDark: s.infoDark,
+      infoBackground: s.infoBackground,
 
       // Semantic tokens (Layer 2) -- borders
-      borderDefault: s.borderDefault,
-      borderStrong: s.borderStrong,
-      borderFocus: s.borderFocus,
-      borderError: s.borderError,
-      borderDisabled: s.borderDisabled,
+      borderDefault: s.outlinedEnabledBorder,
+      borderStrong: s.standardEnabledBorder,
+      borderFocus: s.primaryMain,
+      borderError: s.errorMain,
+      borderDisabled: s.actionDisabledBackground,
       divider: s.divider,
 
       // Semantic tokens (Layer 2) -- action states
@@ -129,21 +136,30 @@ export function createCdsConfig(brandOverrides?: BrandConfig) {
       actionFocus: s.actionFocus,
       actionSelected: s.actionSelected,
       actionDisabled: s.actionDisabled,
+      actionActive: s.actionActive,
+      actionDisabledBackground: s.actionDisabledBackground,
+
+      // Component-specific semantic tokens
+      snackbarFill: s.snackbarFill,
+      tooltipFill: s.tooltipFill,
+      chipDefaultEnabledBorder: s.chipDefaultEnabledBorder,
+      avatarFill: s.avatarFill,
+      backdropFill: s.backdropFill,
 
       // Semantic tokens -- legacy aliases for backwards compatibility
-      focusRing: s.borderFocus,
+      focusRing: s.primaryMain,
       textDefault: s.textPrimary,
       surfaceDefault: s.bgDefault,
-      surfaceRaised: s.bgPaper,
-      borderSubtle: s.borderDefault,
+      surfaceRaised: s.bgPaperElevation0,
+      borderSubtle: s.outlinedEnabledBorder,
       statusSuccess: s.successMain,
       statusWarning: s.warningMain,
       statusError: s.errorMain,
       statusInfo: s.infoMain,
-      interactivePrimary: s.brandMain,
-      interactivePrimaryBg: s.brandMain,
-      interactivePrimaryPressed: s.brandDark,
-      interactivePrimaryHover: s.brandLight,
+      interactivePrimary: s.primaryMain,
+      interactivePrimaryBg: s.primaryMain,
+      interactivePrimaryPressed: s.primaryDark,
+      interactivePrimaryHover: s.primaryLight,
 
       // Component tokens (Layer 3) -- button
       buttonPrimaryBg: ct.buttonPrimaryBg,

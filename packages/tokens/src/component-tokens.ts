@@ -2,13 +2,11 @@ import { primitive, type PrimitiveTokens } from './primitive'
 import { semantic, createSemanticTokens, type SemanticTokens } from './semantic'
 
 /**
- * COMPONENT TOKENS -- Per-component design decisions
+ * COMPONENT TOKENS -- Per-component design decisions (Layer 3)
  *
- * Layer 3 of the three-layer token architecture. All values sourced from
- * CDS 37 Figma component inspection (April 2026).
- *
- * Button node: 17621:64726
- * TextField node: 14866:130693
+ * All values sourced from CDS 37 Figma component inspection.
+ * References semantic tokens (s.*) for theme-aware values and
+ * primitive tokens (p.*) for raw palette/scale values.
  */
 export function createComponentTokens(
   s: SemanticTokens = semantic,
@@ -16,14 +14,11 @@ export function createComponentTokens(
 ) {
   return {
     // -------------------------------------------------------------------------
-    // Button (from Figma: 7 types × 3 states × 3 sizes)
+    // Button (Figma node: 17621:64726)
+    // Sizes: Small=28, Medium=32, Large=40
     // -------------------------------------------------------------------------
-    buttonRadius: p.radiusBase, // 4px — confirmed in Figma
+    buttonRadius: p.radiusBase, // 4px
 
-    // Button sizes from Figma:
-    //   Small:  h=28, padding 4/8,  gap 4, fontSize 12
-    //   Medium: h=32, padding 4/12, gap 4, fontSize 14
-    //   Large:  h=40, padding 8/16, gap 8, fontSize 16
     buttonSmHeight: 28,
     buttonSmPaddingH: 8,
     buttonSmPaddingV: 4,
@@ -39,56 +34,52 @@ export function createComponentTokens(
     buttonGap: 4,
 
     // Primary: filled blurple
-    buttonPrimaryBg: s.brandMain,           // #4B3FFF
-    buttonPrimaryText: s.brandContrastText, // #FFFFFF
-    buttonPrimaryHoverBg: s.brandDark,      // #19009B
+    buttonPrimaryBg: s.primaryMain,
+    buttonPrimaryText: s.primaryContrastText,
+    buttonPrimaryHoverBg: s.primaryDark,
 
     // Secondary: outlined blurple
     buttonSecondaryBg: 'transparent',
-    buttonSecondaryText: s.brandMain,       // #4B3FFF
-    buttonSecondaryBorder: s.brandMain,     // #4B3FFF border
-    buttonSecondaryHoverBg: p.blurple100,   // #EEF1FC
-    buttonSecondaryHoverText: s.brandDark,  // #19009B
+    buttonSecondaryText: s.primaryMain,
+    buttonSecondaryBorder: s.primaryMain,
+    buttonSecondaryHoverBg: p.blurple100,
+    buttonSecondaryHoverText: s.primaryDark,
 
     // Tertiary: outlined slate
-    buttonTertiaryText: p.slate700,         // #546574
-    buttonTertiaryBorder: p.slate700,       // #546574
-    buttonTertiaryHoverBg: p.neutral100,    // #F2F2F2
+    buttonTertiaryText: s.secondaryMain,
+    buttonTertiaryBorder: s.secondaryMain,
+    buttonTertiaryHoverBg: p.gray100,
 
     // Destructive: filled red
-    buttonDestructiveBg: p.red600,          // #D33423
-    buttonDestructiveText: p.white,
-    buttonDestructiveHoverBg: p.red700,     // #B12525
+    buttonDestructiveBg: s.errorMain,
+    buttonDestructiveText: s.errorContrastText,
+    buttonDestructiveHoverBg: s.errorDark,
 
     // Destructive-alt: text red
-    buttonDestructiveAltText: p.red600,     // #D33423
-    buttonDestructiveAltHoverBg: p.red700,  // #B12525
-    buttonDestructiveAltHoverText: p.white,
+    buttonDestructiveAltText: s.errorMain,
+    buttonDestructiveAltHoverBg: s.errorDark,
+    buttonDestructiveAltHoverText: s.errorContrastText,
 
-    // Disabled: 38% opacity on primary
-    buttonDisabledBg: s.bgStrong,
+    // Disabled
+    buttonDisabledBg: s.actionDisabledBackground,
     buttonDisabledText: s.textDisabled,
 
     // -------------------------------------------------------------------------
-    // TextField (from Figma: 7 states × 3 sizes)
+    // TextField (Figma node: 14866:130693)
     // -------------------------------------------------------------------------
-    textFieldRadius: p.radiusBase, // 4px
-    textFieldBorderDefault: p.slate700,    // #546574 — Figma input border
-    textFieldBorderFocus: s.brandMain,     // #4B3FFF
-    textFieldBorderError: p.red600,        // #D33423
-    textFieldBorderSuccess: p.green700,    // #037730
-    textFieldBg: s.bgDefault,              // #FFFFFF
-    textFieldDisabledBg: p.neutral100,     // #F2F2F2
-    textFieldLabelColor: 'rgba(0, 0, 0, 0.87)',  // text/primary
-    textFieldValueColor: 'rgba(0, 0, 0, 0.87)',   // filled
-    textFieldPlaceholderColor: 'rgba(0, 0, 0, 0.6)', // text/secondary
-    textFieldHelperColor: 'rgba(0, 0, 0, 0.6)',
-    textFieldErrorTextColor: p.red700,     // #B12525
+    textFieldRadius: p.radiusBase,
+    textFieldBorderDefault: s.secondaryMain,     // slate700
+    textFieldBorderFocus: s.primaryMain,         // blurple700
+    textFieldBorderError: s.errorMain,           // red600
+    textFieldBorderSuccess: s.successMain,       // green700
+    textFieldBg: s.bgDefault,
+    textFieldDisabledBg: s.bgTertiary,
+    textFieldLabelColor: s.textPrimary,
+    textFieldValueColor: s.textPrimary,
+    textFieldPlaceholderColor: s.textSecondary,
+    textFieldHelperColor: s.textSecondary,
+    textFieldErrorTextColor: s.errorColor,
 
-    // TextField sizes from Figma:
-    //   Small:  inputH=28, padding 4/12/4/8
-    //   Medium: inputH=32, padding 4/12/4/8
-    //   Large:  inputH=40, padding 4/12/4/12
     textFieldSmHeight: 28,
     textFieldMdHeight: 32,
     textFieldLgHeight: 40,
@@ -96,50 +87,53 @@ export function createComponentTokens(
     // -------------------------------------------------------------------------
     // Card
     // -------------------------------------------------------------------------
-    cardRadius: p.radiusBase * 2, // 8px (medium in Figma radii)
+    cardRadius: p.radiusBase * 2, // 8px
     cardBg: s.bgDefault,
-    cardBorder: s.borderDefault,
+    cardBorder: s.outlinedEnabledBorder,
 
     // -------------------------------------------------------------------------
-    // Chip (same height scale as buttons)
+    // Chip
     // -------------------------------------------------------------------------
-    chipRadius: p.radiusBase, // 4px
+    chipRadius: p.radiusBase,
     chipGap: 4,
     chipSmHeight: 28,
     chipMdHeight: 32,
     chipLgHeight: 40,
+    chipDefaultBorder: s.chipDefaultEnabledBorder,
+    chipDefaultHoverFill: s.chipDefaultHoverFill,
+    chipDefaultFocusFill: s.chipDefaultFocusFill,
 
     // -------------------------------------------------------------------------
     // Dialog
     // -------------------------------------------------------------------------
-    dialogRadius: 8,  // Figma medium radius
+    dialogRadius: 8,
     dialogBg: s.bgDefault,
 
     // -------------------------------------------------------------------------
     // BottomSheet
     // -------------------------------------------------------------------------
-    bottomSheetRadius: 16, // Figma xlarge radius
-    bottomSheetHandleColor: p.neutral300,
+    bottomSheetRadius: 16,
+    bottomSheetHandleColor: p.gray300,
 
     // -------------------------------------------------------------------------
     // Navigation
     // -------------------------------------------------------------------------
     navBarBg: s.bgDefault,
     navBarBorder: s.divider,
-    navBarActiveColor: s.brandMain,
-    navBarInactiveColor: p.neutral500,
+    navBarActiveColor: s.primaryMain,
+    navBarInactiveColor: s.actionActive,
 
     // -------------------------------------------------------------------------
-    // Focus ring (accessibility)
+    // Focus ring
     // -------------------------------------------------------------------------
-    focusRingColor: s.brandMain,
+    focusRingColor: s.primaryStatesFocusVisible,
     focusRingWidth: 2,
 
     // -------------------------------------------------------------------------
-    // Touch targets (WCAG 2.5.8 / Apple HIG / Material Design 3)
+    // Touch targets
     // -------------------------------------------------------------------------
-    touchTargetMin: 44, // iOS HIG + WCAG AAA
-    touchTargetMd3: 48, // Material Design 3
+    touchTargetMin: 44,
+    touchTargetMd3: 48,
   } as const
 }
 
