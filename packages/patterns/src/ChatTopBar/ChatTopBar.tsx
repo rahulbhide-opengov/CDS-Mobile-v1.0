@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, HStack, VStack, Pressable } from '@opengov/cds-primitives'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -15,13 +16,13 @@ const ONLINE_DOT_SIZE = 8
 
 const TopBarFrame = styled(HStack, {
   name: 'ChatTopBar',
-  backgroundColor: '#FFFFFF',
+  backgroundColor: colors.white,
   paddingHorizontal: '$4',
   paddingVertical: '$2',
   alignItems: 'center',
   minHeight: TOP_BAR_HEIGHT,
   borderBottomWidth: 1,
-  borderBottomColor: '#EEEEEE', // neutral200
+  borderBottomColor: colors.neutral200,
   gap: '$3',
 })
 
@@ -38,7 +39,7 @@ const BackArrow = React.memo(function BackArrow() {
         height={10}
         borderLeftWidth={2}
         borderBottomWidth={2}
-        borderColor="#4B3FFF"
+        borderColor={colors.primary}
         transform={[{ rotate: '45deg' }]}
         marginLeft={4}
       />
@@ -56,9 +57,9 @@ const OnlineDot = React.memo(function OnlineDot({ online }: { online: boolean })
       width={ONLINE_DOT_SIZE}
       height={ONLINE_DOT_SIZE}
       borderRadius={ONLINE_DOT_SIZE / 2}
-      backgroundColor={online ? '#4CAF50' : '#BDBDBD'} // jade500 : neutral400
+      backgroundColor={online ? colors.jade500 : colors.neutral400}
       borderWidth={1.5}
-      borderColor="#FFFFFF"
+      borderColor={colors.white}
       position="absolute"
       bottom={0}
       right={0}
@@ -149,7 +150,7 @@ export function ChatTopBar({
         <Text
           variant="h5"
           numberOfLines={1}
-          color="#212121" // neutral1000
+          color={colors.neutral900}
         >
           {title}
         </Text>
@@ -161,12 +162,12 @@ export function ChatTopBar({
                 width={6}
                 height={6}
                 borderRadius={3}
-                backgroundColor={online ? '#4CAF50' : '#BDBDBD'}
+                backgroundColor={online ? colors.jade500 : colors.neutral400}
               />
             )}
             <Text
               variant="caption"
-              color="#9E9E9E" // neutral500
+              color={colors.neutral500}
               numberOfLines={1}
             >
               {resolvedSubtitle}

@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
 import { styled, type GetProps } from '@tamagui/core'
 import { Pressable } from '@opengov/cds-primitives'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // IconButtonFrame -- circular icon-only button with all 7 CDS 37 variants
@@ -16,7 +17,7 @@ const IconButtonFrame = styled(Pressable, {
   // Focus ring
   focusStyle: {
     outlineWidth: 2,
-    outlineColor: '#4B3FFF',
+    outlineColor: colors.primary,
     outlineStyle: 'solid',
     outlineOffset: 2,
   },
@@ -87,10 +88,10 @@ const IconButtonFrame = styled(Pressable, {
       destructive: {
         backgroundColor: '$errorColor',
         pressStyle: {
-          backgroundColor: '#661414',
+          backgroundColor: colors.red800,
         },
         hoverStyle: {
-          backgroundColor: '#991F1F',
+          backgroundColor: colors.red700,
         },
       },
 
@@ -99,11 +100,11 @@ const IconButtonFrame = styled(Pressable, {
         borderWidth: 1,
         borderColor: '$errorColor',
         pressStyle: {
-          backgroundColor: '#FFD6D6',
+          backgroundColor: colors.red100,
           borderColor: '$errorColor',
         },
         hoverStyle: {
-          backgroundColor: '#FFF0F0',
+          backgroundColor: colors.red50,
           borderColor: '$errorColor',
         },
       },

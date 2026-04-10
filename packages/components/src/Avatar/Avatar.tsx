@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react'
 import { Image } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text } from '@opengov/cds-primitives'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Size configuration
@@ -58,16 +59,16 @@ const SHAPE_RADIUS: Record<AvatarShape, number> = {
 // ---------------------------------------------------------------------------
 
 const AVATAR_PALETTE = [
-  '#4B3FFF', // primary
-  '#1E55FF', // ogBlue500
-  '#009688', // teal500
-  '#4CAF50', // jade500
-  '#FFC107', // amber500
-  '#E91E63', // rose500
-  '#9C27B0', // port500
-  '#FF5722', // dataSeries16
-  '#3F51B5', // dataSeries12
-  '#00796B', // teal700
+  colors.primary, // primary
+  primitive.blue500, // ogBlue500
+  primitive.teal500, // teal500
+  colors.jade500, // jade500
+  colors.amber500, // amber500
+  primitive.rose500, // rose500
+  primitive.port500, // port500
+  primitive.dataSeries16, // dataSeries16
+  primitive.dataSeries12, // dataSeries12
+  primitive.teal700, // teal700
 ]
 
 function hashName(name: string): number {
@@ -85,9 +86,9 @@ function hashName(name: string): number {
 type StatusType = 'online' | 'offline' | 'busy'
 
 const STATUS_COLORS: Record<StatusType, string> = {
-  online: '#4CAF50', // jade500
-  offline: '#9E9E9E', // neutral500
-  busy: '#CC2929', // red600
+  online: colors.jade500, // jade500
+  offline: primitive.neutral500, // neutral500
+  busy: colors.red600, // red600
 }
 
 const STATUS_LABELS: Record<StatusType, string> = {

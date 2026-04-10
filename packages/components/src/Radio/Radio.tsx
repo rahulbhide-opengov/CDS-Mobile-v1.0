@@ -2,6 +2,7 @@ import React, { useCallback, useRef } from 'react'
 import { Animated, Easing } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, HStack } from '@opengov/cds-primitives'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Size maps
@@ -100,8 +101,8 @@ export function Radio({
   }, [disabled, onSelect])
 
   // ---- Derived styles -------------------------------------------------------
-  const borderColor = selected ? '#4B3FFF' : '#BDBDBD' // primary / neutral400
-  const dotColor = '#4B3FFF' // primary
+  const borderColor = selected ? colors.primary : primitive.neutral400 // primary / neutral400
+  const dotColor = colors.primary // primary
 
   // ---- Render ---------------------------------------------------------------
 

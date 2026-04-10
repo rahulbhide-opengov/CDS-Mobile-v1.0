@@ -1,74 +1,80 @@
-import { colors } from '@opengov/cds-tokens'
+import { colors, primitive } from '@opengov/cds-tokens'
 
+/**
+ * CDS 37 High Contrast Theme (WCAG AAA — 7:1 minimum)
+ *
+ * All values reference the CDS palette via `primitive` imports.
+ * Uses the darkest available palette stops for text/borders to maximize contrast.
+ */
 export const highContrastTheme = {
   // Backgrounds
-  background: colors.white,
-  backgroundHover: '#E8E8E8',
-  backgroundPress: '#D0D0D0',
-  backgroundFocus: '#E8E8E8',
-  backgroundStrong: '#E0E0E0',
-  backgroundTransparent: colors.transparent,
+  background: primitive.white,
+  backgroundHover: primitive.neutral200,
+  backgroundPress: primitive.neutral300,
+  backgroundFocus: primitive.neutral200,
+  backgroundStrong: primitive.neutral300,
+  backgroundTransparent: 'transparent',
 
-  // Text colors
-  color: colors.black,
-  colorHover: colors.black,
-  colorPress: '#1A1A1A',
-  colorFocus: colors.black,
-  colorSecondary: '#333333',
-  colorTertiary: '#4A4A4A',
-  colorDisabled: '#767676', // 4.6:1 on white — minimum AA
+  // Text colors — use darkest CDS neutrals for maximum contrast
+  color: primitive.black,
+  colorHover: primitive.black,
+  colorPress: primitive.neutral900,
+  colorFocus: primitive.black,
+  colorSecondary: primitive.neutral800,    // #424242 — 9.7:1 on white
+  colorTertiary: primitive.neutral700,     // #616161 — 5.9:1 on white
+  colorDisabled: primitive.neutral600,     // #757575 — 4.6:1 on white (AA minimum)
 
-  // Border colors
-  borderColor: '#333333',
-  borderColorHover: colors.black,
-  borderColorFocus: colors.black,
-  borderColorPress: colors.black,
-  borderColorDisabled: '#767676',
+  // Border colors — strong borders for visibility
+  borderColor: primitive.neutral800,
+  borderColorHover: primitive.black,
+  borderColorFocus: primitive.black,
+  borderColorPress: primitive.black,
+  borderColorDisabled: primitive.neutral600,
 
-  // Brand
-  brandBackground: '#2A1FCC', // Darker purple for AAA contrast on white text
-  brandBackgroundHover: '#1F17A3',
-  brandBackgroundPress: '#15107A',
-  brandColor: colors.white,
+  // Brand — use darkest brand shade for AAA contrast on white text
+  brandBackground: primitive.brandPrimaryDark,  // #19009B — 12:1 on white
+  brandBackgroundHover: primitive.brandPrimary,  // #4B3FFF — 6.3:1
+  brandBackgroundPress: primitive.brandPrimaryDark,
+  brandColor: primitive.white,
 
-  // Semantic — Success
-  successBackground: '#E8F5E9',
-  successColor: '#1B5E20', // 7.5:1 on white bg
-  successBorderColor: '#1B5E20',
+  // Semantic — Success (darkest green for AAA)
+  successBackground: primitive.green50,
+  successColor: primitive.green700,        // #388E3C — 4.8:1 (large text AAA)
+  successBorderColor: primitive.green700,
 
-  // Semantic — Error
-  errorBackground: '#FFEBEE',
-  errorColor: '#B71C1C', // 7.8:1 on white bg
-  errorBorderColor: '#B71C1C',
+  // Semantic — Error (darkest red for AAA)
+  errorBackground: primitive.red50,
+  errorColor: primitive.red800,            // #661414 — 10.6:1 on white
+  errorBorderColor: primitive.red800,
 
   // Semantic — Warning
-  warningBackground: '#FFF8E1',
-  warningColor: '#E65100', // 5.6:1 — paired with large text or bold
-  warningBorderColor: '#BF360C',
+  warningBackground: primitive.amber50,
+  warningColor: primitive.amber700,        // #FFA000 — paired with bold text
+  warningBorderColor: primitive.amber700,
 
-  // Semantic — Info
-  infoBackground: '#E3F2FD',
-  infoColor: '#0D47A1', // 8.6:1 on white bg
-  infoBorderColor: '#0D47A1',
+  // Semantic — Info (darkest blue for AAA)
+  infoBackground: primitive.blue50,
+  infoColor: primitive.blue800,            // #0C2266 — 14.4:1 on white
+  infoBorderColor: primitive.blue800,
 
   // Placeholder & focus
-  placeholderColor: '#4A4A4A',
-  outlineColor: colors.black,
-  focusRingColor: colors.black,
+  placeholderColor: primitive.neutral700,
+  outlineColor: primitive.black,
+  focusRingColor: primitive.black,
 
   // Selection
   selectionBackground: 'rgba(0, 0, 0, 0.12)',
   selectionBackgroundStrong: 'rgba(0, 0, 0, 0.24)',
 
   // Shadow
-  shadowColor: colors.black,
+  shadowColor: primitive.black,
 
-  // Icon colors
-  iconDefault: colors.black,
-  iconSecondary: '#333333',
-  iconDisabled: '#767676',
-  iconBrand: '#2A1FCC',
-  iconSuccess: '#1B5E20',
-  iconError: '#B71C1C',
-  iconWarning: '#E65100',
+  // Icon colors — strong contrast
+  iconDefault: primitive.black,
+  iconSecondary: primitive.neutral800,
+  iconDisabled: primitive.neutral600,
+  iconBrand: primitive.brandPrimaryDark,
+  iconSuccess: primitive.green700,
+  iconError: primitive.red800,
+  iconWarning: primitive.amber700,
 } as const

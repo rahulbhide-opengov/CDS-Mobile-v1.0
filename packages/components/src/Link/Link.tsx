@@ -3,6 +3,7 @@ import { Linking, Platform } from 'react-native'
 import { styled, Stack, useTheme, type GetProps } from '@tamagui/core'
 import { Pressable, Text, HStack } from '@opengov/cds-primitives'
 import Svg, { Path } from 'react-native-svg'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Styled text frame for the link label
@@ -148,12 +149,12 @@ export function Link({
 
   // Resolve the icon tint to match the current text color
   const iconColor = disabled
-    ? (theme.colorDisabled?.val as string) ?? '#BDBDBD'
+    ? (theme.colorDisabled?.val as string) ?? primitive.neutral400
     : variant === 'default'
-      ? (theme.brandBackground?.val as string) ?? '#4B3FFF'
+      ? (theme.brandBackground?.val as string) ?? colors.primary
       : variant === 'subtle'
-        ? (theme.colorSecondary?.val as string) ?? '#9E9E9E'
-        : (theme.color?.val as string) ?? '#212121'
+        ? (theme.colorSecondary?.val as string) ?? primitive.neutral500
+        : (theme.color?.val as string) ?? primitive.neutral900
 
   const handlePress = useCallback(() => {
     if (disabled) return

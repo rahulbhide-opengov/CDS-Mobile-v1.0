@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef } from 'react'
 import { Animated, Easing } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, HStack } from '@opengov/cds-primitives'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Size maps
@@ -101,8 +102,8 @@ export function Switch({
   const trackBackgroundColor = toggleAnim.interpolate({
     inputRange: [0, 1],
     outputRange: [
-      '#E0E0E0', // neutral300 -- off track
-      '#4B3FFF', // primary -- on track
+      primitive.neutral300, // neutral300 -- off track
+      colors.primary, // primary -- on track
     ],
   })
 
@@ -151,9 +152,9 @@ export function Switch({
               width: dims.thumbSize,
               height: dims.thumbSize,
               borderRadius: dims.thumbSize / 2,
-              backgroundColor: '#FFFFFF',
+              backgroundColor: colors.white,
               // Subtle shadow for depth
-              shadowColor: '#000000',
+              shadowColor: colors.black,
               shadowOffset: { width: 0, height: 1 },
               shadowOpacity: 0.2,
               shadowRadius: 2,

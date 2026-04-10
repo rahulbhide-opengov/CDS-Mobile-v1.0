@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react'
 import { ScrollView, RefreshControl, View } from 'react-native'
+import { colors } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -26,7 +27,7 @@ export interface PullToRefreshProps {
 // Constants
 // ---------------------------------------------------------------------------
 
-const DEFAULT_TINT_COLOR = '#4B3FFF' // CDS primary
+const DEFAULT_TINT_COLOR = colors.primary // CDS primary
 
 // ---------------------------------------------------------------------------
 // PullToRefresh component

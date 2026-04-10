@@ -1,74 +1,81 @@
-import { colors } from '@opengov/cds-tokens'
+import { colors, primitive } from '@opengov/cds-tokens'
 
+/**
+ * CDS 37 Dark Theme
+ *
+ * Uses ONLY colors from the CDS palette (primitive tokens).
+ * Dark surfaces use the neutral scale inverted; brand colors
+ * shift to the lighter variant for sufficient contrast on dark backgrounds.
+ */
 export const darkTheme = {
-  // Backgrounds
-  background: '#121212',
-  backgroundHover: '#1E1E1E',
-  backgroundPress: '#2C2C2C',
-  backgroundFocus: '#1E1E1E',
-  backgroundStrong: '#2C2C2C',
+  // Backgrounds — using CDS neutral scale (inverted)
+  background: primitive.neutral1000,       // #121212
+  backgroundHover: primitive.neutral900,   // #212121
+  backgroundPress: primitive.neutral800,   // #424242
+  backgroundFocus: primitive.neutral900,   // #212121
+  backgroundStrong: primitive.neutral800,  // #424242
   backgroundTransparent: 'transparent',
 
-  // Text colors
-  color: '#FAFAFA',
-  colorHover: colors.white,
-  colorPress: '#E0E0E0',
-  colorFocus: '#FAFAFA',
-  colorSecondary: '#B0B0B0',
-  colorTertiary: '#808080',
-  colorDisabled: '#606060',
+  // Text colors — using CDS neutral scale
+  color: primitive.neutral50,              // #FAFAFA
+  colorHover: primitive.white,             // #FFFFFF
+  colorPress: primitive.neutral300,        // #E0E0E0
+  colorFocus: primitive.neutral50,         // #FAFAFA
+  colorSecondary: primitive.neutral400,    // #BDBDBD
+  colorTertiary: primitive.neutral500,     // #9E9E9E
+  colorDisabled: primitive.neutral600,     // #757575
 
-  // Border colors
-  borderColor: '#333333',
-  borderColorHover: '#444444',
-  borderColorFocus: colors.primaryLight,
-  borderColorPress: '#555555',
-  borderColorDisabled: '#2C2C2C',
+  // Border colors — using CDS neutral scale
+  borderColor: primitive.neutral800,       // #424242
+  borderColorHover: primitive.neutral700,  // #616161
+  borderColorFocus: primitive.brandPrimaryLight,  // #7C73FF
+  borderColorPress: primitive.neutral600,  // #757575
+  borderColorDisabled: primitive.neutral800, // #424242
 
-  // Brand
-  brandBackground: colors.primaryLight,
-  brandBackgroundHover: colors.primary,
-  brandBackgroundPress: '#8A82FF',
-  brandColor: colors.white,
+  // Brand — lighter variant for dark bg contrast
+  brandBackground: primitive.brandPrimaryLight,   // #7C73FF
+  brandBackgroundHover: primitive.brandPrimary,    // #4B3FFF
+  brandBackgroundPress: primitive.brandPrimaryDark, // #19009B
+  brandColor: primitive.white,
 
-  // Semantic — Success
-  successBackground: '#1B3A1B',
-  successColor: '#81C784',
-  successBorderColor: '#4CAF50',
+  // Semantic — Success (CDS green scale)
+  successBackground: primitive.green50,    // #E8F5E9 (very muted on dark)
+  successColor: primitive.green500,        // #4CAF50
+  successBorderColor: primitive.green500,  // #4CAF50
 
-  // Semantic — Error
-  errorBackground: '#3A1B1B',
-  errorColor: '#EF9A9A',
-  errorBorderColor: '#EF5350',
+  // Semantic — Error (CDS red scale)
+  errorBackground: primitive.red50,        // #FFF0F0
+  errorColor: primitive.red500,            // #FF3333
+  errorBorderColor: primitive.red500,      // #FF3333
 
-  // Semantic — Warning
-  warningBackground: '#3A351B',
-  warningColor: '#FFD54F',
-  warningBorderColor: '#FFB300',
+  // Semantic — Warning (CDS amber scale)
+  warningBackground: primitive.amber50,    // #FFF8E1
+  warningColor: primitive.amber500,        // #FFC107
+  warningBorderColor: primitive.amber500,  // #FFC107
 
-  // Semantic — Info
-  infoBackground: '#1B2A3A',
-  infoColor: '#90CAF9',
-  infoBorderColor: '#42A5F5',
+  // Semantic — Info (CDS blue scale)
+  infoBackground: primitive.blue50,        // #EBF0FF
+  infoColor: primitive.blue400,            // #4774FF
+  infoBorderColor: primitive.blue500,      // #1E55FF
 
   // Placeholder & focus
-  placeholderColor: '#606060',
-  outlineColor: colors.primaryLight,
-  focusRingColor: colors.primaryLight,
+  placeholderColor: primitive.neutral600,   // #757575
+  outlineColor: primitive.brandPrimaryLight,
+  focusRingColor: primitive.brandPrimaryLight,
 
-  // Selection
-  selectionBackground: 'rgba(110, 100, 255, 0.12)',
-  selectionBackgroundStrong: 'rgba(110, 100, 255, 0.24)',
+  // Selection — using brand primary with opacity
+  selectionBackground: 'rgba(75, 63, 255, 0.12)',
+  selectionBackgroundStrong: 'rgba(75, 63, 255, 0.24)',
 
   // Shadow
-  shadowColor: '#000000',
+  shadowColor: primitive.black,
 
-  // Icon colors
-  iconDefault: '#B0B0B0',
-  iconSecondary: '#808080',
-  iconDisabled: '#606060',
-  iconBrand: colors.primaryLight,
-  iconSuccess: '#81C784',
-  iconError: '#EF9A9A',
-  iconWarning: '#FFD54F',
+  // Icon colors — CDS neutral scale
+  iconDefault: primitive.neutral400,       // #BDBDBD
+  iconSecondary: primitive.neutral500,     // #9E9E9E
+  iconDisabled: primitive.neutral600,      // #757575
+  iconBrand: primitive.brandPrimaryLight,  // #7C73FF
+  iconSuccess: primitive.green500,         // #4CAF50
+  iconError: primitive.red500,             // #FF3333
+  iconWarning: primitive.amber500,         // #FFC107
 } as const

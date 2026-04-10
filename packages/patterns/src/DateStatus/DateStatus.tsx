@@ -1,6 +1,7 @@
 import React from 'react'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, HStack, VStack } from '@opengov/cds-primitives'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -20,11 +21,11 @@ interface StatusColorSet {
 }
 
 const STATUS_COLORS: Record<DateStatusType, StatusColorSet> = {
-  positive: { dot: '#4CAF50', text: '#388E3C' },   // jade500, jade700
-  negative: { dot: '#FF3333', text: '#991F1F' },   // red500, red700
-  warning:  { dot: '#FFC107', text: '#FFA000' },   // amber500, amber700
-  info:     { dot: '#1E55FF', text: '#123399' },   // ogBlue500, ogBlue700
-  neutral:  { dot: '#BDBDBD', text: '#616161' },   // neutral400, neutral700
+  positive: { dot: primitive.green500, text: primitive.green700 },   // jade500, jade700
+  negative: { dot: primitive.red500, text: primitive.red700 },   // red500, red700
+  warning:  { dot: primitive.amber500, text: primitive.amber700 },   // amber500, amber700
+  info:     { dot: primitive.blue500, text: primitive.blue700 },   // ogBlue500, ogBlue700
+  neutral:  { dot: primitive.neutral400, text: primitive.neutral700 },   // neutral400, neutral700
 }
 
 // ---------------------------------------------------------------------------
@@ -98,14 +99,14 @@ export function DateStatus({
         {label != null && (
           <Text
             variant="caption"
-            color="#9E9E9E" // neutral500 / colorSecondary
+            color={primitive.neutral500} // neutral500 / colorSecondary
           >
             {label}
           </Text>
         )}
         <Text
           variant="body3"
-          color="#212121" // neutral1000
+          color={primitive.neutral900} // neutral900
         >
           {date}
         </Text>

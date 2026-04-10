@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useMemo } from 'react'
 import { Animated, Easing, View, LayoutChangeEvent } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Size map -- track heights per size variant
@@ -19,14 +20,14 @@ type LinearProgressSize = keyof typeof SIZE_MAP
 // ---------------------------------------------------------------------------
 
 const COLOR_MAP: Record<string, string> = {
-  primary: '#4B3FFF',
-  success: '#388E3C',
-  error: '#CC2929',
-  warning: '#FFA000',
-  neutral: '#9E9E9E',
+  primary: colors.primary,
+  success: colors.jade700,
+  error: colors.red600,
+  warning: colors.amber700,
+  neutral: primitive.neutral500,
 }
 
-const TRACK_COLOR = '#E0E0E0' // neutral300
+const TRACK_COLOR = primitive.neutral300 // neutral300
 
 // ---------------------------------------------------------------------------
 // Types

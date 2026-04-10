@@ -2,6 +2,7 @@ import React from 'react'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Pressable, Text, HStack } from '@opengov/cds-primitives'
 import Svg, { Path } from 'react-native-svg'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Semantic color maps per variant
@@ -17,19 +18,19 @@ interface ChipColorScheme {
 }
 
 const FILLED_COLORS: Record<ChipVariant, ChipColorScheme> = {
-  neutral: { bg: '#F5F5F5', text: '#616161', border: 'transparent' }, // neutral100, neutral700
-  positive: { bg: '#E8F5E9', text: '#388E3C', border: 'transparent' }, // jade50, jade700
-  negative: { bg: '#FFF0F0', text: '#991F1F', border: 'transparent' }, // red50, red700
-  warning: { bg: '#FFF8E1', text: '#FFA000', border: 'transparent' }, // amber50, amber700
-  strong: { bg: '#4B3FFF', text: '#FFFFFF', border: 'transparent' }, // primary, white
+  neutral: { bg: primitive.neutral100, text: primitive.neutral700, border: 'transparent' }, // neutral100, neutral700
+  positive: { bg: colors.jade50, text: colors.jade700, border: 'transparent' }, // jade50, jade700
+  negative: { bg: colors.red50, text: colors.red700, border: 'transparent' }, // red50, red700
+  warning: { bg: primitive.amber50, text: colors.amber700, border: 'transparent' }, // amber50, amber700
+  strong: { bg: colors.primary, text: colors.white, border: 'transparent' }, // primary, white
 }
 
 const OUTLINED_COLORS: Record<ChipVariant, ChipColorScheme> = {
-  neutral: { bg: 'transparent', text: '#616161', border: '#E0E0E0' }, // neutral700, neutral300
-  positive: { bg: 'transparent', text: '#388E3C', border: '#4CAF50' }, // jade700, jade500
-  negative: { bg: 'transparent', text: '#991F1F', border: '#FF3333' }, // red700, red500
-  warning: { bg: 'transparent', text: '#FFA000', border: '#FFC107' }, // amber700, amber500
-  strong: { bg: 'transparent', text: '#4B3FFF', border: '#4B3FFF' }, // primary, primary
+  neutral: { bg: 'transparent', text: primitive.neutral700, border: primitive.neutral300 }, // neutral700, neutral300
+  positive: { bg: 'transparent', text: colors.jade700, border: colors.jade500 }, // jade700, jade500
+  negative: { bg: 'transparent', text: colors.red700, border: primitive.red500 }, // red700, red500
+  warning: { bg: 'transparent', text: colors.amber700, border: colors.amber500 }, // amber700, amber500
+  strong: { bg: 'transparent', text: colors.primary, border: colors.primary }, // primary, primary
 }
 
 // ---------------------------------------------------------------------------
@@ -48,8 +49,8 @@ interface ChipSizeConfig {
 }
 
 const SIZE_CONFIG: Record<ChipSize, ChipSizeConfig> = {
-  sm: { height: 24, paddingH: 8, fontSize: 11, lineHeight: 14, iconSize: 14, gap: 4 },
-  md: { height: 32, paddingH: 12, fontSize: 13, lineHeight: 18, iconSize: 16, gap: 6 },
+  sm: { height: 24, paddingH: 8, fontSize: 12, lineHeight: 14, iconSize: 14, gap: 4 },
+  md: { height: 32, paddingH: 12, fontSize: 14, lineHeight: 18, iconSize: 16, gap: 6 },
   lg: { height: 36, paddingH: 14, fontSize: 14, lineHeight: 20, iconSize: 18, gap: 6 },
 }
 
@@ -146,13 +147,21 @@ export function Chip({
   const resolvedBorder = selected ? 'transparent' : colors.border
 
   // Disabled visual overrides
-  const finalBg = disabled ? '#F5F5F5' : resolvedBg // neutral100
-  const finalText = disabled ? '#BDBDBD' : resolvedText // neutral400
-  const finalBorder = disabled ? '#EEEEEE' : resolvedBorder // neutral200
+  const finalBg = disabled ? primitive.neutral100 : resolvedBg // neutral100
+  const finalText = disabled ? primitive.neutral400 : resolvedText // neutral400
+  const finalBorder = disabled ? primitive.neutral200 : resolvedBorder // neutral200
   const finalOpacity = disabled ? 0.6 : 1
 
   const isPressable = !!onPress && !disabled
   const isClosable = closable && !!onClose && !disabled
+
+  // WCAG touch-target compliance: expand effective touch area to 44pt minimum
+  const hitSlopMap: Record<ChipSize, { top: number; bottom: number; left: number; right: number }> = {
+    sm: { top: 10, bottom: 10, left: 4, right: 4 },  // 24 + 20 = 44
+    md: { top: 6, bottom: 6, left: 4, right: 4 },    // 32 + 12 = 44
+    lg: { top: 4, bottom: 4, left: 4, right: 4 },    // 36 + 8 = 44
+  }
+  const chipHitSlop = hitSlopMap[size]
 
   // The chip body (used in both pressable and static modes)
   const chipContent = (
@@ -199,6 +208,7 @@ export function Chip({
     return (
       <Pressable
         onPress={onPress}
+        hitSlop={chipHitSlop}
         minWidth={0}
         minHeight={0}
         alignSelf="flex-start"

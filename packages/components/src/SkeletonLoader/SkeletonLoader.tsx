@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { Animated, Easing, View, type DimensionValue } from 'react-native'
 import { Stack } from '@tamagui/core'
+import { primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -27,8 +28,8 @@ export interface SkeletonLoaderProps {
 // Constants
 // ---------------------------------------------------------------------------
 
-const BASE_COLOR = '#E0E0E0' // neutral300
-const HIGHLIGHT_COLOR = '#F5F5F5' // neutral100
+const BASE_COLOR = primitive.neutral300 // neutral300
+const HIGHLIGHT_COLOR = primitive.neutral100 // neutral100
 
 const DEFAULT_HEIGHTS: Record<string, number> = {
   text: 16,

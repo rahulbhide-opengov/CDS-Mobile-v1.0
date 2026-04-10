@@ -2,6 +2,7 @@ import React, { useRef, useCallback, useMemo, useState } from 'react'
 import { Animated, PanResponder, View, LayoutChangeEvent, type DimensionValue } from 'react-native'
 import { Stack } from '@tamagui/core'
 import { Text } from '@opengov/cds-primitives'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -13,11 +14,11 @@ const TRACK_HEIGHT = 4
 const ACTIVE_TRACK_HEIGHT = 4
 const VALUE_LABEL_OFFSET = -32 // vertical offset above thumb for the value label
 
-const FILL_COLOR = '#4B3FFF' // primary
-const TRACK_COLOR = '#E0E0E0' // neutral300
-const THUMB_COLOR = '#FFFFFF'
+const FILL_COLOR = colors.primary // primary
+const TRACK_COLOR = primitive.neutral300 // neutral300
+const THUMB_COLOR = colors.white
 const THUMB_SHADOW = {
-  shadowColor: '#000000',
+  shadowColor: colors.black,
   shadowOffset: { width: 0, height: 2 },
   shadowOpacity: 0.2,
   shadowRadius: 4,
@@ -223,7 +224,7 @@ export const Slider = React.memo(function Slider({
         >
           <View
             style={{
-              backgroundColor: '#333333',
+              backgroundColor: primitive.neutral900,
               borderRadius: 4,
               paddingHorizontal: 6,
               paddingVertical: 2,
@@ -231,7 +232,7 @@ export const Slider = React.memo(function Slider({
           >
             <Text
               color="white"
-              fontSize={11}
+              fontSize={12}
               fontWeight="$medium"
               textAlign="center"
             >

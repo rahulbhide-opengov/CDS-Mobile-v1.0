@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from 'react'
 import { ActivityIndicator } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Pressable, Text } from '@opengov/cds-primitives'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // ButtonFrame -- Tamagui styled frame with all 7 CDS 37 variants & 3 sizes
@@ -19,7 +20,7 @@ const ButtonFrame = styled(Pressable, {
   // Focus ring
   focusStyle: {
     outlineWidth: 2,
-    outlineColor: '#4B3FFF',
+    outlineColor: colors.primary,
     outlineStyle: 'solid',
     outlineOffset: 2,
   },
@@ -90,10 +91,10 @@ const ButtonFrame = styled(Pressable, {
       destructive: {
         backgroundColor: '$errorColor',
         pressStyle: {
-          backgroundColor: '#661414', // red800 pressed
+          backgroundColor: colors.red800, // red800 pressed
         },
         hoverStyle: {
-          backgroundColor: '#991F1F', // red700 hover
+          backgroundColor: colors.red700, // red700 hover
         },
       },
 
@@ -102,11 +103,11 @@ const ButtonFrame = styled(Pressable, {
         borderWidth: 1,
         borderColor: '$errorColor',
         pressStyle: {
-          backgroundColor: '#FFD6D6', // red100 pressed
+          backgroundColor: colors.red100, // red100 pressed
           borderColor: '$errorColor',
         },
         hoverStyle: {
-          backgroundColor: '#FFF0F0', // red50 hover
+          backgroundColor: colors.red50, // red50 hover
           borderColor: '$errorColor',
         },
       },
@@ -283,16 +284,16 @@ function getSpinnerColor(variant: ButtonVariant): string {
   switch (variant) {
     case 'primary':
     case 'destructive':
-      return '#FFFFFF'
+      return colors.white
     case 'secondary':
     case 'tertiary':
-      return '#4B3FFF'
+      return colors.primary
     case 'destructiveAlt':
-      return '#CC2929'
+      return colors.red600
     case 'secondaryAlt':
     case 'tertiaryAlt':
     default:
-      return '#616161'
+      return primitive.neutral700
   }
 }
 
@@ -365,7 +366,7 @@ export const Button = React.memo(function Button({
       {loading ? (
         <ActivityIndicator
           size="small"
-          color={isDisabled ? '#BDBDBD' : getSpinnerColor(variant)}
+          color={isDisabled ? primitive.neutral400 : getSpinnerColor(variant)}
           testID={testID ? `${testID}-spinner` : undefined}
         />
       ) : (

@@ -2,6 +2,7 @@ import React, { useCallback, useRef, useState } from 'react'
 import { TextInput, Animated, Easing, Platform } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, HStack, VStack, Pressable } from '@opengov/cds-primitives'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -24,9 +25,9 @@ const BUTTON_SIZE = 36
 
 const InputContainer = styled(HStack, {
   name: 'ChatInputContainer',
-  backgroundColor: '#FFFFFF',
+  backgroundColor: colors.white,
   borderTopWidth: 1,
-  borderTopColor: '#EEEEEE', // neutral200
+  borderTopColor: colors.neutral200,
   paddingHorizontal: '$3',
   paddingVertical: '$2',
   alignItems: 'flex-end',
@@ -69,7 +70,7 @@ const AttachIcon = React.memo(function AttachIcon() {
       <Stack
         width={14}
         height={2}
-        backgroundColor="#9E9E9E"
+        backgroundColor={colors.neutral500}
         borderRadius={1}
         position="absolute"
       />
@@ -77,7 +78,7 @@ const AttachIcon = React.memo(function AttachIcon() {
       <Stack
         width={2}
         height={14}
-        backgroundColor="#9E9E9E"
+        backgroundColor={colors.neutral500}
         borderRadius={1}
         position="absolute"
       />
@@ -198,7 +199,7 @@ export function ChatInput({
           justifyContent="flex-end"
           paddingHorizontal="$4"
           paddingVertical="$1"
-          backgroundColor="#FFFFFF"
+          backgroundColor={colors.white}
         >
           <Text
             variant="caption"
@@ -231,7 +232,7 @@ export function ChatInput({
         {/* Expandable text input */}
         <Stack
           flex={1}
-          backgroundColor="#FAFAFA" // neutral50
+          backgroundColor={colors.neutral50}
           borderRadius={20}
           paddingHorizontal="$4"
           paddingVertical="$2"
@@ -242,8 +243,8 @@ export function ChatInput({
             style={{
               fontSize: 16,
               lineHeight: LINE_HEIGHT,
-              fontFamily: Platform.OS === 'ios' ? 'System' : 'Roboto',
-              color: disabled ? '#BDBDBD' : '#212121', // neutral400 : neutral1000
+              fontFamily: Platform.OS === 'ios' ? 'DM Sans' : 'Roboto',
+              color: disabled ? colors.neutral400 : colors.neutral900,
               padding: 0,
               margin: 0,
               maxHeight: MAX_INPUT_HEIGHT,
@@ -254,7 +255,7 @@ export function ChatInput({
             onChangeText={handleChangeText}
             onContentSizeChange={handleContentSizeChange}
             placeholder={placeholder}
-            placeholderTextColor="#BDBDBD" // neutral400
+            placeholderTextColor={colors.neutral400}
             editable={!disabled}
             multiline
             maxLength={maxLength}
@@ -279,13 +280,13 @@ export function ChatInput({
             width={BUTTON_SIZE}
             height={BUTTON_SIZE}
             borderRadius={BUTTON_SIZE / 2}
-            backgroundColor={canSend ? '#4B3FFF' : '#E0E0E0'} // primary : neutral300
+            backgroundColor={canSend ? colors.primary : colors.neutral300}
             alignItems="center"
             justifyContent="center"
             minWidth={BUTTON_SIZE}
             minHeight={BUTTON_SIZE}
           >
-            <SendArrow color={canSend ? '#FFFFFF' : '#9E9E9E'} />
+            <SendArrow color={canSend ? primitive.white : colors.neutral500} />
           </Pressable>
         </Animated.View>
       </InputContainer>

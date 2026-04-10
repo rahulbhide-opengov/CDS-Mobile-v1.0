@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, Pressable } from '@opengov/cds-primitives'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Arrow dimensions
@@ -59,7 +60,7 @@ function Arrow({ placement }: { placement: 'top' | 'bottom' | 'left' | 'right' }
               borderTopWidth: ARROW_SIZE,
               borderLeftColor: 'transparent',
               borderRightColor: 'transparent',
-              borderTopColor: '#323232',
+              borderTopColor: primitive.neutral900,
             },
           ]}
         />
@@ -77,7 +78,7 @@ function Arrow({ placement }: { placement: 'top' | 'bottom' | 'left' | 'right' }
               borderBottomWidth: ARROW_SIZE,
               borderLeftColor: 'transparent',
               borderRightColor: 'transparent',
-              borderBottomColor: '#323232',
+              borderBottomColor: primitive.neutral900,
             },
           ]}
         />
@@ -95,7 +96,7 @@ function Arrow({ placement }: { placement: 'top' | 'bottom' | 'left' | 'right' }
               borderLeftWidth: ARROW_SIZE,
               borderTopColor: 'transparent',
               borderBottomColor: 'transparent',
-              borderLeftColor: '#323232',
+              borderLeftColor: primitive.neutral900,
             },
           ]}
         />
@@ -113,7 +114,7 @@ function Arrow({ placement }: { placement: 'top' | 'bottom' | 'left' | 'right' }
               borderRightWidth: ARROW_SIZE,
               borderTopColor: 'transparent',
               borderBottomColor: 'transparent',
-              borderRightColor: '#323232',
+              borderRightColor: primitive.neutral900,
             },
           ]}
         />
@@ -363,8 +364,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   bubble: {
-    backgroundColor: '#323232',
-    borderRadius: 6,
+    backgroundColor: primitive.neutral900,
+    borderRadius: 4,
     paddingHorizontal: 12,
     paddingVertical: 6,
     maxWidth: TOOLTIP_MAX_WIDTH,

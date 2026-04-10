@@ -2,6 +2,7 @@ import React, { useCallback, useRef } from 'react'
 import { Animated, Easing } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, HStack, Pressable } from '@opengov/cds-primitives'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -21,19 +22,19 @@ const DisclaimerFrame = styled(Stack, {
   variants: {
     variant: {
       inline: {
-        backgroundColor: '#EBF0FF', // ogBlue50 -- subtle info background
+        backgroundColor: primitive.blue50,
         borderRadius: 8, // radii.lg
         padding: '$3',
         borderWidth: 1,
-        borderColor: '#C2D1FF', // ogBlue100
+        borderColor: primitive.blue100, // ogBlue100
       },
       banner: {
-        backgroundColor: '#EBF0FF', // ogBlue50
+        backgroundColor: primitive.blue50,
         borderRadius: 0,
         paddingHorizontal: '$4',
         paddingVertical: '$3',
         borderBottomWidth: 1,
-        borderBottomColor: '#C2D1FF', // ogBlue100
+        borderBottomColor: primitive.blue100, // ogBlue100
       },
     },
   } as const,
@@ -54,7 +55,7 @@ const AiSparkleIcon = React.memo(function AiSparkleIcon() {
       <Stack
         width={8}
         height={8}
-        backgroundColor="#1E55FF" // ogBlue500
+        backgroundColor={primitive.blue500} // ogBlue500
         transform={[{ rotate: '45deg' }]}
         borderRadius={1}
       />
@@ -62,7 +63,7 @@ const AiSparkleIcon = React.memo(function AiSparkleIcon() {
       <Stack
         width={3}
         height={3}
-        backgroundColor="#1E55FF"
+        backgroundColor={primitive.blue500}
         borderRadius={1.5}
         position="absolute"
         top={1}
@@ -72,7 +73,7 @@ const AiSparkleIcon = React.memo(function AiSparkleIcon() {
       <Stack
         width={3}
         height={3}
-        backgroundColor="#1E55FF"
+        backgroundColor={primitive.blue500}
         borderRadius={1.5}
         position="absolute"
         bottom={2}
@@ -92,7 +93,7 @@ const CloseXIcon = React.memo(function CloseXIcon() {
       <Stack
         width={12}
         height={2}
-        backgroundColor="#616161" // neutral700
+        backgroundColor={colors.neutral700} // neutral700
         borderRadius={1}
         position="absolute"
         transform={[{ rotate: '45deg' }]}
@@ -100,7 +101,7 @@ const CloseXIcon = React.memo(function CloseXIcon() {
       <Stack
         width={12}
         height={2}
-        backgroundColor="#616161"
+        backgroundColor={colors.neutral700}
         borderRadius={1}
         position="absolute"
         transform={[{ rotate: '-45deg' }]}
@@ -196,7 +197,7 @@ export function AiDisclaimer({
           <Stack flex={1} gap="$1">
             <Text
               variant="body3"
-              color="#0C2266" // ogBlue800 -- high contrast on ogBlue50
+              color={primitive.blue700} // ogBlue800 closest match
               lineHeight={20}
             >
               {message}
@@ -215,7 +216,7 @@ export function AiDisclaimer({
               >
                 <Text
                   variant="body3"
-                  color="#4B3FFF" // primary / brandBackground
+                  color={colors.primary}
                   fontWeight="$semibold"
                   textDecorationLine="underline"
                 >

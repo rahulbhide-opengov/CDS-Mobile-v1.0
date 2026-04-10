@@ -55,18 +55,19 @@ import {
   CalendarIcon,
   ChevronRightIcon,
 } from '@opengov/cds-icons'
-import { colors } from '@opengov/cds-tokens'
+import { colors, primitive, brands } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Brand configurations for white-label demo
+// All colors come from the CDS token palette — no non-CDS hex values.
 // ---------------------------------------------------------------------------
 
 type BrandKey = 'opengov' | 'govblue' | 'civicgreen'
 
 const BRANDS: Record<BrandKey, { name: string; primary: string; accent: string }> = {
-  opengov: { name: 'OpenGov', primary: '#4B3FFF', accent: '#6E64FF' },
-  govblue: { name: 'GovBlue', primary: '#1565C0', accent: '#1E88E5' },
-  civicgreen: { name: 'CivicGreen', primary: '#2E7D32', accent: '#43A047' },
+  opengov: { name: 'OpenGov', primary: brands.opengov.brandPrimary, accent: brands.opengov.brandPrimaryLight },
+  govblue: { name: 'GovBlue', primary: brands.govBlue.brandPrimary, accent: brands.govBlue.brandPrimaryLight },
+  civicgreen: { name: 'CivicGreen', primary: brands.civicGreen.brandPrimary, accent: brands.civicGreen.brandPrimaryLight },
 }
 
 // ---------------------------------------------------------------------------
@@ -93,7 +94,7 @@ function Section({
         >
           {title}
         </Text>
-        <Text fontSize="$sm" color="$colorSubtle">
+        <Text fontSize="$sm" color="$colorSecondary">
           {description}
         </Text>
       </VStack>
@@ -112,7 +113,7 @@ function SubLabel({ children }: { children: string }) {
     <Text
       fontSize="$xs"
       fontWeight="$semibold"
-      color="$colorSubtle"
+      color="$colorSecondary"
       textTransform="uppercase"
       letterSpacing={0.5}
       paddingTop="$2"
@@ -137,10 +138,10 @@ function Swatch({ name, hex }: { name: string; hex: string }) {
         borderWidth={1}
         borderColor="$borderColor"
       />
-      <Text fontSize={10} color="$colorSubtle" textAlign="center" numberOfLines={1}>
+      <Text fontSize="$xs" color="$colorSecondary" textAlign="center" numberOfLines={1}>
         {name}
       </Text>
-      <Text fontSize={9} color="$colorDisabled" textAlign="center">
+      <Text fontSize="$xs" color="$colorDisabled" textAlign="center">
         {hex}
       </Text>
     </VStack>
@@ -208,7 +209,7 @@ export default function ShowcasePage() {
       <View
         style={[
           styles.root,
-          { backgroundColor: isDark ? '#121212' : '#FFFFFF' },
+          { backgroundColor: isDark ? primitive.neutral1000 : primitive.white },
         ]}
       >
         <ScrollView
@@ -277,7 +278,7 @@ export default function ShowcasePage() {
 
                 <Text
                   fontSize="$md"
-                  color="$colorSubtle"
+                  color="$colorSecondary"
                   textAlign="center"
                   maxWidth={560}
                   paddingTop="$2"
@@ -341,8 +342,8 @@ export default function ShowcasePage() {
                 <Text fontSize="$xl" fontWeight="$semibold" color="$color">Heading 5 (24px)</Text>
                 <Text fontSize="$lg" fontWeight="$medium" color="$color">Body 1 / H6 (20px)</Text>
                 <Text fontSize="$md" color="$color">Body 2 -- Default (16px)</Text>
-                <Text fontSize="$sm" color="$colorSubtle">Body 3 -- Secondary (14px)</Text>
-                <Text fontSize="$xs" color="$colorSubtle">Caption (12px)</Text>
+                <Text fontSize="$sm" color="$colorSecondary">Body 3 -- Secondary (14px)</Text>
+                <Text fontSize="$xs" color="$colorSecondary">Caption (12px)</Text>
               </VStack>
 
               {/* Spacing / Radius */}
@@ -356,7 +357,7 @@ export default function ShowcasePage() {
                       backgroundColor={colors.primary}
                       borderRadius={2}
                     />
-                    <Text fontSize={10} color="$colorSubtle">{s}px</Text>
+                    <Text fontSize="$xs" color="$colorSecondary">{s}px</Text>
                   </VStack>
                 ))}
               </HStack>
@@ -379,7 +380,7 @@ export default function ShowcasePage() {
                       borderWidth={2}
                       borderColor={colors.ogBlue500}
                     />
-                    <Text fontSize={10} color="$colorSubtle">{label}</Text>
+                    <Text fontSize="$xs" color="$colorSecondary">{label}</Text>
                   </VStack>
                 ))}
               </HStack>
@@ -606,7 +607,7 @@ export default function ShowcasePage() {
                   step={5}
                   showValue
                 />
-                <Text fontSize="$xs" color="$colorSubtle">
+                <Text fontSize="$xs" color="$colorSecondary">
                   Value: {sliderValue}
                 </Text>
               </VStack>
@@ -693,7 +694,7 @@ export default function ShowcasePage() {
                           <Text fontSize="$sm" fontWeight="$semibold" color="$color">
                             Budget Report Q4
                           </Text>
-                          <Text fontSize="$xs" color="$colorSubtle">
+                          <Text fontSize="$xs" color="$colorSecondary">
                             Sarah Chen -- 2 hours ago
                           </Text>
                         </VStack>
@@ -717,9 +718,9 @@ export default function ShowcasePage() {
                       </Text>
                       <HStack gap="$2" alignItems="center">
                         <Chip label="Pending Review" variant="warning" size="sm" />
-                        <Text fontSize="$xs" color="$colorSubtle">Due in 3 days</Text>
+                        <Text fontSize="$xs" color="$colorSecondary">Due in 3 days</Text>
                       </HStack>
-                      <Text fontSize="$sm" color="$colorSubtle">
+                      <Text fontSize="$sm" color="$colorSecondary">
                         Building permit for commercial renovation at
                         456 Main St, Suite 200.
                       </Text>
@@ -744,13 +745,13 @@ export default function ShowcasePage() {
                           <Text fontSize="$2xl" fontWeight="$bold" color="$color">
                             1,247
                           </Text>
-                          <Text fontSize="$xs" color="$colorSubtle">Active permits</Text>
+                          <Text fontSize="$xs" color="$colorSecondary">Active permits</Text>
                         </VStack>
                         <VStack>
                           <Text fontSize="$2xl" fontWeight="$bold" color="$color">
                             89%
                           </Text>
-                          <Text fontSize="$xs" color="$colorSubtle">Approval rate</Text>
+                          <Text fontSize="$xs" color="$colorSecondary">Approval rate</Text>
                         </VStack>
                       </HStack>
                     </VStack>
@@ -942,21 +943,21 @@ export default function ShowcasePage() {
               <VStack gap="$3" maxWidth={480}>
                 <VStack gap="$1">
                   <HStack justifyContent="space-between">
-                    <Text fontSize="$xs" color="$colorSubtle">Budget utilization</Text>
+                    <Text fontSize="$xs" color="$colorSecondary">Budget utilization</Text>
                     <Text fontSize="$xs" fontWeight="$semibold" color="$color">68%</Text>
                   </HStack>
                   <LinearProgress value={68} color="primary" />
                 </VStack>
                 <VStack gap="$1">
                   <HStack justifyContent="space-between">
-                    <Text fontSize="$xs" color="$colorSubtle">Permit processing</Text>
+                    <Text fontSize="$xs" color="$colorSecondary">Permit processing</Text>
                     <Text fontSize="$xs" fontWeight="$semibold" color="$color">92%</Text>
                   </HStack>
                   <LinearProgress value={92} color="success" />
                 </VStack>
                 <VStack gap="$1">
                   <HStack justifyContent="space-between">
-                    <Text fontSize="$xs" color="$colorSubtle">Loading data...</Text>
+                    <Text fontSize="$xs" color="$colorSecondary">Loading data...</Text>
                   </HStack>
                   <LinearProgress color="primary" />
                 </VStack>
@@ -1195,7 +1196,7 @@ export default function ShowcasePage() {
                       <Text fontSize="$lg" fontWeight="$bold" color="$color">
                         {BRANDS[activeBrand].name}
                       </Text>
-                      <Text fontSize="$xs" color="$colorSubtle">
+                      <Text fontSize="$xs" color="$colorSecondary">
                         {BRANDS[activeBrand].primary}
                       </Text>
                     </VStack>
@@ -1246,7 +1247,7 @@ export default function ShowcasePage() {
                     </Box>
                   </HStack>
 
-                  <Text fontSize="$sm" color="$colorSubtle">
+                  <Text fontSize="$sm" color="$colorSecondary">
                     The CDS Mobile system supports custom brand tokens, allowing
                     any government agency to adopt the component library while
                     maintaining their visual identity. Theme tokens cascade through
@@ -1265,7 +1266,7 @@ export default function ShowcasePage() {
               paddingVertical="$10"
             >
               <Divider spacing="md" />
-              <Text fontSize="$xs" color="$colorSubtle" textAlign="center">
+              <Text fontSize="$xs" color="$colorSecondary" textAlign="center">
                 OpenGov CDS Mobile -- Component Design System
               </Text>
               <Text fontSize="$xs" color="$colorDisabled" textAlign="center">

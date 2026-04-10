@@ -8,6 +8,7 @@ import {
 } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, HStack, Pressable } from '@opengov/cds-primitives'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Size presets (min-height in dp)
@@ -32,7 +33,7 @@ const CANCEL_WIDTH = 64
 // Search icon (inline SVG-like Stack composition, matching codebase pattern)
 // ---------------------------------------------------------------------------
 
-function SearchIcon({ color = '#9E9E9E' }: { color?: string }) {
+function SearchIcon({ color = primitive.neutral500 }: { color?: string }) {
   return (
     <Stack width={20} height={20} alignItems="center" justifyContent="center">
       {/* Circle */}
@@ -228,8 +229,8 @@ export function SearchBar({
   const animatedBorderColor = focusBorderAnim.interpolate({
     inputRange: [0, 1],
     outputRange: [
-      variant === 'outlined' ? '#EEEEEE' : 'transparent',
-      '#4B3FFF',
+      variant === 'outlined' ? primitive.neutral200 : 'transparent',
+      colors.primary,
     ],
   })
 
@@ -258,7 +259,7 @@ export function SearchBar({
           styles.inputContainer,
           {
             minHeight,
-            backgroundColor: variant === 'filled' ? '#F5F5F5' : 'transparent',
+            backgroundColor: variant === 'filled' ? primitive.neutral100 : 'transparent',
             borderColor: animatedBorderColor,
             borderWidth: variant === 'outlined' ? animatedBorderWidth : 0,
             borderRadius: minHeight / 2,
@@ -266,7 +267,7 @@ export function SearchBar({
         ]}
       >
         {/* Leading search icon */}
-        <SearchIcon color={isFocused ? '#4B3FFF' : '#9E9E9E'} />
+        <SearchIcon color={isFocused ? colors.primary : primitive.neutral500} />
 
         {/* TextInput */}
         <TextInput
@@ -281,7 +282,7 @@ export function SearchBar({
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
-          placeholderTextColor="#BDBDBD"
+          placeholderTextColor={primitive.neutral400}
           onFocus={handleFocus}
           onBlur={handleBlur}
           autoFocus={autoFocus}
@@ -352,8 +353,8 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    fontFamily: 'System',
-    color: '#212121',
+    fontFamily: 'DM Sans',
+    color: primitive.neutral900,
     padding: 0,
     margin: 0,
   },

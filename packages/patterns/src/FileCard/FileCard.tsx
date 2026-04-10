@@ -2,6 +2,7 @@ import React, { useCallback } from 'react'
 import { Image } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, HStack, VStack, Pressable } from '@opengov/cds-primitives'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -17,15 +18,15 @@ const THUMBNAIL_SIZE = 44
 type FileCategory = 'document' | 'spreadsheet' | 'presentation' | 'image' | 'video' | 'audio' | 'archive' | 'code' | 'unknown'
 
 const FILE_CATEGORY_COLORS: Record<FileCategory, { bg: string; fg: string; label: string }> = {
-  document:     { bg: '#EBF0FF', fg: '#1E55FF', label: 'DOC' },   // ogBlue50 / ogBlue500
-  spreadsheet:  { bg: '#E8F5E9', fg: '#388E3C', label: 'XLS' },   // jade50 / jade700
-  presentation: { bg: '#FFF8E1', fg: '#FFA000', label: 'PPT' },   // amber50 / amber700
-  image:        { bg: '#F3E5F5', fg: '#9C27B0', label: 'IMG' },   // port50 / port500
-  video:        { bg: '#FFF0F3', fg: '#E91E63', label: 'VID' },   // rose50 / rose500
-  audio:        { bg: '#E0F7FA', fg: '#00796B', label: 'AUD' },   // teal50 / teal700
-  archive:      { bg: '#FFF8E1', fg: '#FFA000', label: 'ZIP' },   // amber50 / amber700
-  code:         { bg: '#F5F5F5', fg: '#616161', label: 'CODE' },  // neutral100 / neutral700
-  unknown:      { bg: '#F5F5F5', fg: '#9E9E9E', label: 'FILE' },  // neutral100 / neutral500
+  document:     { bg: primitive.blue50, fg: primitive.blue500, label: 'DOC' },
+  spreadsheet:  { bg: colors.jade50, fg: colors.jade700, label: 'XLS' },
+  presentation: { bg: primitive.amber50, fg: colors.amber700, label: 'PPT' },
+  image:        { bg: primitive.port50, fg: primitive.port500, label: 'IMG' },
+  video:        { bg: primitive.rose50, fg: primitive.rose500, label: 'VID' },
+  audio:        { bg: primitive.teal50, fg: colors.teal700, label: 'AUD' },
+  archive:      { bg: primitive.amber50, fg: colors.amber700, label: 'ZIP' },
+  code:         { bg: colors.neutral100, fg: colors.neutral700, label: 'CODE' },
+  unknown:      { bg: colors.neutral100, fg: colors.neutral500, label: 'FILE' },
 }
 
 const EXTENSION_MAP: Record<string, FileCategory> = {
@@ -70,10 +71,10 @@ function getFileCategory(fileType?: string, fileName?: string): FileCategory {
 
 const FileCardFrame = styled(Pressable, {
   name: 'FileCard',
-  backgroundColor: '#FFFFFF',
+  backgroundColor: colors.white,
   borderRadius: 8, // radii.lg
   borderWidth: 1,
-  borderColor: '#EEEEEE', // neutral200
+  borderColor: colors.neutral200,
   padding: '$3',
   flexDirection: 'row',
   alignItems: 'center',
@@ -98,14 +99,14 @@ const DownloadIcon = React.memo(function DownloadIcon() {
         borderTopWidth={6}
         borderLeftColor="transparent"
         borderRightColor="transparent"
-        borderTopColor="#4B3FFF"
+        borderTopColor={colors.primary}
         marginTop={2}
       />
       {/* Stem */}
       <Stack
         width={2}
         height={5}
-        backgroundColor="#4B3FFF"
+        backgroundColor={colors.primary}
         position="absolute"
         top={2}
       />
@@ -113,7 +114,7 @@ const DownloadIcon = React.memo(function DownloadIcon() {
       <Stack
         width={12}
         height={2}
-        backgroundColor="#4B3FFF"
+        backgroundColor={colors.primary}
         borderRadius={1}
         position="absolute"
         bottom={2}
@@ -133,7 +134,7 @@ const TrashIcon = React.memo(function TrashIcon() {
       <Stack
         width={14}
         height={2}
-        backgroundColor="#991F1F" // red700
+        backgroundColor={colors.red700}
         borderRadius={1}
         position="absolute"
         top={4}
@@ -142,7 +143,7 @@ const TrashIcon = React.memo(function TrashIcon() {
       <Stack
         width={6}
         height={2}
-        backgroundColor="#991F1F"
+        backgroundColor={colors.red700}
         borderRadius={1}
         position="absolute"
         top={2}
@@ -152,7 +153,7 @@ const TrashIcon = React.memo(function TrashIcon() {
         width={10}
         height={9}
         borderWidth={1.5}
-        borderColor="#991F1F"
+        borderColor={colors.red700}
         borderTopWidth={0}
         borderBottomLeftRadius={2}
         borderBottomRightRadius={2}
@@ -174,7 +175,7 @@ function ProgressBar({ progress }: { progress: number }) {
     <Stack
       height={3}
       borderRadius={2}
-      backgroundColor="#EEEEEE" // neutral200
+      backgroundColor={colors.neutral200}
       marginTop="$1.5"
       overflow="hidden"
       accessibilityRole="progressbar"
@@ -184,7 +185,7 @@ function ProgressBar({ progress }: { progress: number }) {
       <Stack
         height="100%"
         borderRadius={2}
-        backgroundColor="#4B3FFF" // primary
+        backgroundColor={colors.primary}
         width={`${clampedProgress}%`}
       />
     </Stack>
@@ -306,13 +307,13 @@ export function FileCard({
           variant="body3"
           fontWeight="$medium"
           numberOfLines={1}
-          color="#212121" // neutral1000
+          color={colors.neutral900}
         >
           {fileName}
         </Text>
 
         {(fileSize || fileType) && (
-          <Text variant="caption" color="#9E9E9E" numberOfLines={1}>
+          <Text variant="caption" color={colors.neutral500} numberOfLines={1}>
             {[fileType?.toUpperCase().replace(/^\./, ''), fileSize].filter(Boolean).join(' \u00b7 ')}
           </Text>
         )}

@@ -1,5 +1,6 @@
 import React from 'react'
 import { styled, Stack, Text as TamaguiText, type GetProps } from '@tamagui/core'
+import { primitive } from '@opengov/cds-tokens'
 
 /**
  * FloatingBottomNav
@@ -68,7 +69,7 @@ const NavBar = styled(Stack, {
   alignItems: 'center',
   justifyContent: 'space-between',
   padding: '$2',
-  borderRadius: 100,
+  borderRadius: 9999,
   backgroundColor: 'rgba(255, 255, 255, 0.6)',
   borderWidth: 2,
   borderColor: '$background',
@@ -88,8 +89,8 @@ const ActiveTab = styled(Stack, {
   gap: '$2',
   height: 44,
   paddingHorizontal: '$5',
-  borderRadius: 100,
-  backgroundColor: '#2B343D', // secondary/dark from PLC
+  borderRadius: 9999,
+  backgroundColor: primitive.brandSecondary, // secondary/dark from PLC
   shadowColor: 'rgba(43, 52, 61, 0.16)',
   shadowOffset: { width: 0, height: 4 },
   shadowOpacity: 1,
@@ -113,7 +114,7 @@ const InactiveTab = styled(Stack, {
   justifyContent: 'center',
   width: 40,
   height: 40,
-  borderRadius: 100,
+  borderRadius: 9999,
   overflow: 'hidden',
   padding: '$3',
 
@@ -182,6 +183,7 @@ export function FloatingBottomNav({
               key={item.key}
               device={device}
               onPress={() => onSelect?.(item.key)}
+              hitSlop={{ top: 2, bottom: 2, left: 2, right: 2 }}
               accessibilityRole="button"
               accessibilityState={{ selected: false }}
               accessibilityLabel={item.label}

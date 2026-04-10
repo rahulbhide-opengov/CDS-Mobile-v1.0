@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import { styled, Stack, Text as TamaguiText, type GetProps } from '@tamagui/core'
 import { Pressable, Text, HStack } from '@opengov/cds-primitives'
 import Svg, { Path } from 'react-native-svg'
+import { primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // BreadcrumbsFrame
@@ -69,7 +70,7 @@ const BreadcrumbEllipsis = styled(TamaguiText, {
 // Default chevron separator icon
 // ---------------------------------------------------------------------------
 
-function ChevronRight({ size = 16, color = '#9E9E9E' }: { size?: number; color?: string }) {
+function ChevronRight({ size = 16, color = primitive.neutral500 }: { size?: number; color?: string }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
       <Path

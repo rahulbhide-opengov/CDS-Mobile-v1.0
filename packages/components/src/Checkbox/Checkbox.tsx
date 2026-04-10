@@ -2,6 +2,7 @@ import React, { useCallback, useRef } from 'react'
 import { Animated, Easing } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, HStack, Pressable } from '@opengov/cds-primitives'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Size maps
@@ -151,12 +152,12 @@ export function Checkbox({
   // ---- Derived styles -------------------------------------------------------
   const isActive = checked || indeterminate
   const borderColor = error && !isActive
-    ? '#991F1F' // red700 / errorColor
+    ? colors.red700 // red700 / errorColor
     : isActive
-      ? '#4B3FFF' // primary
-      : '#BDBDBD' // neutral400
+      ? colors.primary // primary
+      : primitive.neutral400 // neutral400
 
-  const backgroundColor = isActive ? '#4B3FFF' : 'transparent'
+  const backgroundColor = isActive ? colors.primary : 'transparent'
 
   // ---- Render ---------------------------------------------------------------
 
@@ -179,7 +180,7 @@ export function Checkbox({
           transform: [{ scale: scaleAnim }],
           width: dims.box,
           height: dims.box,
-          borderRadius: 3,
+          borderRadius: 2,
           borderWidth: dims.borderWidth,
           borderColor,
           backgroundColor,

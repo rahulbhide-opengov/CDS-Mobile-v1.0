@@ -1,5 +1,6 @@
 import React from 'react'
 import { styled, Stack, Text as TamaguiText, type GetProps } from '@tamagui/core'
+import { primitive } from '@opengov/cds-tokens'
 
 /**
  * SegmentedTabs
@@ -139,7 +140,7 @@ const TabChipCount = styled(TamaguiText, {
   variants: {
     selected: {
       true: {
-        color: '#19009B', // primary/dark
+        color: primitive.brandPrimaryDark, // primary/dark
       },
       false: {
         color: '$colorSecondary',
@@ -179,6 +180,7 @@ export function SegmentedTabs({
             selected={isSelected}
             type={variant === 'iconOnly' ? 'iconOnly' : 'label'}
             onPress={() => onSelect?.(item.key)}
+            hitSlop={{ top: 6, bottom: 6, left: 0, right: 0 }}
             accessibilityRole="tab"
             accessibilityState={{ selected: isSelected }}
             accessibilityLabel={

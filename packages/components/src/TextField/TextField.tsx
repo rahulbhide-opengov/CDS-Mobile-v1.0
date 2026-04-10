@@ -2,6 +2,7 @@ import React, { useCallback, useRef, useState } from 'react'
 import { TextInput, type TextInputProps, Animated, Easing } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, HStack, VStack, Pressable } from '@opengov/cds-primitives'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Styled primitives
@@ -214,8 +215,8 @@ export function TextField({
   const animatedBorderColor = focusAnim.interpolate({
     inputRange: [0, 1],
     outputRange: [
-      hasError ? '#991F1F' : '#EEEEEE', // neutral200 / red700
-      hasError ? '#991F1F' : '#4B3FFF',  // red700 / primary
+      hasError ? colors.red700 : primitive.neutral200, // neutral200 / red700
+      hasError ? colors.red700 : colors.primary,  // red700 / primary
     ],
   })
 
@@ -256,10 +257,10 @@ export function TextField({
             borderBottomWidth: animatedBorderWidth,
             borderColor: animatedBorderColor,
             backgroundColor: disabled
-              ? '#F5F5F5' // neutral100
+              ? primitive.neutral100 // neutral100
               : variant === 'filled'
-                ? '#F5F5F5' // neutral100 / backgroundStrong
-                : '#FFFFFF',
+                ? primitive.neutral100 // neutral100 / backgroundStrong
+                : colors.white,
             flexDirection: 'row',
             alignItems: multiline ? 'flex-start' : 'center',
             paddingHorizontal: 12,
@@ -284,8 +285,8 @@ export function TextField({
           style={{
             flex: 1,
             fontSize: 16,
-            fontFamily: 'System',
-            color: disabled ? '#BDBDBD' : '#212121', // neutral400 / neutral1000
+            fontFamily: 'DM Sans',
+            color: disabled ? primitive.neutral400 : primitive.neutral900, // neutral400 / neutral900
             padding: 0,
             margin: 0,
             textAlignVertical: multiline ? 'top' : 'center',
@@ -294,7 +295,7 @@ export function TextField({
           value={value}
           onChangeText={disabled ? undefined : onChangeText}
           placeholder={placeholder}
-          placeholderTextColor="#BDBDBD" // neutral400 / placeholderColor
+          placeholderTextColor={primitive.neutral400} // neutral400 / placeholderColor
           editable={!disabled}
           multiline={multiline}
           numberOfLines={multiline ? numberOfLines : undefined}

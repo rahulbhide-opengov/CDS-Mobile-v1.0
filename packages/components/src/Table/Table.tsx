@@ -10,6 +10,7 @@ import {
 } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, HStack, VStack } from '@opengov/cds-primitives'
+import { primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -630,7 +631,7 @@ export function Table<T = any>({
 const styles = StyleSheet.create({
   loadingBar: {
     height: 14,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: primitive.neutral300,
     borderRadius: 4,
     width: '80%',
   },

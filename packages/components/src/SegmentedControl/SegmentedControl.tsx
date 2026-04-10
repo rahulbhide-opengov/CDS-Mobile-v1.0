@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useMemo } from 'react'
 import { Animated, LayoutChangeEvent } from 'react-native'
 import { styled, Stack, Text as TamaguiText, type GetProps } from '@tamagui/core'
 import { Pressable, HStack } from '@opengov/cds-primitives'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // SegmentedControlFrame -- outer container (neutral pill background)
@@ -152,6 +153,7 @@ export function SegmentedControl({
           <SegmentPressable
             key={item.key}
             onPress={() => onSelect?.(item.key)}
+            hitSlop={{ top: 4, bottom: 4, left: 0, right: 0 }}
             accessibilityRole="tab"
             accessibilityState={{ selected: isActive }}
             accessibilityLabel={item.label}
@@ -240,8 +242,8 @@ function SlidingIndicator({
             bottom: 0,
             width: segmentPixelWidth,
             borderRadius: 8,
-            backgroundColor: '#FFFFFF',
-            shadowColor: '#000000',
+            backgroundColor: colors.white,
+            shadowColor: colors.black,
             shadowOffset: { width: 0, height: 1 },
             shadowOpacity: 0.12,
             shadowRadius: 3,

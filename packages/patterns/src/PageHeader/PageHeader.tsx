@@ -1,6 +1,7 @@
 import React from 'react'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, HStack, VStack } from '@opengov/cds-primitives'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Styled primitives
@@ -8,7 +9,7 @@ import { Text, HStack, VStack } from '@opengov/cds-primitives'
 
 const PageHeaderFrame = styled(Stack, {
   name: 'PageHeader',
-  backgroundColor: '#FFFFFF',
+  backgroundColor: colors.white,
   paddingHorizontal: '$4',
   gap: '$2',
 
@@ -28,7 +29,7 @@ const PageHeaderFrame = styled(Stack, {
     bordered: {
       true: {
         borderBottomWidth: 1,
-        borderBottomColor: '#EEEEEE', // neutral200
+        borderBottomColor: colors.neutral200,
       },
     },
   } as const,
@@ -125,14 +126,14 @@ export function PageHeader({
             <Text
               variant={titleVariant}
               numberOfLines={2}
-              color="#212121" // neutral1000
+              color={colors.neutral900}
             >
               {title}
             </Text>
             {subtitle != null && (
               <Text
                 variant={subtitleVariant}
-                color="#9E9E9E" // neutral500 / colorSecondary
+                color={colors.neutral500}
                 numberOfLines={3}
               >
                 {subtitle}
@@ -152,7 +153,7 @@ export function PageHeader({
           <VStack gap="$1">
             <Text
               variant={titleVariant}
-              color="#212121" // neutral1000
+              color={colors.neutral900}
               numberOfLines={3}
             >
               {title}
@@ -160,7 +161,7 @@ export function PageHeader({
             {subtitle != null && (
               <Text
                 variant={subtitleVariant}
-                color="#9E9E9E" // neutral500
+                color={colors.neutral500}
                 numberOfLines={4}
               >
                 {subtitle}

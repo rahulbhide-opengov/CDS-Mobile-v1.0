@@ -11,6 +11,7 @@ import {
 } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, HStack, VStack, Pressable } from '@opengov/cds-primitives'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -33,11 +34,11 @@ const TriggerFrame = styled(Pressable, {
   alignItems: 'center',
   justifyContent: 'space-between',
   borderWidth: 1,
-  borderColor: '#EEEEEE', // neutral200
+  borderColor: primitive.neutral200, // neutral200
   borderRadius: 4, // radii.md
   paddingHorizontal: '$3',
   paddingVertical: '$2',
-  backgroundColor: '#FFFFFF',
+  backgroundColor: primitive.white,
   gap: '$2',
 
   variants: {
@@ -47,7 +48,7 @@ const TriggerFrame = styled(Pressable, {
       lg: { minHeight: 52, paddingHorizontal: '$4', paddingVertical: '$3' },
     },
     error: {
-      true: { borderColor: '#991F1F' }, // red700
+      true: { borderColor: primitive.red700 }, // red700
     },
     disabled: {
       true: { opacity: 0.5 },
@@ -77,7 +78,7 @@ const ChevronDown = React.memo(function ChevronDown({ rotated }: { rotated?: boo
         height={8}
         borderRightWidth={2}
         borderBottomWidth={2}
-        borderColor="#9E9E9E" // neutral500
+        borderColor={primitive.neutral500} // neutral500
         transform={[{ rotate: '45deg' }]}
         marginTop={-3}
       />
@@ -97,7 +98,7 @@ const Checkmark = React.memo(function Checkmark() {
         height={6}
         borderBottomWidth={2}
         borderLeftWidth={2}
-        borderColor="#4B3FFF" // primary
+        borderColor={colors.primary} // primary
         transform={[{ rotate: '-45deg' }]}
         marginTop={-2}
       />
@@ -116,7 +117,7 @@ const SearchIcon = React.memo(function SearchIcon() {
         width={11}
         height={11}
         borderWidth={2}
-        borderColor="#9E9E9E"
+        borderColor={primitive.neutral500}
         borderRadius={6}
         position="absolute"
         top={1}
@@ -125,7 +126,7 @@ const SearchIcon = React.memo(function SearchIcon() {
       <Stack
         width={5}
         height={2}
-        backgroundColor="#9E9E9E"
+        backgroundColor={primitive.neutral500}
         borderRadius={1}
         position="absolute"
         bottom={2}
@@ -146,7 +147,7 @@ const CloseXIcon = React.memo(function CloseXIcon() {
       <Stack
         width={12}
         height={2}
-        backgroundColor="#616161"
+        backgroundColor={primitive.neutral700}
         borderRadius={1}
         position="absolute"
         transform={[{ rotate: '45deg' }]}
@@ -154,7 +155,7 @@ const CloseXIcon = React.memo(function CloseXIcon() {
       <Stack
         width={12}
         height={2}
-        backgroundColor="#616161"
+        backgroundColor={primitive.neutral700}
         borderRadius={1}
         position="absolute"
         transform={[{ rotate: '-45deg' }]}
@@ -261,14 +262,14 @@ const OptionRow = React.memo(function OptionRow({ option, isSelected, onSelect }
       <VStack flex={1} gap="$0.5" minWidth={0}>
         <Text
           variant="body2"
-          color="#212121"
+          color={primitive.neutral900}
           numberOfLines={1}
           fontWeight={isSelected ? '$medium' : '$regular'}
         >
           {option.label}
         </Text>
         {option.description != null && (
-          <Text variant="caption" color="#9E9E9E" numberOfLines={1}>
+          <Text variant="caption" color={primitive.neutral500} numberOfLines={1}>
             {option.description}
           </Text>
         )}
@@ -297,7 +298,7 @@ const GroupHeader = React.memo(function GroupHeader({ label }: GroupHeaderProps)
     <Stack paddingHorizontal="$4" paddingTop="$3" paddingBottom="$1.5">
       <Text
         variant="overline"
-        color="#9E9E9E" // neutral500
+        color={primitive.neutral500} // neutral500
       >
         {label}
       </Text>
@@ -554,7 +555,7 @@ export function SelectMenu({
         <Text
           variant="body3"
           fontWeight="$medium"
-          color={hasError ? '#991F1F' : '#212121'}
+          color={hasError ? primitive.red700 : primitive.neutral900}
         >
           {label}
         </Text>
@@ -574,7 +575,7 @@ export function SelectMenu({
         <Text
           flex={1}
           variant="body2"
-          color={hasSelection ? '#212121' : '#BDBDBD'} // neutral1000 : neutral400
+          color={hasSelection ? primitive.neutral900 : primitive.neutral400}
           numberOfLines={1}
         >
           {displayText}
@@ -584,7 +585,7 @@ export function SelectMenu({
 
       {/* Error text */}
       {errorText != null && (
-        <Text variant="caption" color="#991F1F">
+        <Text variant="caption" color={primitive.red700}>
           {errorText}
         </Text>
       )}
@@ -627,7 +628,7 @@ export function SelectMenu({
           {...panResponder.panHandlers}
         >
           <Stack
-            backgroundColor="#FFFFFF"
+            backgroundColor={primitive.white}
             borderTopLeftRadius={16}
             borderTopRightRadius={16}
             flex={1}
@@ -643,7 +644,7 @@ export function SelectMenu({
                 width={32}
                 height={4}
                 borderRadius={2}
-                backgroundColor="#BDBDBD"
+                backgroundColor={primitive.neutral400}
                 opacity={0.5}
               />
             </Stack>
@@ -655,7 +656,7 @@ export function SelectMenu({
               alignItems="center"
               justifyContent="space-between"
             >
-              <Text variant="h5" color="#212121">
+              <Text variant="h5" color={primitive.neutral900}>
                 {label ?? 'Select'}
               </Text>
               <Pressable
@@ -679,7 +680,7 @@ export function SelectMenu({
               <HStack
                 marginHorizontal="$4"
                 marginBottom="$2"
-                backgroundColor="#FAFAFA"
+                backgroundColor={primitive.neutral100}
                 borderRadius={8}
                 paddingHorizontal="$3"
                 paddingVertical="$2"
@@ -692,7 +693,7 @@ export function SelectMenu({
                     flex: 1,
                     fontSize: 14,
                     fontFamily: Platform.OS === 'ios' ? 'System' : 'Roboto',
-                    color: '#212121',
+                    color: primitive.neutral900,
                     padding: 0,
                     margin: 0,
                     minHeight: 24,
@@ -700,7 +701,7 @@ export function SelectMenu({
                   value={searchQuery}
                   onChangeText={setSearchQuery}
                   placeholder="Search..."
-                  placeholderTextColor="#BDBDBD"
+                  placeholderTextColor={primitive.neutral400}
                   autoCorrect={false}
                   autoCapitalize="none"
                   returnKeyType="search"
@@ -731,7 +732,7 @@ export function SelectMenu({
                 alignItems="center"
                 gap="$2"
               >
-                <Text variant="caption" color="#9E9E9E">
+                <Text variant="caption" color={primitive.neutral500}>
                   {selectedOptions.length} selected
                 </Text>
               </HStack>
@@ -747,7 +748,7 @@ export function SelectMenu({
               showsVerticalScrollIndicator
               ListEmptyComponent={
                 <Stack padding="$6" alignItems="center">
-                  <Text variant="body3" color="#9E9E9E">
+                  <Text variant="body3" color={primitive.neutral500}>
                     {searchQuery ? 'No matching options' : 'No options available'}
                   </Text>
                 </Stack>

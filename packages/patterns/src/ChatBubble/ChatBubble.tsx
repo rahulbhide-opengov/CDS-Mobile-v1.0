@@ -2,15 +2,16 @@ import React, { useCallback, useEffect, useRef } from 'react'
 import { Animated, Easing } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, HStack, Pressable } from '@opengov/cds-primitives'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
 
 /** Brand primary color for user bubble background */
-const USER_BG = '#4B3FFF'
+const USER_BG = colors.primary
 /** Neutral100 for assistant bubble background */
-const ASSISTANT_BG = '#F5F5F5'
+const ASSISTANT_BG = colors.neutral100
 /** Typing indicator dot size */
 const DOT_SIZE = 6
 /** Number of dots in the typing indicator */
@@ -91,7 +92,7 @@ function TypingDot({ delay }: { delay: number }) {
         width: DOT_SIZE,
         height: DOT_SIZE,
         borderRadius: DOT_SIZE / 2,
-        backgroundColor: '#9E9E9E', // neutral500
+        backgroundColor: colors.neutral500,
         opacity,
       }}
     />
@@ -118,7 +119,7 @@ function StatusIndicator({ status }: { status: ChatBubbleProps['status'] }) {
   if (!status || status === 'sending') return null
 
   // Single check for sent, double check for delivered, blue double check for read
-  const checkColor = status === 'read' ? '#4B3FFF' : 'rgba(255,255,255,0.6)'
+  const checkColor = status === 'read' ? colors.primary : 'rgba(255,255,255,0.6)'
 
   return (
     <HStack gap={2} alignItems="center" marginLeft="$1">
@@ -195,8 +196,8 @@ export function ChatBubble({
   onPress,
 }: ChatBubbleProps) {
   const isUser = sender === 'user'
-  const textColor = isUser ? '#FFFFFF' : '#212121' // white : neutral1000
-  const timestampColor = isUser ? 'rgba(255,255,255,0.7)' : '#9E9E9E' // neutral500
+  const textColor = isUser ? primitive.white : colors.neutral900
+  const timestampColor = isUser ? 'rgba(255,255,255,0.7)' : colors.neutral500
 
   // Sending state dims the bubble
   const sendingOpacity = status === 'sending' ? 0.7 : 1

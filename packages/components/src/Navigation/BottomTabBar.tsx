@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from 'react'
 import { Platform } from 'react-native'
 import { styled, Stack, Text as TamaguiText, type GetProps } from '@tamagui/core'
 import { Pressable, Text, VStack } from '@opengov/cds-primitives'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -13,7 +14,7 @@ const DEFAULT_BOTTOM_INSET = Platform.select({ ios: 34, android: 0, default: 0 }
 const TAB_BAR_HEIGHT = 56
 
 // Badge color
-const BADGE_BG = '#CC2929' // red600
+const BADGE_BG = colors.red600 // red600
 
 // ---------------------------------------------------------------------------
 // BottomTabBarFrame
@@ -80,7 +81,7 @@ const TabLabel = styled(TamaguiText, {
       },
       false: {
         fontWeight: '$regular',
-        color: '#9E9E9E', // neutral500
+        color: primitive.neutral500, // neutral500
       },
     },
   } as const,

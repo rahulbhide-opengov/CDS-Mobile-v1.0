@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react'
 import { styled, Stack, Text as TamaguiText, type GetProps } from '@tamagui/core'
 import { Pressable, Text, HStack } from '@opengov/cds-primitives'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -10,7 +11,7 @@ const TAB_HEIGHT = 48
 const MIN_TOUCH_TARGET = 44
 
 // Badge color
-const BADGE_BG = '#CC2929' // red600
+const BADGE_BG = colors.red600 // red600
 
 // ---------------------------------------------------------------------------
 // TabFrame -- base pressable container
@@ -40,7 +41,7 @@ const PrimaryIndicator = styled(Stack, {
   left: 0,
   right: 0,
   height: 2,
-  borderRadius: 1,
+  borderRadius: 2,
 
   variants: {
     active: {
@@ -99,7 +100,7 @@ const TabLabelPrimary = styled(TamaguiText, {
       },
       false: {
         fontWeight: '$regular',
-        color: '#9E9E9E', // neutral500
+        color: primitive.neutral500, // neutral500
       },
     },
   } as const,
@@ -122,7 +123,7 @@ const TabLabelSecondary = styled(TamaguiText, {
       },
       false: {
         fontWeight: '$regular',
-        color: '#9E9E9E', // neutral500
+        color: primitive.neutral500, // neutral500
       },
     },
   } as const,

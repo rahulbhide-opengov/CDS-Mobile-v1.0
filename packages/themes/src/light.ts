@@ -1,74 +1,80 @@
-import { colors } from '@opengov/cds-tokens'
+import { colors, primitive } from '@opengov/cds-tokens'
 
+/**
+ * CDS 37 Light Theme
+ *
+ * All values reference the CDS palette via `colors` or `primitive` imports.
+ * No hardcoded hex values outside the token system.
+ */
 export const lightTheme = {
   // Backgrounds
-  background: colors.white,
-  backgroundHover: colors.neutral50,
-  backgroundPress: colors.neutral100,
-  backgroundFocus: colors.neutral50,
-  backgroundStrong: colors.neutral100,
-  backgroundTransparent: colors.transparent,
+  background: primitive.white,
+  backgroundHover: primitive.neutral50,
+  backgroundPress: primitive.neutral100,
+  backgroundFocus: primitive.neutral50,
+  backgroundStrong: primitive.neutral100,
+  backgroundTransparent: 'transparent',
 
   // Text colors
-  color: colors.neutral1000,
-  colorHover: colors.black,
-  colorPress: colors.neutral700,
-  colorFocus: colors.neutral1000,
-  colorSecondary: colors.neutral500,
-  colorTertiary: colors.neutral400,
-  colorDisabled: colors.neutral400,
+  color: primitive.neutral1000,
+  colorHover: primitive.black,
+  colorPress: primitive.neutral700,
+  colorFocus: primitive.neutral1000,
+  colorSecondary: primitive.neutral500,
+  colorTertiary: primitive.neutral400,
+  colorDisabled: primitive.neutral400,
 
   // Border colors
-  borderColor: colors.neutral200,
-  borderColorHover: colors.neutral300,
-  borderColorFocus: colors.primary,
-  borderColorPress: colors.neutral400,
-  borderColorDisabled: colors.neutral200,
+  borderColor: primitive.neutral200,
+  borderColorHover: primitive.neutral300,
+  borderColorFocus: primitive.brandPrimary,
+  borderColorPress: primitive.neutral400,
+  borderColorDisabled: primitive.neutral200,
 
   // Brand
-  brandBackground: colors.primary,
-  brandBackgroundHover: colors.primaryLight,
-  brandBackgroundPress: colors.primaryDark,
-  brandColor: colors.white,
+  brandBackground: primitive.brandPrimary,
+  brandBackgroundHover: primitive.brandPrimaryLight,
+  brandBackgroundPress: primitive.brandPrimaryDark,
+  brandColor: primitive.white,
 
   // Semantic — Success
-  successBackground: colors.jade50,
-  successColor: colors.jade700,
-  successBorderColor: colors.jade500,
+  successBackground: primitive.green50,
+  successColor: primitive.green700,
+  successBorderColor: primitive.green500,
 
   // Semantic — Error
-  errorBackground: colors.red50,
-  errorColor: colors.red700,
-  errorBorderColor: colors.red500,
+  errorBackground: primitive.red50,
+  errorColor: primitive.red700,
+  errorBorderColor: primitive.red500,
 
   // Semantic — Warning
-  warningBackground: colors.amber50,
-  warningColor: colors.amber700,
-  warningBorderColor: colors.amber500,
+  warningBackground: primitive.amber50,
+  warningColor: primitive.amber700,
+  warningBorderColor: primitive.amber500,
 
   // Semantic — Info
-  infoBackground: colors.ogBlue50,
-  infoColor: colors.ogBlue700,
-  infoBorderColor: colors.ogBlue500,
+  infoBackground: primitive.blue50,
+  infoColor: primitive.blue700,
+  infoBorderColor: primitive.blue500,
 
   // Placeholder & focus
-  placeholderColor: colors.neutral400,
-  outlineColor: colors.primary,
-  focusRingColor: colors.primary,
+  placeholderColor: primitive.neutral400,
+  outlineColor: primitive.brandPrimary,
+  focusRingColor: primitive.brandPrimary,
 
   // Selection
   selectionBackground: 'rgba(75, 63, 255, 0.08)',
   selectionBackgroundStrong: 'rgba(75, 63, 255, 0.16)',
 
   // Shadow
-  shadowColor: colors.black,
+  shadowColor: primitive.black,
 
   // Icon colors
-  iconDefault: colors.neutral700,
-  iconSecondary: colors.neutral500,
-  iconDisabled: colors.neutral400,
-  iconBrand: colors.primary,
-  iconSuccess: colors.jade700,
-  iconError: colors.red700,
-  iconWarning: colors.amber700,
+  iconDefault: primitive.neutral700,
+  iconSecondary: primitive.neutral500,
+  iconDisabled: primitive.neutral400,
+  iconBrand: primitive.brandPrimary,
+  iconSuccess: primitive.green700,
+  iconError: primitive.red700,
+  iconWarning: primitive.amber700,
 } as const

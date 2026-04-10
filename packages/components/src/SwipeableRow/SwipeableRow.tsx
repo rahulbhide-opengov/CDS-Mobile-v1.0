@@ -2,6 +2,7 @@ import React, { useRef, useCallback, useMemo } from 'react'
 import { Animated, PanResponder, View, Pressable as RNPressable, LayoutChangeEvent } from 'react-native'
 import { Stack } from '@tamagui/core'
 import { Text } from '@opengov/cds-primitives'
+import { colors } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -268,7 +269,7 @@ export const SwipeableRow = React.memo(function SwipeableRow({
         {...panResponder.panHandlers}
         style={{
           transform: [{ translateX }],
-          backgroundColor: '#FFFFFF',
+          backgroundColor: colors.white,
         }}
       >
         {children}

@@ -8,17 +8,18 @@ import {
 } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, HStack, Pressable } from '@opengov/cds-primitives'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Variant color mapping
 // ---------------------------------------------------------------------------
 
 const VARIANT_COLORS = {
-  default: '#323232',   // neutral900
-  success: '#1B7D3E',   // green700
-  error: '#CC2929',      // red600
-  warning: '#B45309',    // amber700
-  info: '#1D6DB0',       // blue700
+  default: primitive.neutral900,   // neutral900
+  success: primitive.green700,   // green700
+  error: colors.red600,      // red600
+  warning: primitive.amber700,    // amber700
+  info: primitive.blue700,       // blue700
 } as const
 
 // Swipe-to-dismiss threshold (px)

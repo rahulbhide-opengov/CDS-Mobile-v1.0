@@ -2,14 +2,15 @@ import React, { useEffect, useRef, useMemo } from 'react'
 import { Animated, Easing, View } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text } from '@opengov/cds-primitives'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Size map -- pixel dimensions per size variant
 // ---------------------------------------------------------------------------
 
 const SIZE_MAP = {
-  sm: { dimension: 24, strokeWidth: 2, fontSize: 8 },
-  md: { dimension: 36, strokeWidth: 3, fontSize: 10 },
+  sm: { dimension: 24, strokeWidth: 2, fontSize: 12 },
+  md: { dimension: 36, strokeWidth: 3, fontSize: 12 },
   lg: { dimension: 48, strokeWidth: 4, fontSize: 12 },
 } as const
 
@@ -20,14 +21,14 @@ type CircularProgressSize = keyof typeof SIZE_MAP
 // ---------------------------------------------------------------------------
 
 const COLOR_MAP: Record<string, string> = {
-  primary: '#4B3FFF',
-  success: '#388E3C',
-  error: '#CC2929',
-  warning: '#FFA000',
-  neutral: '#9E9E9E',
+  primary: colors.primary,
+  success: colors.jade700,
+  error: colors.red600,
+  warning: colors.amber700,
+  neutral: primitive.neutral500,
 }
 
-const TRACK_COLOR = '#E0E0E0' // neutral300
+const TRACK_COLOR = primitive.neutral300 // neutral300
 
 // ---------------------------------------------------------------------------
 // Types

@@ -1,4 +1,4 @@
-import { colors } from '@opengov/cds-tokens'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Button sub-themes
@@ -7,7 +7,7 @@ import { colors } from '@opengov/cds-tokens'
 export const lightButtonPrimary = {
   background: colors.primary,
   backgroundHover: colors.primaryDark,
-  backgroundPress: '#2A1FCC',
+  backgroundPress: primitive.brandPrimaryDark,
   backgroundDisabled: colors.neutral200,
   color: colors.white,
   colorDisabled: colors.neutral400,

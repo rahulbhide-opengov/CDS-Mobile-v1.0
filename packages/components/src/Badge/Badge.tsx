@@ -1,17 +1,18 @@
 import React from 'react'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text } from '@opengov/cds-primitives'
+import { colors, primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Color maps
 // ---------------------------------------------------------------------------
 
 const BADGE_BG: Record<string, string> = {
-  default: '#9E9E9E', // neutral500
-  primary: '#4B3FFF', // primary
-  error: '#CC2929', // red600
-  success: '#388E3C', // jade700
-  warning: '#FFA000', // amber700
+  default: primitive.neutral500, // neutral500
+  primary: colors.primary, // primary
+  error: colors.red600, // red600
+  success: colors.jade700, // jade700
+  warning: colors.amber700, // amber700
 }
 
 // ---------------------------------------------------------------------------
@@ -52,7 +53,7 @@ const BadgeFrame = styled(Stack, {
 const BadgeText = styled(Text, {
   name: 'BadgeText',
   color: 'white',
-  fontSize: 11,
+  fontSize: 12,
   lineHeight: 14,
   fontWeight: '$bold',
   textAlign: 'center',
