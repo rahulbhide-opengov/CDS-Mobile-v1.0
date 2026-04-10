@@ -80,18 +80,27 @@ export type DmSansFontFace = keyof typeof dmSansFontFaces
 // Font size scale (mobile-optimized, derived from CDS 37 web scale)
 // ---------------------------------------------------------------------------
 
+/**
+ * Font size scale — mobile-optimized from CDS 37 Figma.
+ *
+ * Figma mobile column values:
+ *   help=10, caption=12, body3/h6=13, body2/h5=14, body1/h4=16,
+ *   h3=18, h2=22, h1=28, display5=32, display4=40, display3=44,
+ *   display2=48, display1=64
+ */
 export const fontSize = {
-  xs: 12, // Caption, minimum readable
-  sm: 14, // Body 3, secondary
-  md: 16, // Body 2, default body
-  lg: 20, // Body 1 / Heading 6
-  xl: 24, // Heading 5
-  '2xl': 28, // Heading 4 (web 32px scaled)
-  '3xl': 32, // Heading 3 (web 40px scaled)
-  '4xl': 40, // Display 4 (web 56px scaled)
-  '5xl': 48, // Display 3 (web 64px scaled)
-  '6xl': 56, // Display 2 (web 72px scaled)
-  '7xl': 64, // Display 1 (web 80px scaled)
+  xxs: 10, // Figma "help" text style
+  xs: 12,  // Caption
+  sm: 14,  // Body 2, h5 mobile
+  md: 16,  // Body 1, h4 mobile
+  lg: 18,  // h3 mobile (Figma: 18px, was 20px)
+  xl: 22,  // h2 mobile (Figma: 22px, was 24px)
+  '2xl': 28, // h1 mobile
+  '3xl': 32, // Display 5 mobile
+  '4xl': 40, // Display 4 mobile
+  '5xl': 44, // Display 3 mobile (Figma: 44px, was 48px)
+  '6xl': 48, // Display 2 mobile (Figma: 48px, was 56px)
+  '7xl': 64, // Display 1 mobile
 } as const
 
 // ---------------------------------------------------------------------------
@@ -110,18 +119,22 @@ export const fontWeight = {
 // Line height scale
 // ---------------------------------------------------------------------------
 
+/**
+ * Line height scale — matches Figma mobile column.
+ */
 export const lineHeight = {
-  xs: 16,
-  sm: 20,
-  md: 24,
-  lg: 28,
-  xl: 32,
-  '2xl': 36,
-  '3xl': 40,
-  '4xl': 48,
-  '5xl': 56,
-  '6xl': 64,
-  '7xl': 72,
+  xxs: 14, // help text
+  xs: 20,  // caption (Figma: 20px)
+  sm: 20,  // body2, h5 (Figma: 18-20px mobile)
+  md: 24,  // body1, h4 (Figma: 20-24px mobile)
+  lg: 24,  // h3 mobile (Figma: 24px)
+  xl: 32,  // h2 mobile (Figma: 32px)
+  '2xl': 32, // h1 mobile (Figma: 32px)
+  '3xl': 38, // display5 mobile (Figma: 38px)
+  '4xl': 38, // display4 mobile (Figma: 38px)
+  '5xl': 48, // display3 mobile (Figma: 48px)
+  '6xl': 56, // display2 mobile (Figma: 56px)
+  '7xl': 76, // display1 mobile (Figma: 76px)
 } as const
 
 // ---------------------------------------------------------------------------

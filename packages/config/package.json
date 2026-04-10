@@ -6,7 +6,8 @@
   "dependencies": {
     "@opengov/cds-tokens": "workspace:*",
     "@opengov/cds-themes": "workspace:*",
-    "@tamagui/core": "^1.116.0"
+    "@tamagui/core": "^1.116.0",
+    "expo-font": "~13.0.0"
   },
   "peerDependencies": {
     "react": ">=18.0.0",

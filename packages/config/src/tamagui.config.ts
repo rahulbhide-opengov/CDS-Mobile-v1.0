@@ -210,17 +210,18 @@ export function createCdsConfig(brandOverrides?: BrandConfig) {
     family: p.fontFamily,
     size: fontSize,
     lineHeight: {
-      xs: 16,
-      sm: 20,
-      md: 24,
-      lg: 28,
-      xl: 32,
-      '2xl': 36,
-      '3xl': 40,
-      '4xl': 48,
-      '5xl': 56,
-      '6xl': 64,
-      '7xl': 72,
+      xxs: 14,  // help text
+      xs: 20,   // caption
+      sm: 20,   // body2, h5
+      md: 24,   // body1, h4
+      lg: 24,   // h3 mobile
+      xl: 32,   // h2 mobile
+      '2xl': 32,  // h1 mobile
+      '3xl': 38,  // display5 mobile
+      '4xl': 38,  // display4 mobile
+      '5xl': 48,  // display3 mobile
+      '6xl': 56,  // display2 mobile
+      '7xl': 76,  // display1 mobile
     },
     weight: {
       light: '300',
@@ -230,17 +231,18 @@ export function createCdsConfig(brandOverrides?: BrandConfig) {
       bold: '700',
     },
     letterSpacing: {
-      xs: 0.4,
-      sm: 0.25,
-      md: 0,
-      lg: 0,
-      xl: -0.25,
-      '2xl': -0.25,
-      '3xl': -0.5,
-      '4xl': -0.5,
-      '5xl': -0.5,
-      '6xl': -0.5,
-      '7xl': -0.5,
+      xxs: 0.4,   // help text
+      xs: 0,       // caption (Figma: 0)
+      sm: 0.17,    // body2 (Figma: 0.17)
+      md: 0.15,    // body1 (Figma: 0.15)
+      lg: -0.2,    // h3 (Figma: -0.2)
+      xl: -0.25,   // h2 (Figma: -0.25)
+      '2xl': -0.25, // h1 (Figma: -0.25)
+      '3xl': -0.4,  // display5 (Figma: -0.4)
+      '4xl': -0.4,  // display4 (Figma: -0.4)
+      '5xl': -0.4,  // display3 (Figma: -0.4)
+      '6xl': -0.4,  // display2 (Figma: -0.4)
+      '7xl': -0.4,  // display1 (Figma: -0.4)
     },
     face: faceMap,
   })

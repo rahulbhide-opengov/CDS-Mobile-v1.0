@@ -44,21 +44,23 @@ export function createSemanticTokens(p: PrimitiveTokens = primitive) {
     // -------------------------------------------------------------------------
     // Semantic status colors
     // -------------------------------------------------------------------------
-    errorMain: p.red600,
-    errorLight: p.red50,
-    errorDark: p.red700,
+    // Status colors — Figma Semantic Theme "main" uses the 700-weight,
+    // "dark" uses 800 or deeper, "light" uses the 50 background.
+    errorMain: p.red600,       // #D33423 — Figma error/main
+    errorLight: p.red50,       // #FCF7F7 — Figma error/background
+    errorDark: p.red700,       // #B12525 — Figma error/dark
 
-    successMain: p.green500,
-    successLight: p.green50,
-    successDark: p.green700,
+    successMain: p.green700,   // #037730 — Figma success/main (was green500)
+    successLight: p.green50,   // #EFFDF1 — Figma success/background
+    successDark: p.green800,   // #015A2D — Figma success/dark
 
-    warningMain: p.amber500,
-    warningLight: p.amber50,
-    warningDark: p.amber700,
+    warningMain: p.amber700,   // #885604 — Figma warning/main (was amber500)
+    warningLight: p.amber50,   // #FDF7F4 — Figma warning/background
+    warningDark: p.amber800,   // #7D2E04 — Figma warning/dark
 
-    infoMain: p.teal500,
-    infoLight: p.teal50,
-    infoDark: p.teal700,
+    infoMain: p.teal700,       // #0E6F7F — Figma info/main (was teal500)
+    infoLight: p.teal50,       // #F1FAFC — Figma info/background
+    infoDark: p.cerulean800,   // #085461 — Figma info/dark
 
     // -------------------------------------------------------------------------
     // Borders
@@ -66,7 +68,7 @@ export function createSemanticTokens(p: PrimitiveTokens = primitive) {
     borderDefault: p.neutral200,
     borderStrong: p.neutral300,
     borderFocus: p.brandPrimary,
-    borderError: p.red500,
+    borderError: p.red600,     // #D33423 — Figma error/main
     borderDisabled: p.neutral200,
 
     // -------------------------------------------------------------------------
