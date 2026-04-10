@@ -1,0 +1,6 @@
+{
+  "buildCommand": "cd apps/web-preview && npx expo export --platform web",
+  "outputDirectory": "apps/web-preview/dist",
+  "installCommand": "pnpm install",
+  "framework": null
+}
