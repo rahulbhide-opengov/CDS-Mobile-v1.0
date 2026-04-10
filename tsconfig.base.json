@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@opengov/cds-tokens": ["./packages/tokens/src"],
+      "@opengov/cds-tokens/*": ["./packages/tokens/src/*"],
+      "@opengov/cds-themes": ["./packages/themes/src"],
+      "@opengov/cds-themes/*": ["./packages/themes/src/*"],
+      "@opengov/cds-config": ["./packages/config/src"],
+      "@opengov/cds-config/*": ["./packages/config/src/*"],
+      "@opengov/cds-primitives": ["./packages/primitives/src"],
+      "@opengov/cds-primitives/*": ["./packages/primitives/src/*"],
+      "@opengov/cds-icons": ["./packages/icons/src"],
+      "@opengov/cds-icons/*": ["./packages/icons/src/*"],
+      "@opengov/cds-components": ["./packages/components/src"],
+      "@opengov/cds-components/*": ["./packages/components/src/*"],
+      "@opengov/cds-patterns": ["./packages/patterns/src"],
+      "@opengov/cds-patterns/*": ["./packages/patterns/src/*"]
+    }
+  },
+  "exclude": ["node_modules", "dist"]
+}

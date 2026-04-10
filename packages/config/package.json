@@ -1,0 +1,24 @@
+{
+  "name": "@opengov/cds-config",
+  "version": "0.1.0",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "dependencies": {
+    "@opengov/cds-tokens": "workspace:*",
+    "@opengov/cds-themes": "workspace:*",
+    "@tamagui/core": "^1.116.0"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-native": ">=0.74.0"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "react": "^18.3.0",
+    "typescript": "^5.6.0"
+  }
+}
