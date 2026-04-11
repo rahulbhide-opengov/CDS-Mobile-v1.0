@@ -42,6 +42,23 @@ export {
   type LineHeightToken,
 } from './typography'
 
+// Text Styles -- complete CDS 37 typography system (responsive)
+export {
+  baseStyles,
+  buttonStyles,
+  inputStyles,
+  chipStyles,
+  avatarStyles,
+  tableStyles,
+  tooltipStyles,
+  alertStyles,
+  bottomNavStyles,
+  allTextStyles,
+  type TextStyleDef,
+  type ResponsiveTextStyle,
+  type TextStyleName,
+} from './text-styles'
+
 // Spacing
 export { space, negativeSpace, type SpaceToken } from './spacing'
 
