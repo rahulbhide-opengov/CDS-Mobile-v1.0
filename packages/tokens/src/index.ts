@@ -59,6 +59,21 @@ export {
   type TextStyleName,
 } from './text-styles'
 
+// Component Sizes -- responsive sizes from Figma Semantic (Display) collection
+export {
+  buttonSizes,
+  inputSizes,
+  chipSizes,
+  chipInFieldSizes,
+  fabSizes,
+  tableSizes,
+  iconSizes,
+  cornerRadius,
+  borderWidth,
+  allComponentSizes,
+  type ResponsiveSize,
+} from './component-sizes'
+
 // Spacing
 export { space, negativeSpace, type SpaceToken } from './spacing'
 

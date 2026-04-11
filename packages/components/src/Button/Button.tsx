@@ -134,29 +134,29 @@ const ButtonFrame = styled(Stack, {
     },
 
     // -----------------------------------------------------------------------
-    // size -- mobile-native WCAG 2.5.8 compliant touch targets
-    //   sm: 36px (dense, hitSlop pads to 44pt for tables/toolbars)
-    //   md: 44px (WCAG AA minimum, default for mobile)
-    //   lg: 48px (MD3 recommended, primary CTAs)
+    // size -- from Figma Semantic (Display) Mobile (390) column
+    //   Small:  32px (Figma: Button/Small  M=32)
+    //   Medium: 36px (Figma: Button/Medium M=36)
+    //   Large:  48px (Figma: Button/Large  M=48)
     // -----------------------------------------------------------------------
     size: {
       sm: {
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        height: 36,
-        minHeight: 36,
-        gap: 8,
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        height: 32,
+        minHeight: 32,
+        gap: 4,
       },
       md: {
-        paddingHorizontal: 16,
-        paddingVertical: 10,
-        height: 44,
-        minHeight: 44,
-        gap: 8,
+        paddingHorizontal: 12,
+        paddingVertical: 4,
+        height: 36,
+        minHeight: 36,
+        gap: 4,
       },
       lg: {
-        paddingHorizontal: 24,
-        paddingVertical: 12,
+        paddingHorizontal: 16,
+        paddingVertical: 8,
         height: 48,
         minHeight: 48,
         gap: 8,
@@ -364,14 +364,18 @@ export const Button = React.memo(function Button({
     return loading ? 'Loading' : undefined
   }, [accessibilityLabel, children, loading])
 
-  // hitSlop pads small buttons (36px) to WCAG 44pt minimum touch target.
-  // md (44px) and lg (48px) already meet/exceed the requirement.
+  // hitSlop pads small/medium buttons to 44pt WCAG minimum touch target.
+  // Figma mobile: sm=32, md=36, lg=48
   const hitSlop = useMemo(() => {
     if (size === 'sm') {
+      const pad = Math.ceil((MIN_TOUCH_TARGET - 32) / 2) // (44-32)/2 = 6
+      return { top: pad, bottom: pad, left: pad, right: pad }
+    }
+    if (size === 'md') {
       const pad = Math.ceil((MIN_TOUCH_TARGET - 36) / 2) // (44-36)/2 = 4
       return { top: pad, bottom: pad, left: pad, right: pad }
     }
-    return undefined // md=44, lg=48 — both meet WCAG minimum
+    return undefined // lg=48 meets WCAG minimum
   }, [size])
 
   return (

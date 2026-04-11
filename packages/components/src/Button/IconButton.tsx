@@ -126,23 +126,21 @@ const IconButtonFrame = styled(Stack, {
     },
 
     // -----------------------------------------------------------------------
-    // size -- mobile-native WCAG 2.5.8 compliant touch targets
-    //   sm: 36x36 (hitSlop pads to 44pt)
-    //   md: 44x44 (WCAG AA minimum, default)
-    //   lg: 48x48 (MD3 recommended)
+    // size -- from Figma Semantic (Display) Mobile (390) column
+    //   Same as Button heights: sm=32, md=36, lg=48
     // -----------------------------------------------------------------------
     size: {
       sm: {
+        width: 32,
+        height: 32,
+        minWidth: 32,
+        minHeight: 32,
+      },
+      md: {
         width: 36,
         height: 36,
         minWidth: 36,
         minHeight: 36,
-      },
-      md: {
-        width: 44,
-        height: 44,
-        minWidth: 44,
-        minHeight: 44,
       },
       lg: {
         width: 48,
@@ -247,12 +245,17 @@ export const IconButton = React.memo(function IconButton({
 
   // hitSlop pads small icon buttons (36px) to WCAG 44pt minimum.
   // md=44 and lg=48 already meet/exceed the requirement.
+  // Figma mobile: sm=32, md=36, lg=48. hitSlop pads to 44pt.
   const hitSlop = useMemo(() => {
     if (size === 'sm') {
+      const pad = Math.ceil((MIN_TOUCH_TARGET - 32) / 2) // (44-32)/2 = 6
+      return { top: pad, bottom: pad, left: pad, right: pad }
+    }
+    if (size === 'md') {
       const pad = Math.ceil((MIN_TOUCH_TARGET - 36) / 2) // (44-36)/2 = 4
       return { top: pad, bottom: pad, left: pad, right: pad }
     }
-    return undefined // md=44, lg=48 — both meet WCAG minimum
+    return undefined // lg=48 meets WCAG minimum
   }, [size])
 
   const a11yLabel = useMemo(() => {

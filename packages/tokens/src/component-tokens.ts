@@ -16,30 +16,30 @@ export function createComponentTokens(
     // -------------------------------------------------------------------------
     // Button (Figma node: 17621:64726)
     //
-    // CDS 37 Figma desktop sizes: Small=28, Medium=32, Large=40
-    // Mobile/Tablet WCAG 2.5.8: minimum 44px touch target
-    // Material Design 3: minimum 48dp touch target
+    // Figma Semantic (Display) responsive sizes:
+    //   Small:  D=28, T=32, M=32
+    //   Medium: D=32, T=36, M=36
+    //   Large:  D=40, T=48, M=48
     //
-    // Mobile-native sizes ensure all buttons meet WCAG without hitSlop:
-    //   Small  → 36px visual + hitSlop to 44pt (dense UI, tables)
-    //   Medium → 44px (WCAG AA minimum, default)
-    //   Large  → 48px (MD3 recommended, primary CTAs)
+    // For React Native (mobile-first), we use the MOBILE column as default.
+    // Tablet overrides applied via Tamagui media queries.
     // -------------------------------------------------------------------------
     buttonRadius: p.radiusBase, // 4px
 
-    buttonSmHeight: 36,
-    buttonSmPaddingH: 12,
-    buttonSmPaddingV: 6,
+    // Mobile defaults (from Figma Mobile 390 column)
+    buttonSmHeight: 32,
+    buttonSmPaddingH: 8,
+    buttonSmPaddingV: 4,
     buttonSmFontSize: 13,
-    buttonMdHeight: 44,
-    buttonMdPaddingH: 16,
-    buttonMdPaddingV: 10,
+    buttonMdHeight: 36,
+    buttonMdPaddingH: 12,
+    buttonMdPaddingV: 4,
     buttonMdFontSize: 14,
     buttonLgHeight: 48,
-    buttonLgPaddingH: 24,
-    buttonLgPaddingV: 12,
+    buttonLgPaddingH: 16,
+    buttonLgPaddingV: 8,
     buttonLgFontSize: 16,
-    buttonGap: 8,
+    buttonGap: 4,
 
     // Primary: filled blurple
     buttonPrimaryBg: s.primaryMain,
@@ -88,10 +88,10 @@ export function createComponentTokens(
     textFieldHelperColor: s.textSecondary,
     textFieldErrorTextColor: s.errorColor,
 
-    // Mobile-native: all text fields meet 44px minimum touch target
-    textFieldSmHeight: 44,    // WCAG minimum (was 28)
-    textFieldMdHeight: 48,    // MD3 recommended (was 32)
-    textFieldLgHeight: 56,    // Comfortable large (was 40)
+    // Figma Mobile (390) column: Inputs/Small=32, Medium=40, Large=48
+    textFieldSmHeight: 32,
+    textFieldMdHeight: 40,
+    textFieldLgHeight: 48,
 
     // -------------------------------------------------------------------------
     // Card
@@ -105,10 +105,10 @@ export function createComponentTokens(
     // -------------------------------------------------------------------------
     chipRadius: p.radiusBase,
     chipGap: 4,
-    // Mobile-native: chips meet WCAG touch targets
-    chipSmHeight: 32,     // Dense, hitSlop to 44pt (was 28)
-    chipMdHeight: 36,     // Default, hitSlop to 44pt (was 32)
-    chipLgHeight: 44,     // WCAG minimum (was 40)
+    // Figma Mobile (390) column: Chip/Small=32, Medium=36, Large=44
+    chipSmHeight: 32,
+    chipMdHeight: 36,
+    chipLgHeight: 44,
     chipDefaultBorder: s.chipDefaultEnabledBorder,
     chipDefaultHoverFill: s.chipDefaultHoverFill,
     chipDefaultFocusFill: s.chipDefaultFocusFill,
