@@ -1,8 +1,29 @@
+/**
+ * ButtonGroup -- CDS 37 toolbar container for grouped buttons
+ *
+ * Spacing modes:
+ *   compact = 0px gap (connected, with border-radius merging)
+ *   default = 8px gap
+ *   loose   = 16px gap
+ *
+ * Compact mode applies border-radius overrides so adjacent buttons
+ * share borders correctly (4px radius on outer edges, 0px on inner edges).
+ *
+ * Uses accessibilityRole="toolbar" per WAI-ARIA toolbar pattern.
+ */
+
 import React, { Children, cloneElement, isValidElement, useMemo } from 'react'
 import { styled, Stack } from '@tamagui/core'
 
 // ---------------------------------------------------------------------------
-// ButtonGroupFrame -- layout container for grouped buttons
+// Constants
+// ---------------------------------------------------------------------------
+
+/** CDS 37: button border radius used for compact group outer corners */
+const BUTTON_RADIUS = 4
+
+// ---------------------------------------------------------------------------
+// ButtonGroupFrame -- layout container
 // ---------------------------------------------------------------------------
 
 const ButtonGroupFrame = styled(Stack, {
@@ -71,34 +92,32 @@ interface CompactRadiusOverrides {
 function getCompactOverrides(
   index: number,
   count: number,
-  orientation: 'horizontal' | 'vertical'
+  orientation: 'horizontal' | 'vertical',
 ): CompactRadiusOverrides {
   const isFirst = index === 0
   const isLast = index === count - 1
-  const isMiddle = !isFirst && !isLast
-  const radius = 4 // $md
 
   if (count === 1) {
-    // Single button -- keep all corners
-    return { borderRadius: radius }
+    // Single button -- keep all corners at 4px
+    return { borderRadius: BUTTON_RADIUS }
   }
 
   if (orientation === 'horizontal') {
     if (isFirst) {
       return {
-        borderTopLeftRadius: radius,
-        borderBottomLeftRadius: radius,
+        borderTopLeftRadius: BUTTON_RADIUS,
+        borderBottomLeftRadius: BUTTON_RADIUS,
         borderTopRightRadius: 0,
         borderBottomRightRadius: 0,
-        borderRightWidth: 0, // avoid double border
+        borderRightWidth: 0, // avoid double border between adjacent buttons
       }
     }
     if (isLast) {
       return {
         borderTopLeftRadius: 0,
         borderBottomLeftRadius: 0,
-        borderTopRightRadius: radius,
-        borderBottomRightRadius: radius,
+        borderTopRightRadius: BUTTON_RADIUS,
+        borderBottomRightRadius: BUTTON_RADIUS,
       }
     }
     // Middle
@@ -111,8 +130,8 @@ function getCompactOverrides(
   // Vertical orientation
   if (isFirst) {
     return {
-      borderTopLeftRadius: radius,
-      borderTopRightRadius: radius,
+      borderTopLeftRadius: BUTTON_RADIUS,
+      borderTopRightRadius: BUTTON_RADIUS,
       borderBottomLeftRadius: 0,
       borderBottomRightRadius: 0,
       borderBottomWidth: 0,
@@ -122,8 +141,8 @@ function getCompactOverrides(
     return {
       borderTopLeftRadius: 0,
       borderTopRightRadius: 0,
-      borderBottomLeftRadius: radius,
-      borderBottomRightRadius: radius,
+      borderBottomLeftRadius: BUTTON_RADIUS,
+      borderBottomRightRadius: BUTTON_RADIUS,
     }
   }
   // Middle

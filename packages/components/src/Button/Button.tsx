@@ -1,141 +1,167 @@
+/**
+ * Button -- CDS 37 Figma-accurate implementation
+ *
+ * Source of truth: CDS 37 Figma component node 17621:64726
+ *
+ * 7 type variants: Primary, Secondary, Secondary-alt, Tertiary, Tertiary-alt,
+ *                  Destructive, Destructive-alt
+ * 3 sizes: Small (28), Medium (32), Large (40)
+ * Disabled: 38% opacity on the entire button (Figma opacity: 0.38)
+ *
+ * All colors reference `primitive.*` from @opengov/cds-tokens.
+ * Typography references `buttonStyles` from @opengov/cds-tokens.
+ */
+
 import React, { useCallback, useMemo } from 'react'
 import { ActivityIndicator } from 'react-native'
-import { styled, Stack, type GetProps } from '@tamagui/core'
-import { Pressable, Text } from '@opengov/cds-primitives'
-import { colors, primitive } from '@opengov/cds-tokens'
+import { styled, Stack, Text as TamaguiText } from '@tamagui/core'
+import { primitive, buttonStyles } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
-// ButtonFrame -- Tamagui styled frame with all 7 CDS 37 variants & 3 sizes
+// Constants
 // ---------------------------------------------------------------------------
 
-const ButtonFrame = styled(Pressable, {
+/** CDS 37: border radius 4px for all button sizes and variants */
+const BUTTON_RADIUS = 4
+
+/** CDS 37: disabled state uses 38% opacity on the whole component */
+const DISABLED_OPACITY = primitive.stateDisabledOpacity // 0.38
+
+/** Minimum touch target per WCAG / iOS HIG */
+const MIN_TOUCH_TARGET = 44
+
+// ---------------------------------------------------------------------------
+// ButtonFrame -- Tamagui styled frame with CDS 37 variant system
+// ---------------------------------------------------------------------------
+
+const ButtonFrame = styled(Stack, {
   name: 'Button',
+  tag: 'button',
+  role: 'button',
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'center',
-  gap: '$1',
-  borderRadius: '$md',
+  borderRadius: BUTTON_RADIUS,
   borderWidth: 0,
-
-  // Focus ring
-  focusStyle: {
-    outlineWidth: 2,
-    outlineColor: colors.primary,
-    outlineStyle: 'solid',
-    outlineOffset: 2,
-  },
+  cursor: 'pointer',
+  // Reset Pressable-inherited minimums so small buttons render at 28px
+  minWidth: 0,
+  minHeight: 0,
 
   variants: {
     // -----------------------------------------------------------------------
-    // Variant -- maps directly to CDS 37 button variants
+    // variant -- maps to CDS 37 Figma "type" property
     // -----------------------------------------------------------------------
     variant: {
       primary: {
-        backgroundColor: '$brandBackground',
+        backgroundColor: primitive.blurple700,
         pressStyle: {
-          backgroundColor: '$brandBackgroundPress',
+          backgroundColor: primitive.blurple900,
         },
         hoverStyle: {
-          backgroundColor: '$brandBackgroundHover',
+          backgroundColor: primitive.blurple900,
         },
       },
 
       secondary: {
-        backgroundColor: '$background',
+        backgroundColor: 'transparent',
         borderWidth: 1,
-        borderColor: '$borderColor',
+        borderColor: primitive.blurple700,
         pressStyle: {
-          backgroundColor: '$backgroundPress',
-          borderColor: '$borderColorPress',
+          backgroundColor: primitive.blurple100,
+          borderColor: primitive.blurple900,
         },
         hoverStyle: {
-          backgroundColor: '$backgroundHover',
-          borderColor: '$borderColorHover',
+          backgroundColor: primitive.blurple100,
+          borderColor: primitive.blurple900,
         },
       },
 
       secondaryAlt: {
         backgroundColor: 'transparent',
-        borderWidth: 1,
-        borderColor: '$borderColor',
+        borderWidth: 0,
         pressStyle: {
-          backgroundColor: '$backgroundPress',
-          borderColor: '$borderColorPress',
+          backgroundColor: primitive.blurple100,
         },
         hoverStyle: {
-          backgroundColor: '$backgroundHover',
-          borderColor: '$borderColorHover',
+          backgroundColor: primitive.blurple100,
         },
       },
 
       tertiary: {
         backgroundColor: 'transparent',
+        borderWidth: 1,
+        borderColor: primitive.slate700,
         pressStyle: {
-          backgroundColor: '$backgroundPress',
+          backgroundColor: primitive.gray100,
         },
         hoverStyle: {
-          backgroundColor: '$backgroundHover',
+          backgroundColor: primitive.gray100,
         },
       },
 
       tertiaryAlt: {
         backgroundColor: 'transparent',
+        borderWidth: 0,
         pressStyle: {
-          backgroundColor: '$backgroundPress',
+          backgroundColor: primitive.gray100,
         },
         hoverStyle: {
-          backgroundColor: '$backgroundHover',
+          backgroundColor: primitive.gray100,
         },
       },
 
       destructive: {
-        backgroundColor: '$errorColor',
+        backgroundColor: primitive.red600,
         pressStyle: {
-          backgroundColor: colors.red800, // red800 pressed
+          backgroundColor: primitive.red700,
         },
         hoverStyle: {
-          backgroundColor: colors.red700, // red700 hover
+          backgroundColor: primitive.red700,
         },
       },
 
       destructiveAlt: {
         backgroundColor: 'transparent',
-        borderWidth: 1,
-        borderColor: '$errorColor',
+        borderWidth: 0,
         pressStyle: {
-          backgroundColor: colors.red100, // red100 pressed
-          borderColor: '$errorColor',
+          backgroundColor: primitive.red700,
         },
         hoverStyle: {
-          backgroundColor: colors.red50, // red50 hover
-          borderColor: '$errorColor',
+          backgroundColor: primitive.red700,
         },
       },
     },
 
     // -----------------------------------------------------------------------
-    // Size -- sm / md / lg with explicit padding values from CDS 37 spec
+    // size -- sm (28px) / md (32px) / lg (40px) from CDS 37 Figma variables
     // -----------------------------------------------------------------------
     size: {
       sm: {
         paddingHorizontal: 8,
         paddingVertical: 4,
-        minHeight: 28,   // CDS 37 Figma: Small = 28px
+        height: 28,
+        minHeight: 28,
+        gap: 4,
       },
       md: {
         paddingHorizontal: 12,
         paddingVertical: 4,
-        minHeight: 32,   // CDS 37 Figma: Medium = 32px
+        height: 32,
+        minHeight: 32,
+        gap: 4,
       },
       lg: {
         paddingHorizontal: 16,
         paddingVertical: 8,
-        minHeight: 40,   // CDS 37 Figma: Large = 40px
+        height: 40,
+        minHeight: 40,
+        gap: 8,
       },
     },
 
     // -----------------------------------------------------------------------
-    // Full width stretches to fill container
+    // fullWidth -- stretches to fill container
     // -----------------------------------------------------------------------
     fullWidth: {
       true: {
@@ -145,11 +171,12 @@ const ButtonFrame = styled(Pressable, {
     },
 
     // -----------------------------------------------------------------------
-    // Disabled -- unified disabled appearance across all variants
+    // disabled -- Figma uses opacity 0.38 on the entire component.
+    // Colors stay the same as idle; only the opacity changes.
     // -----------------------------------------------------------------------
     disabled: {
       true: {
-        opacity: 1,
+        opacity: DISABLED_OPACITY,
         cursor: 'not-allowed',
         pointerEvents: 'none',
       },
@@ -163,35 +190,56 @@ const ButtonFrame = styled(Pressable, {
 })
 
 // ---------------------------------------------------------------------------
-// ButtonText -- styled text with per-variant color mapping
+// ButtonText -- styled text with per-variant color and per-size typography
+//
+// Typography values sourced from buttonStyles (text-styles.ts), mobile column.
 // ---------------------------------------------------------------------------
 
-const ButtonText = styled(Text, {
+const ButtonText = styled(TamaguiText, {
   name: 'ButtonText',
   fontFamily: '$body',
-  fontWeight: '$medium',
   userSelect: 'none',
 
   variants: {
     variant: {
-      primary: { color: 'white' },
-      secondary: { color: '$brandBackground' },
-      secondaryAlt: { color: '$color' },
-      tertiary: { color: '$brandBackground' },
-      tertiaryAlt: { color: '$color' },
-      destructive: { color: 'white' },
-      destructiveAlt: { color: '$errorColor' },
+      primary:        { color: primitive.white },
+      secondary:      { color: primitive.blurple700 },
+      secondaryAlt:   { color: primitive.blurple700 },
+      tertiary:       { color: primitive.slate700 },
+      tertiaryAlt:    { color: primitive.slate700 },
+      destructive:    { color: primitive.white },
+      destructiveAlt: { color: primitive.red600 },
+    },
+
+    // Pressed-state text color overrides (applied programmatically)
+    pressed: {
+      primary:        { color: primitive.white },
+      secondary:      { color: primitive.blurple900 },
+      secondaryAlt:   { color: primitive.blurple900 },
+      tertiary:       { color: primitive.slate700 },
+      tertiaryAlt:    { color: primitive.slate700 },
+      destructive:    { color: primitive.white },
+      destructiveAlt: { color: primitive.white },
     },
 
     size: {
-      sm: { fontSize: '$xs', lineHeight: '$xs' },
-      md: { fontSize: '$sm', lineHeight: '$sm' },
-      lg: { fontSize: '$md', lineHeight: '$md' },
-    },
-
-    disabled: {
-      true: {
-        color: '$colorDisabled',
+      sm: {
+        fontSize: buttonStyles.small.mobile.fontSize,     // 13
+        fontWeight: String(buttonStyles.small.mobile.fontWeight) as '500', // Medium 500
+        lineHeight: buttonStyles.small.mobile.lineHeight,  // 18
+        letterSpacing: buttonStyles.small.mobile.letterSpacing,
+      },
+      md: {
+        fontSize: buttonStyles.medium.mobile.fontSize,     // 14
+        fontWeight: String(buttonStyles.medium.mobile.fontWeight) as '500', // Medium 500
+        lineHeight: buttonStyles.medium.mobile.lineHeight,  // 20
+        letterSpacing: buttonStyles.medium.mobile.letterSpacing,
+      },
+      lg: {
+        fontSize: buttonStyles.large.mobile.fontSize,      // 16
+        fontWeight: String(buttonStyles.large.mobile.fontWeight) as '600', // SemiBold 600
+        lineHeight: buttonStyles.large.mobile.lineHeight,   // 24
+        letterSpacing: buttonStyles.large.mobile.letterSpacing,
       },
     },
   } as const,
@@ -206,7 +254,7 @@ const ButtonText = styled(Text, {
 // Types
 // ---------------------------------------------------------------------------
 
-type ButtonVariant =
+export type ButtonVariant =
   | 'primary'
   | 'secondary'
   | 'secondaryAlt'
@@ -215,14 +263,14 @@ type ButtonVariant =
   | 'destructive'
   | 'destructiveAlt'
 
-type ButtonSize = 'sm' | 'md' | 'lg'
+export type ButtonSize = 'sm' | 'md' | 'lg'
 
 export interface ButtonProps {
-  /** Visual variant. Defaults to "primary". */
+  /** CDS 37 type variant. Defaults to "primary". */
   variant?: ButtonVariant
-  /** Size preset. Defaults to "md". */
+  /** Size preset. Defaults to "md" (32px). */
   size?: ButtonSize
-  /** Disables the button and applies muted styling. */
+  /** Disables the button -- applies 38% opacity per Figma spec. */
   disabled?: boolean
   /** Shows a loading spinner and disables press interactions. */
   loading?: boolean
@@ -238,63 +286,44 @@ export interface ButtonProps {
   children: React.ReactNode
   /** Accessibility label override. Falls back to children if a string. */
   accessibilityLabel?: string
+  /** Whether to show the focus ring. Maps to Figma "focusRing" prop. */
+  focusRing?: boolean
   /** Additional test ID for testing. */
   testID?: string
 }
 
 // ---------------------------------------------------------------------------
-// Disabled background resolver
-// ---------------------------------------------------------------------------
-
-const DISABLED_BG_FILLED = '$backgroundStrong' // neutral100 for solid variants
-const DISABLED_BG_TRANSPARENT = 'transparent' // for ghost/outline variants
-
-function getDisabledBackground(variant: ButtonVariant): string {
-  switch (variant) {
-    case 'primary':
-    case 'secondary':
-    case 'destructive':
-      return DISABLED_BG_FILLED
-    case 'secondaryAlt':
-    case 'tertiary':
-    case 'tertiaryAlt':
-    case 'destructiveAlt':
-      return DISABLED_BG_TRANSPARENT
-    default:
-      return DISABLED_BG_FILLED
-  }
-}
-
-function getDisabledBorder(variant: ButtonVariant): string | undefined {
-  switch (variant) {
-    case 'secondary':
-    case 'secondaryAlt':
-    case 'destructiveAlt':
-      return '$borderColorDisabled'
-    default:
-      return undefined
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Spinner color resolver
+// Spinner color resolver -- idle-state colors for the ActivityIndicator
 // ---------------------------------------------------------------------------
 
 function getSpinnerColor(variant: ButtonVariant): string {
   switch (variant) {
     case 'primary':
-    case 'destructive':
-      return colors.white
+      return primitive.white
     case 'secondary':
-    case 'tertiary':
-      return colors.primary
-    case 'destructiveAlt':
-      return colors.red600
     case 'secondaryAlt':
+      return primitive.blurple700
+    case 'tertiary':
     case 'tertiaryAlt':
+      return primitive.slate700
+    case 'destructive':
+      return primitive.white
+    case 'destructiveAlt':
+      return primitive.red600
     default:
-      return primitive.neutral700
+      return primitive.blurple700
   }
+}
+
+// ---------------------------------------------------------------------------
+// Focus ring style
+// ---------------------------------------------------------------------------
+
+const FOCUS_RING_STYLE = {
+  outlineWidth: 2,
+  outlineColor: primitive.blurple700,
+  outlineStyle: 'solid' as const,
+  outlineOffset: 2,
 }
 
 // ---------------------------------------------------------------------------
@@ -312,6 +341,7 @@ export const Button = React.memo(function Button({
   onPress,
   children,
   accessibilityLabel,
+  focusRing = true,
   testID,
 }: ButtonProps) {
   const isDisabled = disabled || loading
@@ -331,19 +361,19 @@ export const Button = React.memo(function Button({
     return loading ? 'Loading' : undefined
   }, [accessibilityLabel, children, loading])
 
-  // hitSlop ensures sm buttons still meet 44pt minimum touch target
-  const hitSlop = size === 'sm' ? { top: 6, bottom: 6, left: 6, right: 6 } : undefined
-
-  // Disabled styling is applied as inline overrides so the Tamagui variant
-  // system handles the base shape while we control the disabled palette.
-  const disabledOverrides = isDisabled
-    ? {
-        backgroundColor: getDisabledBackground(variant),
-        borderColor: getDisabledBorder(variant),
-        pressStyle: { backgroundColor: getDisabledBackground(variant) },
-        hoverStyle: { backgroundColor: getDisabledBackground(variant) },
-      }
-    : undefined
+  // hitSlop ensures sm buttons (28px) still meet 44pt minimum touch target.
+  // sm needs (44-28)/2 = 8px on each side.
+  const hitSlop = useMemo(() => {
+    if (size === 'sm') {
+      const pad = Math.ceil((MIN_TOUCH_TARGET - 28) / 2)
+      return { top: pad, bottom: pad, left: pad, right: pad }
+    }
+    if (size === 'md') {
+      const pad = Math.ceil((MIN_TOUCH_TARGET - 32) / 2)
+      return { top: pad, bottom: pad, left: pad, right: pad }
+    }
+    return undefined // lg is 40px, close enough; no hitSlop needed
+  }, [size])
 
   return (
     <ButtonFrame
@@ -359,14 +389,14 @@ export const Button = React.memo(function Button({
         disabled: isDisabled,
         busy: loading,
       }}
+      focusStyle={focusRing ? FOCUS_RING_STYLE : undefined}
       testID={testID}
-      {...disabledOverrides}
     >
       {/* Loading spinner replaces iconLeft position */}
       {loading ? (
         <ActivityIndicator
           size="small"
-          color={isDisabled ? primitive.neutral400 : getSpinnerColor(variant)}
+          color={getSpinnerColor(variant)}
           testID={testID ? `${testID}-spinner` : undefined}
         />
       ) : (
@@ -378,7 +408,6 @@ export const Button = React.memo(function Button({
         <ButtonText
           variant={variant}
           size={size}
-          disabled={isDisabled || undefined}
         >
           {children}
         </ButtonText>

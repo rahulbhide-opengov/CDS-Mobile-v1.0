@@ -1,145 +1,162 @@
+/**
+ * IconButton -- CDS 37 Figma-accurate icon-only button
+ *
+ * Same 7 type variants and 3 sizes as Button, but square/circular with no label.
+ * Sizes: sm=28x28, md=32x32, lg=40x40 (matching Button heights).
+ * Border radius: 9999 for circular shape.
+ * Disabled: 38% opacity on the entire button (Figma opacity: 0.38).
+ *
+ * All colors reference `primitive.*` from @opengov/cds-tokens.
+ */
+
 import React, { useCallback, useMemo } from 'react'
-import { styled, type GetProps } from '@tamagui/core'
-import { Pressable } from '@opengov/cds-primitives'
-import { colors, primitive } from '@opengov/cds-tokens'
+import { styled, Stack } from '@tamagui/core'
+import { primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
-// IconButtonFrame -- circular icon-only button with all 7 CDS 37 variants
+// Constants
 // ---------------------------------------------------------------------------
 
-const IconButtonFrame = styled(Pressable, {
+/** CDS 37: disabled state uses 38% opacity on the whole component */
+const DISABLED_OPACITY = primitive.stateDisabledOpacity // 0.38
+
+/** Minimum touch target per WCAG / iOS HIG */
+const MIN_TOUCH_TARGET = 44
+
+// ---------------------------------------------------------------------------
+// IconButtonFrame -- circular Tamagui styled frame with CDS 37 variant system
+// ---------------------------------------------------------------------------
+
+const IconButtonFrame = styled(Stack, {
   name: 'IconButton',
+  tag: 'button',
+  role: 'button',
   alignItems: 'center',
   justifyContent: 'center',
   borderRadius: 9999,
   borderWidth: 0,
-
-  // Focus ring
-  focusStyle: {
-    outlineWidth: 2,
-    outlineColor: colors.primary,
-    outlineStyle: 'solid',
-    outlineOffset: 2,
-  },
+  cursor: 'pointer',
+  // Reset any inherited minimums so 28px renders correctly
+  minWidth: 0,
+  minHeight: 0,
 
   variants: {
     // -----------------------------------------------------------------------
-    // Variant -- same 7 variants as Button, adapted for icon-only use
+    // variant -- same 7 CDS 37 types, same idle/pressed colors as Button
     // -----------------------------------------------------------------------
     variant: {
       primary: {
-        backgroundColor: '$brandBackground',
+        backgroundColor: primitive.blurple700,
         pressStyle: {
-          backgroundColor: '$brandBackgroundPress',
+          backgroundColor: primitive.blurple900,
         },
         hoverStyle: {
-          backgroundColor: '$brandBackgroundHover',
+          backgroundColor: primitive.blurple900,
         },
       },
 
       secondary: {
-        backgroundColor: '$background',
+        backgroundColor: 'transparent',
         borderWidth: 1,
-        borderColor: '$borderColor',
+        borderColor: primitive.blurple700,
         pressStyle: {
-          backgroundColor: '$backgroundPress',
-          borderColor: '$borderColorPress',
+          backgroundColor: primitive.blurple100,
+          borderColor: primitive.blurple900,
         },
         hoverStyle: {
-          backgroundColor: '$backgroundHover',
-          borderColor: '$borderColorHover',
+          backgroundColor: primitive.blurple100,
+          borderColor: primitive.blurple900,
         },
       },
 
       secondaryAlt: {
         backgroundColor: 'transparent',
-        borderWidth: 1,
-        borderColor: '$borderColor',
+        borderWidth: 0,
         pressStyle: {
-          backgroundColor: '$backgroundPress',
-          borderColor: '$borderColorPress',
+          backgroundColor: primitive.blurple100,
         },
         hoverStyle: {
-          backgroundColor: '$backgroundHover',
-          borderColor: '$borderColorHover',
+          backgroundColor: primitive.blurple100,
         },
       },
 
       tertiary: {
         backgroundColor: 'transparent',
+        borderWidth: 1,
+        borderColor: primitive.slate700,
         pressStyle: {
-          backgroundColor: '$backgroundPress',
+          backgroundColor: primitive.gray100,
         },
         hoverStyle: {
-          backgroundColor: '$backgroundHover',
+          backgroundColor: primitive.gray100,
         },
       },
 
       tertiaryAlt: {
         backgroundColor: 'transparent',
+        borderWidth: 0,
         pressStyle: {
-          backgroundColor: '$backgroundPress',
+          backgroundColor: primitive.gray100,
         },
         hoverStyle: {
-          backgroundColor: '$backgroundHover',
+          backgroundColor: primitive.gray100,
         },
       },
 
       destructive: {
-        backgroundColor: '$errorColor',
+        backgroundColor: primitive.red600,
         pressStyle: {
-          backgroundColor: colors.red800,
+          backgroundColor: primitive.red700,
         },
         hoverStyle: {
-          backgroundColor: colors.red700,
+          backgroundColor: primitive.red700,
         },
       },
 
       destructiveAlt: {
         backgroundColor: 'transparent',
-        borderWidth: 1,
-        borderColor: '$errorColor',
+        borderWidth: 0,
         pressStyle: {
-          backgroundColor: colors.red100,
-          borderColor: '$errorColor',
+          backgroundColor: primitive.red700,
         },
         hoverStyle: {
-          backgroundColor: colors.red50,
-          borderColor: '$errorColor',
+          backgroundColor: primitive.red700,
         },
       },
     },
 
     // -----------------------------------------------------------------------
-    // Size -- fixed square dimensions; always circular via borderRadius 9999
+    // size -- fixed square dimensions matching CDS 37 button heights
+    // sm=28x28, md=32x32, lg=40x40
     // -----------------------------------------------------------------------
     size: {
       sm: {
+        width: 28,
+        height: 28,
+        minWidth: 28,
+        minHeight: 28,
+      },
+      md: {
         width: 32,
         height: 32,
         minWidth: 32,
         minHeight: 32,
       },
-      md: {
+      lg: {
         width: 40,
         height: 40,
         minWidth: 40,
         minHeight: 40,
       },
-      lg: {
-        width: 48,
-        height: 48,
-        minWidth: 48,
-        minHeight: 48,
-      },
     },
 
     // -----------------------------------------------------------------------
-    // Disabled
+    // disabled -- Figma uses opacity 0.38 on the entire component.
+    // Colors stay the same as idle; only the opacity changes.
     // -----------------------------------------------------------------------
     disabled: {
       true: {
-        opacity: 1,
+        opacity: DISABLED_OPACITY,
         cursor: 'not-allowed',
         pointerEvents: 'none',
       },
@@ -156,7 +173,7 @@ const IconButtonFrame = styled(Pressable, {
 // Types
 // ---------------------------------------------------------------------------
 
-type IconButtonVariant =
+export type IconButtonVariant =
   | 'primary'
   | 'secondary'
   | 'secondaryAlt'
@@ -165,59 +182,38 @@ type IconButtonVariant =
   | 'destructive'
   | 'destructiveAlt'
 
-type IconButtonSize = 'sm' | 'md' | 'lg'
+export type IconButtonSize = 'sm' | 'md' | 'lg'
 
 export interface IconButtonProps {
-  /** Visual variant. Defaults to "primary". */
+  /** CDS 37 type variant. Defaults to "primary". */
   variant?: IconButtonVariant
-  /** Size preset. Defaults to "md". */
+  /** Size preset. Defaults to "md" (32x32). */
   size?: IconButtonSize
-  /** Disables the button. */
+  /** Disables the button -- applies 38% opacity per Figma spec. */
   disabled?: boolean
-  /** Icon element to render. */
+  /** Icon element to render (ReactNode). */
   icon: React.ReactNode
-  /** Press handler. */
+  /** Press handler. Not called when disabled. */
   onPress?: () => void
   /** Long-press handler (useful for tooltip reveal on mobile). */
   onLongPress?: () => void
   /** Required accessibility label since there is no visible text. */
   accessibilityLabel: string
+  /** Whether to show the focus ring. Maps to Figma "focusRing" prop. */
+  focusRing?: boolean
   /** Optional test ID. */
   testID?: string
 }
 
 // ---------------------------------------------------------------------------
-// Disabled background resolver
+// Focus ring style
 // ---------------------------------------------------------------------------
 
-const DISABLED_BG_FILLED = '$backgroundStrong'
-const DISABLED_BG_TRANSPARENT = 'transparent'
-
-function getDisabledBackground(variant: IconButtonVariant): string {
-  switch (variant) {
-    case 'primary':
-    case 'secondary':
-    case 'destructive':
-      return DISABLED_BG_FILLED
-    case 'secondaryAlt':
-    case 'tertiary':
-    case 'tertiaryAlt':
-    case 'destructiveAlt':
-      return DISABLED_BG_TRANSPARENT
-    default:
-      return DISABLED_BG_FILLED
-  }
-}
-
-function getDisabledBorder(variant: IconButtonVariant): string | undefined {
-  switch (variant) {
-    case 'secondary':
-    case 'secondaryAlt':
-    case 'destructiveAlt':
-      return '$borderColorDisabled'
-    default:
-      return undefined
-  }
+const FOCUS_RING_STYLE = {
+  outlineWidth: 2,
+  outlineColor: primitive.blurple700,
+  outlineStyle: 'solid' as const,
+  outlineOffset: 2,
 }
 
 // ---------------------------------------------------------------------------
@@ -232,6 +228,7 @@ export const IconButton = React.memo(function IconButton({
   onPress,
   onLongPress,
   accessibilityLabel,
+  focusRing = true,
   testID,
 }: IconButtonProps) {
   const handlePress = useCallback(() => {
@@ -246,21 +243,23 @@ export const IconButton = React.memo(function IconButton({
     }
   }, [disabled, onLongPress])
 
-  // hitSlop to ensure 44pt minimum touch target for sm size
-  const hitSlop = size === 'sm' ? { top: 6, bottom: 6, left: 6, right: 6 } : undefined
+  // hitSlop ensures small buttons meet 44pt minimum touch target.
+  // sm=28px needs (44-28)/2=8, md=32px needs (44-32)/2=6
+  const hitSlop = useMemo(() => {
+    if (size === 'sm') {
+      const pad = Math.ceil((MIN_TOUCH_TARGET - 28) / 2)
+      return { top: pad, bottom: pad, left: pad, right: pad }
+    }
+    if (size === 'md') {
+      const pad = Math.ceil((MIN_TOUCH_TARGET - 32) / 2)
+      return { top: pad, bottom: pad, left: pad, right: pad }
+    }
+    return undefined // lg is 40px, close enough to 44
+  }, [size])
 
   const a11yLabel = useMemo(() => {
     return disabled ? `${accessibilityLabel}, disabled` : accessibilityLabel
   }, [accessibilityLabel, disabled])
-
-  const disabledOverrides = disabled
-    ? {
-        backgroundColor: getDisabledBackground(variant),
-        borderColor: getDisabledBorder(variant),
-        pressStyle: { backgroundColor: getDisabledBackground(variant) },
-        hoverStyle: { backgroundColor: getDisabledBackground(variant) },
-      }
-    : undefined
 
   return (
     <IconButtonFrame
@@ -273,8 +272,8 @@ export const IconButton = React.memo(function IconButton({
       accessibilityRole="button"
       accessibilityLabel={a11yLabel}
       accessibilityState={{ disabled }}
+      focusStyle={focusRing ? FOCUS_RING_STYLE : undefined}
       testID={testID}
-      {...disabledOverrides}
     >
       {icon}
     </IconButtonFrame>
