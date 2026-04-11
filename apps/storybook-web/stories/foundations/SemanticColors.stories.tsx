@@ -8,7 +8,6 @@ import { lightTheme } from '@opengov/cds-themes'
 // ---------------------------------------------------------------------------
 
 function TokenRow({ name, value, description }: { name: string; value: string; description: string }) {
-  const isTransparent = value === 'transparent' || value.includes('rgba')
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '8px 0', borderBottom: '1px solid #DDDEDE' }}>
       <div
@@ -58,18 +57,124 @@ const meta: Meta = {
 export default meta
 
 // ---------------------------------------------------------------------------
-// Stories
+// Stories — using the ACTUAL semantic.ts token names
 // ---------------------------------------------------------------------------
 
-export const Backgrounds: StoryObj = {
+export const Primary: StoryObj = {
+  name: 'Primary (Blurple)',
   render: () => (
     <TokenSection
-      title="Backgrounds"
+      title="Primary"
       tokens={[
-        { name: 'bgDefault', value: semantic.bgDefault, description: 'Default surface background (white)' },
-        { name: 'bgPaper', value: semantic.bgPaper, description: 'Paper/card background' },
-        { name: 'bgStrong', value: semantic.bgStrong, description: 'Stronger background for grouped areas (gray/100)' },
-        { name: 'bgInverse', value: semantic.bgInverse, description: 'Inverse background for dark surfaces (gray/900)' },
+        { name: 'primaryMain', value: semantic.primaryMain, description: 'Main brand — blurple/700' },
+        { name: 'primaryDark', value: semantic.primaryDark, description: 'Dark brand — blurple/900' },
+        { name: 'primaryLight', value: semantic.primaryLight, description: 'Light brand — blurple/100' },
+        { name: 'primaryContrastText', value: semantic.primaryContrastText, description: 'Text on primary' },
+        { name: 'primaryStatesHover', value: semantic.primaryStatesHover, description: 'Primary hover overlay' },
+        { name: 'primaryStatesSelected', value: semantic.primaryStatesSelected, description: 'Primary selected overlay' },
+        { name: 'primaryStatesFocus', value: semantic.primaryStatesFocus, description: 'Primary focus overlay' },
+        { name: 'primaryStatesFocusVisible', value: semantic.primaryStatesFocusVisible, description: 'Primary focus-visible ring' },
+        { name: 'primaryStatesOutlinedBorder', value: semantic.primaryStatesOutlinedBorder, description: 'Primary outlined border' },
+      ]}
+    />
+  ),
+}
+
+export const Secondary: StoryObj = {
+  name: 'Secondary (Slate)',
+  render: () => (
+    <TokenSection
+      title="Secondary"
+      tokens={[
+        { name: 'secondaryMain', value: semantic.secondaryMain, description: 'Main secondary — slate/700' },
+        { name: 'secondaryDark', value: semantic.secondaryDark, description: 'Dark secondary — slate/900' },
+        { name: 'secondaryLight', value: semantic.secondaryLight, description: 'Light secondary — slate/100' },
+        { name: 'secondaryContrastText', value: semantic.secondaryContrastText, description: 'Text on secondary' },
+        { name: 'secondaryStatesHover', value: semantic.secondaryStatesHover, description: 'Secondary hover overlay' },
+        { name: 'secondaryStatesSelected', value: semantic.secondaryStatesSelected, description: 'Secondary selected overlay' },
+        { name: 'secondaryStatesFocus', value: semantic.secondaryStatesFocus, description: 'Secondary focus overlay' },
+        { name: 'secondaryStatesFocusVisible', value: semantic.secondaryStatesFocusVisible, description: 'Secondary focus-visible ring' },
+        { name: 'secondaryStatesOutlinedBorder', value: semantic.secondaryStatesOutlinedBorder, description: 'Secondary outlined border' },
+      ]}
+    />
+  ),
+}
+
+export const Error: StoryObj = {
+  render: () => (
+    <TokenSection
+      title="Error"
+      tokens={[
+        { name: 'errorMain', value: semantic.errorMain, description: 'Error main — red/600 (#D33423)' },
+        { name: 'errorDark', value: semantic.errorDark, description: 'Error dark — red/700 (#B12525)' },
+        { name: 'errorLight', value: semantic.errorLight, description: 'Error light — red/50' },
+        { name: 'errorColor', value: semantic.errorColor, description: 'Error text color (= errorDark)' },
+        { name: 'errorBackground', value: semantic.errorBackground, description: 'Error background surface' },
+        { name: 'errorContrastText', value: semantic.errorContrastText, description: 'Text on error fill' },
+        { name: 'errorStatesHover', value: semantic.errorStatesHover, description: 'Error hover overlay' },
+        { name: 'errorStatesSelected', value: semantic.errorStatesSelected, description: 'Error selected overlay' },
+        { name: 'errorStatesFocusVisible', value: semantic.errorStatesFocusVisible, description: 'Error focus-visible ring' },
+        { name: 'errorStatesOutlinedBorder', value: semantic.errorStatesOutlinedBorder, description: 'Error outlined border' },
+      ]}
+    />
+  ),
+}
+
+export const Warning: StoryObj = {
+  render: () => (
+    <TokenSection
+      title="Warning"
+      tokens={[
+        { name: 'warningMain', value: semantic.warningMain, description: 'Warning main — yellow/700 (#885604)' },
+        { name: 'warningDark', value: semantic.warningDark, description: 'Warning dark — orange/800' },
+        { name: 'warningLight', value: semantic.warningLight, description: 'Warning light — orange/50' },
+        { name: 'warningColor', value: semantic.warningColor, description: 'Warning text color (= warningDark)' },
+        { name: 'warningBackground', value: semantic.warningBackground, description: 'Warning background surface' },
+        { name: 'warningContrastText', value: semantic.warningContrastText, description: 'Text on warning fill' },
+        { name: 'warningStatesHover', value: semantic.warningStatesHover, description: 'Warning hover overlay' },
+        { name: 'warningStatesSelected', value: semantic.warningStatesSelected, description: 'Warning selected overlay' },
+        { name: 'warningStatesFocusVisible', value: semantic.warningStatesFocusVisible, description: 'Warning focus-visible ring' },
+        { name: 'warningStatesOutlinedBorder', value: semantic.warningStatesOutlinedBorder, description: 'Warning outlined border' },
+      ]}
+    />
+  ),
+}
+
+export const Info: StoryObj = {
+  render: () => (
+    <TokenSection
+      title="Info"
+      tokens={[
+        { name: 'infoMain', value: semantic.infoMain, description: 'Info main — cerulean/700 (#0E6F7F)' },
+        { name: 'infoDark', value: semantic.infoDark, description: 'Info dark — cerulean/800' },
+        { name: 'infoLight', value: semantic.infoLight, description: 'Info light — cerulean/50' },
+        { name: 'infoColor', value: semantic.infoColor, description: 'Info text color (= infoDark)' },
+        { name: 'infoBackground', value: semantic.infoBackground, description: 'Info background surface' },
+        { name: 'infoContrastText', value: semantic.infoContrastText, description: 'Text on info fill' },
+        { name: 'infoStatesHover', value: semantic.infoStatesHover, description: 'Info hover overlay' },
+        { name: 'infoStatesSelected', value: semantic.infoStatesSelected, description: 'Info selected overlay' },
+        { name: 'infoStatesFocusVisible', value: semantic.infoStatesFocusVisible, description: 'Info focus-visible ring' },
+        { name: 'infoStatesOutlinedBorder', value: semantic.infoStatesOutlinedBorder, description: 'Info outlined border' },
+      ]}
+    />
+  ),
+}
+
+export const Success: StoryObj = {
+  render: () => (
+    <TokenSection
+      title="Success"
+      tokens={[
+        { name: 'successMain', value: semantic.successMain, description: 'Success main — green/700 (#037730)' },
+        { name: 'successDark', value: semantic.successDark, description: 'Success dark — green/800' },
+        { name: 'successLight', value: semantic.successLight, description: 'Success light — green/50' },
+        { name: 'successColor', value: semantic.successColor, description: 'Success text color (= green/700)' },
+        { name: 'successBackground', value: semantic.successBackground, description: 'Success background surface' },
+        { name: 'successContrastText', value: semantic.successContrastText, description: 'Text on success fill' },
+        { name: 'successStatesHover', value: semantic.successStatesHover, description: 'Success hover overlay' },
+        { name: 'successStatesSelected', value: semantic.successStatesSelected, description: 'Success selected overlay' },
+        { name: 'successStatesFocusVisible', value: semantic.successStatesFocusVisible, description: 'Success focus-visible ring' },
+        { name: 'successStatesOutlinedBorder', value: semantic.successStatesOutlinedBorder, description: 'Success outlined border' },
       ]}
     />
   ),
@@ -81,62 +186,27 @@ export const TextColors: StoryObj = {
     <TokenSection
       title="Text"
       tokens={[
-        { name: 'textPrimary', value: semantic.textPrimary, description: 'Primary text — 87% black (Figma: text/primary)' },
-        { name: 'textSecondary', value: semantic.textSecondary, description: 'Secondary text — 60% black (Figma: text/secondary)' },
-        { name: 'textDisabled', value: semantic.textDisabled, description: 'Disabled text — 38% black (Figma: text/disabled)' },
-        { name: 'textInverse', value: semantic.textInverse, description: 'Inverse text for dark backgrounds (white)' },
+        { name: 'textPrimary', value: semantic.textPrimary, description: '87% black — primary text' },
+        { name: 'textSecondary', value: semantic.textSecondary, description: '60% black — secondary text' },
+        { name: 'textDisabled', value: semantic.textDisabled, description: '38% black — disabled text' },
+        { name: 'textStatesHover', value: semantic.textStatesHover, description: 'Text hover overlay' },
+        { name: 'textStatesSelected', value: semantic.textStatesSelected, description: 'Text selected overlay' },
+        { name: 'textStatesFocusVisible', value: semantic.textStatesFocusVisible, description: 'Text focus-visible ring' },
       ]}
     />
   ),
 }
 
-export const Brand: StoryObj = {
+export const Backgrounds: StoryObj = {
   render: () => (
     <TokenSection
-      title="Brand"
+      title="Backgrounds"
       tokens={[
-        { name: 'brandMain', value: semantic.brandMain, description: 'Primary brand — blurple/700 (#4B3FFF)' },
-        { name: 'brandDark', value: semantic.brandDark, description: 'Brand dark — blurple/900 (#19009B)' },
-        { name: 'brandLight', value: semantic.brandLight, description: 'Brand light — blurple/500 (#7589FF)' },
-        { name: 'brandContrastText', value: semantic.brandContrastText, description: 'Contrast text on brand — white' },
-      ]}
-    />
-  ),
-}
-
-export const Status: StoryObj = {
-  render: () => (
-    <TokenSection
-      title="Status Colors"
-      tokens={[
-        { name: 'errorMain', value: semantic.errorMain, description: 'Error main — red/600 (#D33423)' },
-        { name: 'errorDark', value: semantic.errorDark, description: 'Error dark — red/700 (#B12525)' },
-        { name: 'errorLight', value: semantic.errorLight, description: 'Error background — red/50 (#FCF7F7)' },
-        { name: 'successMain', value: semantic.successMain, description: 'Success main — green/700 (#037730)' },
-        { name: 'successDark', value: semantic.successDark, description: 'Success dark — green/800 (#015A2D)' },
-        { name: 'successLight', value: semantic.successLight, description: 'Success background — green/50 (#EFFDF1)' },
-        { name: 'warningMain', value: semantic.warningMain, description: 'Warning main — orange/700 (#885604)' },
-        { name: 'warningDark', value: semantic.warningDark, description: 'Warning dark — orange/800 (#7D2E04)' },
-        { name: 'warningLight', value: semantic.warningLight, description: 'Warning background — amber/50 (#FDF7F4)' },
-        { name: 'infoMain', value: semantic.infoMain, description: 'Info main — cerulean/700 (#0E6F7F)' },
-        { name: 'infoDark', value: semantic.infoDark, description: 'Info dark — cerulean/800 (#085461)' },
-        { name: 'infoLight', value: semantic.infoLight, description: 'Info background — cerulean/50 (#F1FAFC)' },
-      ]}
-    />
-  ),
-}
-
-export const Borders: StoryObj = {
-  render: () => (
-    <TokenSection
-      title="Borders & Divider"
-      tokens={[
-        { name: 'borderDefault', value: semantic.borderDefault, description: 'Default border — gray/200 (#DDDEDE)' },
-        { name: 'borderStrong', value: semantic.borderStrong, description: 'Strong border — gray/300 (#C8C9CA)' },
-        { name: 'borderFocus', value: semantic.borderFocus, description: 'Focus border — blurple/700 (#4B3FFF)' },
-        { name: 'borderError', value: semantic.borderError, description: 'Error border — red/600 (#D33423)' },
-        { name: 'borderDisabled', value: semantic.borderDisabled, description: 'Disabled border — gray/200 (#DDDEDE)' },
-        { name: 'divider', value: semantic.divider, description: 'Divider line — 12% black (Figma: #0000001F)' },
+        { name: 'bgDefault', value: semantic.bgDefault, description: 'Default surface — white' },
+        { name: 'bgSecondary', value: semantic.bgSecondary, description: 'Secondary surface — gray/50' },
+        { name: 'bgTertiary', value: semantic.bgTertiary, description: 'Tertiary surface — gray/100' },
+        { name: 'bgPaperElevation0', value: semantic.bgPaperElevation0, description: 'Paper elevation 0' },
+        { name: 'bgPaperElevation1', value: semantic.bgPaperElevation1, description: 'Paper elevation 1' },
       ]}
     />
   ),
@@ -146,28 +216,111 @@ export const ActionStates: StoryObj = {
   name: 'Action States',
   render: () => (
     <TokenSection
-      title="Action States (Opacity Layers)"
+      title="Action States"
       tokens={[
-        { name: 'actionHover', value: semantic.actionHover, description: `Hover overlay — ${primitive.stateHoverOpacity * 100}% black` },
-        { name: 'actionFocus', value: semantic.actionFocus, description: `Focus overlay — ${primitive.stateFocusOpacity * 100}% black` },
-        { name: 'actionSelected', value: semantic.actionSelected, description: `Selected overlay — ${primitive.stateSelectedOpacity * 100}% black` },
-        { name: 'actionDisabled', value: semantic.actionDisabled, description: `Disabled overlay — ${primitive.stateDisabledOpacity * 100}% black` },
+        { name: 'actionActive', value: semantic.actionActive, description: '56% black — active icon/element' },
+        { name: 'actionHover', value: semantic.actionHover, description: '4% black — hover overlay' },
+        { name: 'actionSelected', value: semantic.actionSelected, description: '8% black — selected overlay' },
+        { name: 'actionFocus', value: semantic.actionFocus, description: '12% black — focus overlay' },
+        { name: 'actionDisabled', value: semantic.actionDisabled, description: '38% black — disabled content' },
+        { name: 'actionDisabledBackground', value: semantic.actionDisabledBackground, description: '12% black — disabled surface' },
       ]}
     />
   ),
 }
 
-export const ThemeTokens: StoryObj = {
-  name: 'Light Theme (Full)',
+export const Borders: StoryObj = {
+  render: () => (
+    <TokenSection
+      title="Borders & Inputs"
+      tokens={[
+        { name: 'standardEnabledBorder', value: semantic.standardEnabledBorder, description: 'Standard input border — 25% black' },
+        { name: 'standardHoverBorder', value: semantic.standardHoverBorder, description: 'Standard input hover border' },
+        { name: 'outlinedEnabledBorder', value: semantic.outlinedEnabledBorder, description: 'Outlined input border — 12% black' },
+        { name: 'outlinedHoverBorder', value: semantic.outlinedHoverBorder, description: 'Outlined input hover border' },
+        { name: 'filledEnabledFill', value: semantic.filledEnabledFill, description: 'Filled input background — 6% black' },
+        { name: 'filledHoverFill', value: semantic.filledHoverFill, description: 'Filled input hover background — 9% black' },
+        { name: 'elevationOutlined', value: semantic.elevationOutlined, description: 'Outlined elevation border' },
+        { name: 'divider', value: semantic.divider, description: 'Divider line — 12% black' },
+      ]}
+    />
+  ),
+}
+
+export const ComponentSpecific: StoryObj = {
+  name: 'Component-Specific',
+  render: () => (
+    <TokenSection
+      title="Component-Specific Tokens"
+      tokens={[
+        { name: 'snackbarFill', value: semantic.snackbarFill, description: 'Snackbar background' },
+        { name: 'tooltipFill', value: semantic.tooltipFill, description: 'Tooltip background' },
+        { name: 'chipDefaultEnabledBorder', value: semantic.chipDefaultEnabledBorder, description: 'Chip default border — gray/400' },
+        { name: 'chipDefaultHoverFill', value: semantic.chipDefaultHoverFill, description: 'Chip hover fill — 12% black' },
+        { name: 'chipDefaultFocusFill', value: semantic.chipDefaultFocusFill, description: 'Chip focus fill — 20% black' },
+        { name: 'avatarFill', value: semantic.avatarFill, description: 'Avatar fallback fill — gray/400' },
+        { name: 'switchKnobFillEnabled', value: semantic.switchKnobFillEnabled, description: 'Switch knob — gray/50' },
+        { name: 'switchSlideFill', value: semantic.switchSlideFill, description: 'Switch slide track' },
+        { name: 'backdropFill', value: semantic.backdropFill, description: 'Modal backdrop — 50% black' },
+        { name: 'appBarDefaultFill', value: semantic.appBarDefaultFill, description: 'App bar background — gray/100' },
+        { name: 'ratingActiveFill', value: semantic.ratingActiveFill, description: 'Active star fill' },
+        { name: 'statesFocus', value: semantic.statesFocus, description: 'General focus state — 12% black' },
+      ]}
+    />
+  ),
+}
+
+export const BlackWhiteStates: StoryObj = {
+  name: 'Black & White States',
+  render: () => (
+    <TokenSection
+      title="Black & White State Layers"
+      tokens={[
+        { name: 'blackStatesMain', value: semantic.blackStatesMain, description: 'Base black' },
+        { name: 'blackStatesHover', value: semantic.blackStatesHover, description: 'Black hover — 4%' },
+        { name: 'blackStatesSelected', value: semantic.blackStatesSelected, description: 'Black selected — 8%' },
+        { name: 'blackStatesFocus', value: semantic.blackStatesFocus, description: 'Black focus — 12%' },
+        { name: 'blackStatesFocusVisible', value: semantic.blackStatesFocusVisible, description: 'Black focus-visible — 30%' },
+        { name: 'blackStatesOutlinedBorder', value: semantic.blackStatesOutlinedBorder, description: 'Black outlined — 50%' },
+        { name: 'whiteStatesMain', value: semantic.whiteStatesMain, description: 'Base white' },
+        { name: 'whiteStatesHover', value: semantic.whiteStatesHover, description: 'White hover — 4%' },
+        { name: 'whiteStatesSelected', value: semantic.whiteStatesSelected, description: 'White selected — 8%' },
+        { name: 'whiteStatesFocus', value: semantic.whiteStatesFocus, description: 'White focus — 12%' },
+        { name: 'whiteStatesFocusVisible', value: semantic.whiteStatesFocusVisible, description: 'White focus-visible — 30%' },
+        { name: 'whiteStatesOutlinedBorder', value: semantic.whiteStatesOutlinedBorder, description: 'White outlined — 50%' },
+      ]}
+    />
+  ),
+}
+
+export const DataVisualization: StoryObj = {
+  name: 'Data Visualization (18 Series)',
+  render: () => (
+    <TokenSection
+      title="Data Visualization Series"
+      tokens={Array.from({ length: 18 }, (_, i) => {
+        const key = `dataVizSeries${i + 1}` as keyof typeof semantic
+        return {
+          name: `Series ${i + 1}`,
+          value: semantic[key] as string,
+          description: `dataVizSeries${i + 1}`,
+        }
+      })}
+    />
+  ),
+}
+
+export const LightThemeFull: StoryObj = {
+  name: 'Light Theme (Complete)',
   render: () => {
     const entries = Object.entries(lightTheme)
     return (
       <div>
         <h2 style={{ fontFamily: 'DM Sans, system-ui', fontSize: 22, fontWeight: 600, color: '#323334', marginBottom: 16 }}>
-          Light Theme — All Tokens
+          Light Theme — All {entries.length} Tokens
         </h2>
         <p style={{ fontFamily: 'DM Sans, system-ui', fontSize: 14, color: '#939598', marginBottom: 24 }}>
-          Complete mapping of all Tamagui theme tokens for the CDS 37 light mode.
+          Complete Tamagui theme token mapping for CDS 37 light mode.
         </p>
         {entries.map(([key, value]) => (
           <TokenRow key={key} name={`$${key}`} value={value} description="" />
