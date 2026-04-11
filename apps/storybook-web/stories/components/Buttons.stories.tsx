@@ -1,105 +1,54 @@
 import React, { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 import { primitive, buttonStyles } from '@opengov/cds-tokens'
+import {
+  DocPage, DocSection, DocShowcase, SpecTable, PropsTable, DoDont,
+} from '../.shared/DocLayout'
 
 // ---------------------------------------------------------------------------
-// Since Storybook web can't render RN components directly, we create
-// pure HTML/CSS previews that match the exact CDS 37 Figma specs.
-// These serve as the visual reference + documentation for the RN components.
+// CDS Button preview component (HTML/CSS replica for Storybook web)
 // ---------------------------------------------------------------------------
 
-const FONT_LINK = 'https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000&display=swap'
-
-function FontLoader({ children }: { children: React.ReactNode }) {
-  React.useEffect(() => {
-    if (!document.querySelector(`link[href="${FONT_LINK}"]`)) {
-      const link = document.createElement('link')
-      link.rel = 'stylesheet'
-      link.href = FONT_LINK
-      document.head.appendChild(link)
-    }
-  }, [])
-  return <>{children}</>
-}
-
-// CDS 37 Button variant colors (from Figma)
 const VARIANTS = {
-  primary: {
-    idle: { bg: primitive.blurple700, text: '#FFFFFF', border: 'none' },
-    hover: { bg: primitive.blurple900, text: '#FFFFFF', border: 'none' },
-    label: 'Primary',
-    desc: 'Filled blurple. Main CTA.',
-  },
-  secondary: {
-    idle: { bg: 'transparent', text: primitive.blurple700, border: `1px solid ${primitive.blurple700}` },
-    hover: { bg: primitive.blurple100, text: primitive.blurple900, border: `1px solid ${primitive.blurple900}` },
-    label: 'Secondary',
-    desc: 'Outlined blurple. Secondary CTA.',
-  },
-  secondaryAlt: {
-    idle: { bg: 'transparent', text: primitive.blurple700, border: 'none' },
-    hover: { bg: primitive.blurple100, text: primitive.blurple900, border: 'none' },
-    label: 'Secondary Alt',
-    desc: 'Text-only blurple. Ghost primary.',
-  },
-  tertiary: {
-    idle: { bg: 'transparent', text: primitive.slate700, border: `1px solid ${primitive.slate700}` },
-    hover: { bg: primitive.gray100, text: primitive.slate700, border: `1px solid ${primitive.slate700}` },
-    label: 'Tertiary',
-    desc: 'Outlined slate. Neutral action.',
-  },
-  tertiaryAlt: {
-    idle: { bg: 'transparent', text: primitive.slate700, border: 'none' },
-    hover: { bg: primitive.gray100, text: primitive.slate700, border: 'none' },
-    label: 'Tertiary Alt',
-    desc: 'Text-only slate. Ghost neutral.',
-  },
-  destructive: {
-    idle: { bg: primitive.red600, text: '#FFFFFF', border: 'none' },
-    hover: { bg: primitive.red700, text: '#FFFFFF', border: 'none' },
-    label: 'Destructive',
-    desc: 'Filled red. Danger action.',
-  },
-  destructiveAlt: {
-    idle: { bg: 'transparent', text: primitive.red600, border: 'none' },
-    hover: { bg: primitive.red700, text: '#FFFFFF', border: 'none' },
-    label: 'Destructive Alt',
-    desc: 'Text-only red. Ghost danger.',
-  },
-}
+  primary:        { idle: { bg: '#4B3FFF', text: '#FFF', border: 'none' },        hover: { bg: '#19009B', text: '#FFF', border: 'none' } },
+  secondary:      { idle: { bg: 'transparent', text: '#4B3FFF', border: '1px solid #4B3FFF' }, hover: { bg: '#EEF1FC', text: '#19009B', border: '1px solid #19009B' } },
+  secondaryAlt:   { idle: { bg: 'transparent', text: '#4B3FFF', border: 'none' }, hover: { bg: '#EEF1FC', text: '#19009B', border: 'none' } },
+  tertiary:       { idle: { bg: 'transparent', text: '#546574', border: '1px solid #546574' }, hover: { bg: '#F2F2F2', text: '#546574', border: '1px solid #546574' } },
+  tertiaryAlt:    { idle: { bg: 'transparent', text: '#546574', border: 'none' }, hover: { bg: '#F2F2F2', text: '#546574', border: 'none' } },
+  destructive:    { idle: { bg: '#D33423', text: '#FFF', border: 'none' },        hover: { bg: '#B12525', text: '#FFF', border: 'none' } },
+  destructiveAlt: { idle: { bg: 'transparent', text: '#D33423', border: 'none' }, hover: { bg: '#B12525', text: '#FFF', border: 'none' } },
+} as const
 
-// Mobile-native WCAG 2.5.8 sizes (minimum 44px touch target)
 const SIZES = {
-  small: { height: 36, ph: 12, pv: 6, gap: 8, ...buttonStyles.small.mobile },
-  medium: { height: 44, ph: 16, pv: 10, gap: 8, ...buttonStyles.medium.mobile },
-  large: { height: 48, ph: 24, pv: 12, gap: 8, ...buttonStyles.large.mobile },
-}
+  sm: { h: 36, px: 12, fs: 13, fw: 500, gap: 8 },
+  md: { h: 44, px: 16, fs: 14, fw: 500, gap: 8 },
+  lg: { h: 48, px: 24, fs: 16, fw: 600, gap: 8 },
+} as const
 
-type VariantKey = keyof typeof VARIANTS
-type SizeKey = keyof typeof SIZES
+type V = keyof typeof VARIANTS
+type S = keyof typeof SIZES
 
-function CdsButton({ variant = 'primary' as VariantKey, size = 'medium' as SizeKey, disabled = false, children = 'Action', hovered = false }: {
-  variant?: VariantKey; size?: SizeKey; disabled?: boolean; children?: string; hovered?: boolean
+function Btn({ variant = 'primary' as V, size = 'md' as S, disabled = false, children = 'Action' }: {
+  variant?: V; size?: S; disabled?: boolean; children?: React.ReactNode
 }) {
-  const [isHover, setIsHover] = useState(hovered)
+  const [hov, setHov] = useState(false)
   const v = VARIANTS[variant]
   const s = SIZES[size]
-  const state = isHover && !disabled ? v.hover : v.idle
+  const st = hov && !disabled ? v.hover : v.idle
   return (
     <button
       disabled={disabled}
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
       style={{
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: s.gap,
-        height: s.height, paddingLeft: s.ph, paddingRight: s.ph,
-        backgroundColor: state.bg, color: state.text,
-        border: state.border === 'none' ? 'none' : state.border,
+        height: s.h, paddingLeft: s.px, paddingRight: s.px,
+        backgroundColor: st.bg, color: st.text,
+        border: st.border === 'none' ? 'none' : st.border,
         borderRadius: 4, cursor: disabled ? 'not-allowed' : 'pointer',
         opacity: disabled ? 0.38 : 1,
-        fontFamily: 'DM Sans, system-ui', fontSize: s.fontSize, fontWeight: s.fontWeight,
-        lineHeight: `${s.lineHeight}px`, letterSpacing: s.letterSpacing || 0,
-        transition: 'all 150ms ease',
+        fontFamily: "'DM Sans', system-ui", fontSize: s.fs, fontWeight: s.fw,
+        lineHeight: '20px', transition: 'all 120ms ease', outline: 'none',
       }}
     >
       {children}
@@ -107,21 +56,11 @@ function CdsButton({ variant = 'primary' as VariantKey, size = 'medium' as SizeK
   )
 }
 
-function SpecTable({ title, rows }: { title: string; rows: { label: string; value: string }[] }) {
+function PlusIcon({ color = '#FFF', size = 16 }: { color?: string; size?: number }) {
   return (
-    <div style={{ marginBottom: 24 }}>
-      <h4 style={{ fontFamily: 'DM Sans, system-ui', fontSize: 14, fontWeight: 600, color: '#323334', margin: '0 0 8px 0' }}>{title}</h4>
-      <table style={{ borderCollapse: 'collapse', fontFamily: 'DM Mono, monospace', fontSize: 12 }}>
-        <tbody>
-          {rows.map(r => (
-            <tr key={r.label} style={{ borderBottom: '1px solid #DDDEDE' }}>
-              <td style={{ padding: '4px 12px 4px 0', color: '#939598' }}>{r.label}</td>
-              <td style={{ padding: '4px 0', color: '#323334', fontWeight: 500 }}>{r.value}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <path d="M12 5v14M5 12h14" stroke={color} strokeWidth="2" strokeLinecap="round" />
+    </svg>
   )
 }
 
@@ -130,9 +69,8 @@ function SpecTable({ title, rows }: { title: string; rows: { label: string; valu
 // ---------------------------------------------------------------------------
 
 const meta: Meta = {
-  title: 'Components/Buttons',
-  parameters: { layout: 'padded' },
-  decorators: [(Story) => <FontLoader><Story /></FontLoader>],
+  title: 'Components/Button',
+  parameters: { layout: 'fullscreen' },
 }
 export default meta
 
@@ -140,347 +78,235 @@ export default meta
 // Stories
 // ---------------------------------------------------------------------------
 
-export const AllVariants: StoryObj = {
-  name: '01. All 7 Variants',
+export const Overview: StoryObj = {
+  name: 'Overview',
   render: () => (
-    <div>
-      <h2 style={{ fontFamily: 'DM Sans, system-ui', fontSize: 22, fontWeight: 600, color: '#323334', marginBottom: 8 }}>
-        Button Variants
-      </h2>
-      <p style={{ fontFamily: 'DM Sans, system-ui', fontSize: 14, color: '#939598', marginBottom: 24 }}>
-        CDS 37 defines 7 button types. Each shown at Medium size in Idle state.
-      </p>
-      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-        {(Object.keys(VARIANTS) as VariantKey[]).map(v => (
-          <div key={v} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-            <CdsButton variant={v}>{VARIANTS[v].label}</CdsButton>
-            <span style={{ fontFamily: 'DM Mono, monospace', fontSize: 10, color: '#939598' }}>{v}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  ),
-}
+    <DocPage
+      title="Button"
+      description="Buttons trigger actions. CDS 37 defines 7 visual types, 3 sizes optimized for mobile touch targets (WCAG 2.5.8), and loading/disabled states."
+      badge="@opengov/cds-components"
+    >
+      {/* All Variants */}
+      <DocSection title="Variants" description="7 button types for different levels of emphasis and intent.">
+        <DocShowcase
+          preview={
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+              {(Object.keys(VARIANTS) as V[]).map(v => (
+                <Btn key={v} variant={v}>{v.replace(/([A-Z])/g, ' $1').trim()}</Btn>
+              ))}
+            </div>
+          }
+          code={`import { Button } from '@opengov/cds-components'
 
-export const AllSizes: StoryObj = {
-  name: '02. All 3 Sizes',
-  render: () => (
-    <div>
-      <h2 style={{ fontFamily: 'DM Sans, system-ui', fontSize: 22, fontWeight: 600, color: '#323334', marginBottom: 8 }}>
-        Button Sizes
-      </h2>
-      <p style={{ fontFamily: 'DM Sans, system-ui', fontSize: 14, color: '#939598', marginBottom: 24 }}>
-        Small (28px), Medium (32px), Large (40px). Font and padding scale per size.
-      </p>
-      <div style={{ display: 'flex', gap: 16, alignItems: 'flex-end', marginBottom: 24 }}>
-        {(Object.keys(SIZES) as SizeKey[]).map(s => (
-          <div key={s} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-            <CdsButton size={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</CdsButton>
-            <span style={{ fontFamily: 'DM Mono, monospace', fontSize: 10, color: '#939598' }}>
-              {SIZES[s].height}px / {SIZES[s].fontSize}px / {SIZES[s].fontWeight}
-            </span>
-          </div>
-        ))}
-      </div>
-      <SpecTable title="Size Specifications" rows={[
-        { label: 'Small', value: 'h=36 | px=12 | py=6 | gap=8 | 13px Medium (hitSlop→44pt)' },
-        { label: 'Medium', value: 'h=44 | px=16 | py=10 | gap=8 | 14px Medium (WCAG AA)' },
-        { label: 'Large', value: 'h=48 | px=24 | py=12 | gap=8 | 16px SemiBold (MD3)' },
-      ]} />
-    </div>
-  ),
-}
+<Button variant="primary" onPress={handleSave}>Save</Button>
+<Button variant="secondary">Cancel</Button>
+<Button variant="tertiary">Dismiss</Button>
+<Button variant="destructive">Delete</Button>`}
+          specs={
+            <SpecTable
+              headers={['Variant', 'Background', 'Text', 'Border', 'Use case']}
+              rows={[
+                ['primary', '#4B3FFF (blurple700)', '#FFFFFF', 'none', 'Main CTA'],
+                ['secondary', 'transparent', '#4B3FFF', '1px blurple700', 'Secondary action'],
+                ['secondaryAlt', 'transparent', '#4B3FFF', 'none', 'Ghost primary'],
+                ['tertiary', 'transparent', '#546574 (slate700)', '1px slate700', 'Neutral action'],
+                ['tertiaryAlt', 'transparent', '#546574', 'none', 'Ghost neutral'],
+                ['destructive', '#D33423 (red600)', '#FFFFFF', 'none', 'Danger action'],
+                ['destructiveAlt', 'transparent', '#D33423', 'none', 'Ghost danger'],
+              ]}
+            />
+          }
+        />
+      </DocSection>
 
-export const States: StoryObj = {
-  name: '03. States (Idle / Hover / Disabled)',
-  render: () => (
-    <div>
-      <h2 style={{ fontFamily: 'DM Sans, system-ui', fontSize: 22, fontWeight: 600, color: '#323334', marginBottom: 8 }}>
-        Button States
-      </h2>
-      <p style={{ fontFamily: 'DM Sans, system-ui', fontSize: 14, color: '#939598', marginBottom: 24 }}>
-        Idle, Hover/Pressed, and Disabled (38% opacity). Hover the Idle buttons to see the transition.
-      </p>
-      <table style={{ borderCollapse: 'collapse', fontFamily: 'DM Sans, system-ui' }}>
-        <thead>
-          <tr style={{ borderBottom: '2px solid #DDDEDE' }}>
-            <th style={{ padding: '8px 16px', fontSize: 12, fontWeight: 600, color: '#616365', textAlign: 'left' }}>Type</th>
-            <th style={{ padding: '8px 16px', fontSize: 12, fontWeight: 600, color: '#616365', textAlign: 'left' }}>Idle</th>
-            <th style={{ padding: '8px 16px', fontSize: 12, fontWeight: 600, color: '#616365', textAlign: 'left' }}>Hover/Pressed</th>
-            <th style={{ padding: '8px 16px', fontSize: 12, fontWeight: 600, color: '#616365', textAlign: 'left' }}>Disabled</th>
-          </tr>
-        </thead>
-        <tbody>
-          {(Object.keys(VARIANTS) as VariantKey[]).map(v => (
-            <tr key={v} style={{ borderBottom: '1px solid #DDDEDE' }}>
-              <td style={{ padding: '12px 16px', fontFamily: 'DM Mono, monospace', fontSize: 12, color: '#323334' }}>{v}</td>
-              <td style={{ padding: '12px 16px' }}><CdsButton variant={v}>{VARIANTS[v].label}</CdsButton></td>
-              <td style={{ padding: '12px 16px' }}><CdsButton variant={v} hovered>{VARIANTS[v].label}</CdsButton></td>
-              <td style={{ padding: '12px 16px' }}><CdsButton variant={v} disabled>{VARIANTS[v].label}</CdsButton></td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  ),
-}
+      {/* Sizes */}
+      <DocSection title="Sizes" description="All sizes meet WCAG 2.5.8 minimum 44px touch target for mobile.">
+        <DocShowcase
+          preview={
+            <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+              <Btn size="sm">Small</Btn>
+              <Btn size="md">Medium</Btn>
+              <Btn size="lg">Large</Btn>
+            </div>
+          }
+          code={`<Button size="sm">Small</Button>   // 36px + hitSlop→44
+<Button size="md">Medium</Button>  // 44px (WCAG AA)
+<Button size="lg">Large</Button>   // 48px (MD3)`}
+          specs={
+            <SpecTable
+              headers={['Size', 'Height', 'Padding H', 'Font', 'Weight', 'Touch Target']}
+              rows={[
+                ['sm', '36px', '12px', '13px', 'Medium (500)', '44pt via hitSlop'],
+                ['md', '44px', '16px', '14px', 'Medium (500)', '44pt native'],
+                ['lg', '48px', '24px', '16px', 'SemiBold (600)', '48pt native (MD3)'],
+              ]}
+            />
+          }
+        />
+      </DocSection>
 
-export const VariantSpecs: StoryObj = {
-  name: '04. Color Specifications',
-  render: () => (
-    <div>
-      <h2 style={{ fontFamily: 'DM Sans, system-ui', fontSize: 22, fontWeight: 600, color: '#323334', marginBottom: 16 }}>
-        Button Color Spec
-      </h2>
-      {(Object.keys(VARIANTS) as VariantKey[]).map(v => {
-        const spec = VARIANTS[v]
-        return (
-          <SpecTable key={v} title={`${spec.label} (${v})`} rows={[
-            { label: 'Description', value: spec.desc },
-            { label: 'Idle BG', value: spec.idle.bg },
-            { label: 'Idle Text', value: spec.idle.text },
-            { label: 'Idle Border', value: spec.idle.border },
-            { label: 'Hover BG', value: spec.hover.bg },
-            { label: 'Hover Text', value: spec.hover.text },
-            { label: 'Hover Border', value: spec.hover.border },
-            { label: 'Disabled', value: 'opacity: 0.38 (all colors stay same)' },
-          ]} />
-        )
-      })}
-    </div>
-  ),
-}
-
-export const IconButtons: StoryObj = {
-  name: '05. Icon Buttons',
-  render: () => {
-    const iconSvg = (color: string) => (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-        <path d="M12 5v14M5 12h14" stroke={color} strokeWidth="2" strokeLinecap="round" />
-      </svg>
-    )
-    return (
-      <div>
-        <h2 style={{ fontFamily: 'DM Sans, system-ui', fontSize: 22, fontWeight: 600, color: '#323334', marginBottom: 8 }}>
-          Icon Buttons
-        </h2>
-        <p style={{ fontFamily: 'DM Sans, system-ui', fontSize: 14, color: '#939598', marginBottom: 24 }}>
-          Square (borderRadius: 4px) or circular (borderRadius: 9999). Same 7 variants, 3 sizes.
-        </p>
-        <div style={{ display: 'flex', gap: 24, marginBottom: 24 }}>
-          <div>
-            <p style={{ fontFamily: 'DM Sans, system-ui', fontSize: 12, fontWeight: 600, color: '#616365', marginBottom: 8 }}>Variants (32x32)</p>
-            <div style={{ display: 'flex', gap: 8 }}>
-              {([
-                { v: 'primary', bg: primitive.blurple700, c: '#FFF' },
-                { v: 'secondary', bg: 'transparent', c: primitive.blurple700, border: primitive.blurple700 },
-                { v: 'tertiary', bg: 'transparent', c: primitive.slate700, border: primitive.slate700 },
-                { v: 'destructive', bg: primitive.red600, c: '#FFF' },
-              ] as const).map(({ v, bg, c, border }) => (
-                <div
-                  key={v}
-                  style={{
-                    width: 32, height: 32, borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    backgroundColor: bg, border: border ? `1px solid ${border}` : 'none', cursor: 'pointer',
-                  }}
-                >
-                  {iconSvg(c)}
+      {/* States */}
+      <DocSection title="States" description="Idle, hover/pressed, and disabled. Disabled uses 38% opacity per Figma spec.">
+        <DocShowcase
+          preview={
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              {(['primary', 'secondary', 'tertiary', 'destructive'] as V[]).map(v => (
+                <div key={v} style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+                  <span style={{ width: 100, fontSize: 12, fontFamily: "'DM Mono', monospace", color: 'rgba(0,0,0,0.6)' }}>{v}</span>
+                  <Btn variant={v}>Idle</Btn>
+                  <Btn variant={v} disabled>Disabled</Btn>
                 </div>
               ))}
             </div>
-          </div>
-          <div>
-            <p style={{ fontFamily: 'DM Sans, system-ui', fontSize: 12, fontWeight: 600, color: '#616365', marginBottom: 8 }}>Sizes</p>
-            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              {[36, 44, 48].map(s => (
-                <div
-                  key={s}
-                  style={{
-                    width: s, height: s, borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    backgroundColor: primitive.blurple700, cursor: 'pointer',
-                  }}
-                >
-                  {iconSvg('#FFF')}
-                </div>
-              ))}
+          }
+          code={`<Button disabled>Cannot Submit</Button>
+<Button loading>Saving...</Button>
+
+// Disabled applies opacity: 0.38 to the entire button.
+// Colors remain the same as idle state.`}
+        />
+      </DocSection>
+
+      {/* With Icons */}
+      <DocSection title="With Icons">
+        <DocShowcase
+          preview={
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+              <Btn variant="primary"><PlusIcon /> Create New</Btn>
+              <Btn variant="secondary"><PlusIcon color="#4B3FFF" /> Add Item</Btn>
+              <Btn variant="tertiary"><PlusIcon color="#546574" /> Options</Btn>
             </div>
-          </div>
-          <div>
-            <p style={{ fontFamily: 'DM Sans, system-ui', fontSize: 12, fontWeight: 600, color: '#616365', marginBottom: 8 }}>Circular</p>
-            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              {[36, 44, 48].map(s => (
-                <div
-                  key={s}
-                  style={{
+          }
+          code={`<Button variant="primary" iconLeft={<AddIcon size={16} color="#FFF" />}>
+  Create New
+</Button>
+
+<Button variant="secondary" iconRight={<ChevronRightIcon />}>
+  Continue
+</Button>`}
+        />
+      </DocSection>
+
+      {/* Icon Buttons */}
+      <DocSection title="Icon Button" description="Square (radius 4) or circular (radius 9999). Same 7 variants.">
+        <DocShowcase
+          preview={
+            <div style={{ display: 'flex', gap: 24 }}>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                {(['primary', 'secondary', 'tertiary', 'destructive'] as const).map(v => {
+                  const colors = { primary: { bg: '#4B3FFF', ic: '#FFF' }, secondary: { bg: 'transparent', ic: '#4B3FFF', border: '#4B3FFF' }, tertiary: { bg: 'transparent', ic: '#546574', border: '#546574' }, destructive: { bg: '#D33423', ic: '#FFF' } }
+                  const c = colors[v]
+                  return (
+                    <div key={v} style={{
+                      width: 44, height: 44, borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      backgroundColor: c.bg, border: 'border' in c ? `1px solid ${c.border}` : 'none', cursor: 'pointer',
+                    }}>
+                      <PlusIcon color={c.ic} />
+                    </div>
+                  )
+                })}
+              </div>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                {[36, 44, 48].map(s => (
+                  <div key={s} style={{
                     width: s, height: s, borderRadius: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    backgroundColor: primitive.blurple700, cursor: 'pointer',
-                  }}
-                >
-                  {iconSvg('#FFF')}
-                </div>
-              ))}
+                    backgroundColor: '#4B3FFF', cursor: 'pointer',
+                  }}>
+                    <PlusIcon />
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        </div>
-        <SpecTable title="Icon Button Sizes" rows={[
-          { label: 'Small', value: '36 x 36 px (hitSlop pads to 44pt)' },
-          { label: 'Medium', value: '44 x 44 px (WCAG AA minimum)' },
-          { label: 'Large', value: '48 x 48 px (MD3 recommended)' },
-        ]} />
-      </div>
-    )
-  },
-}
-
-export const ButtonGroups: StoryObj = {
-  name: '06. Button Groups',
-  render: () => (
-    <div>
-      <h2 style={{ fontFamily: 'DM Sans, system-ui', fontSize: 22, fontWeight: 600, color: '#323334', marginBottom: 8 }}>
-        Button Groups
-      </h2>
-      <p style={{ fontFamily: 'DM Sans, system-ui', fontSize: 14, color: '#939598', marginBottom: 24 }}>
-        Group buttons with default (8px gap), compact (connected), or loose (16px gap) spacing.
-      </p>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-        <div>
-          <p style={{ fontFamily: 'DM Sans, system-ui', fontSize: 12, fontWeight: 600, color: '#616365', marginBottom: 8 }}>Default spacing (8px gap)</p>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <CdsButton variant="secondary" size="small">Left</CdsButton>
-            <CdsButton variant="secondary" size="small">Center</CdsButton>
-            <CdsButton variant="secondary" size="small">Right</CdsButton>
-          </div>
-        </div>
-        <div>
-          <p style={{ fontFamily: 'DM Sans, system-ui', fontSize: 12, fontWeight: 600, color: '#616365', marginBottom: 8 }}>Compact (connected borders)</p>
-          <div style={{ display: 'flex', gap: 0 }}>
-            <CdsButton variant="secondary" size="small">Left</CdsButton>
-            <CdsButton variant="secondary" size="small">Center</CdsButton>
-            <CdsButton variant="secondary" size="small">Right</CdsButton>
-          </div>
-        </div>
-        <div>
-          <p style={{ fontFamily: 'DM Sans, system-ui', fontSize: 12, fontWeight: 600, color: '#616365', marginBottom: 8 }}>Mixed variants</p>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <CdsButton variant="primary" size="medium">Save</CdsButton>
-            <CdsButton variant="tertiary" size="medium">Cancel</CdsButton>
-          </div>
-        </div>
-        <div>
-          <p style={{ fontFamily: 'DM Sans, system-ui', fontSize: 12, fontWeight: 600, color: '#616365', marginBottom: 8 }}>Action pair (primary + destructive)</p>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <CdsButton variant="primary" size="medium">Confirm</CdsButton>
-            <CdsButton variant="destructiveAlt" size="medium">Delete</CdsButton>
-          </div>
-        </div>
-      </div>
-      <div style={{ marginTop: 24 }}>
-        <SpecTable title="Button Group Spacing" rows={[
-          { label: 'compact', value: '0px gap — connected borders, shared radii' },
-          { label: 'default', value: '8px gap — standard button group' },
-          { label: 'loose', value: '16px gap — wider spacing' },
-        ]} />
-      </div>
-    </div>
-  ),
-}
-
-export const UsageGuidelines: StoryObj = {
-  name: '07. Usage Guidelines',
-  render: () => (
-    <div style={{ maxWidth: 640 }}>
-      <h2 style={{ fontFamily: 'DM Sans, system-ui', fontSize: 22, fontWeight: 600, color: '#323334', marginBottom: 16 }}>
-        Button Usage Guidelines
-      </h2>
-      <div style={{ fontFamily: 'DM Sans, system-ui', fontSize: 14, lineHeight: '22px', color: '#323334' }}>
-        <h3 style={{ fontSize: 16, fontWeight: 600, marginTop: 24, marginBottom: 8 }}>Hierarchy</h3>
-        <ul style={{ paddingLeft: 20, color: '#616365' }}>
-          <li><strong>Primary</strong> — One per screen section. Main call-to-action.</li>
-          <li><strong>Secondary</strong> — Supporting actions alongside primary.</li>
-          <li><strong>Tertiary</strong> — Neutral actions (cancel, close, dismiss).</li>
-          <li><strong>Destructive</strong> — Delete, remove, revoke actions only.</li>
-        </ul>
-
-        <h3 style={{ fontSize: 16, fontWeight: 600, marginTop: 24, marginBottom: 8 }}>Size Selection</h3>
-        <ul style={{ paddingLeft: 20, color: '#616365' }}>
-          <li><strong>Large (40px)</strong> — Primary CTAs, form submit, full-width actions.</li>
-          <li><strong>Medium (32px)</strong> — Default. Toolbars, cards, dialogs.</li>
-          <li><strong>Small (28px)</strong> — Dense UI, tables, inline actions.</li>
-        </ul>
-
-        <h3 style={{ fontSize: 16, fontWeight: 600, marginTop: 24, marginBottom: 8, color: primitive.green700 }}>Do</h3>
-        <ul style={{ paddingLeft: 20, color: '#616365' }}>
-          <li>Use consistent button hierarchy within a section</li>
-          <li>Pair primary + tertiary for confirm/cancel flows</li>
-          <li>Use destructive variant ONLY for irreversible actions</li>
-          <li>Keep button labels to 1-3 words</li>
-        </ul>
-
-        <h3 style={{ fontSize: 16, fontWeight: 600, marginTop: 24, marginBottom: 8, color: primitive.red600 }}>Do Not</h3>
-        <ul style={{ paddingLeft: 20, color: '#616365' }}>
-          <li>Use multiple Primary buttons in the same section</li>
-          <li>Mix more than 2 variant types in a button group</li>
-          <li>Use Destructive for non-destructive actions</li>
-          <li>Use button labels longer than 4 words</li>
-        </ul>
-      </div>
-    </div>
-  ),
-}
-
-export const ReactNativeUsage: StoryObj = {
-  name: '08. React Native Usage',
-  render: () => (
-    <div style={{ maxWidth: 640 }}>
-      <h2 style={{ fontFamily: 'DM Sans, system-ui', fontSize: 22, fontWeight: 600, color: '#323334', marginBottom: 16 }}>
-        React Native Import
-      </h2>
-      <pre style={{
-        fontFamily: 'DM Mono, monospace', fontSize: 13, lineHeight: '20px',
-        backgroundColor: primitive.gray100, padding: 16, borderRadius: 4,
-        overflow: 'auto', color: '#323334',
-      }}>
-{`import { Button, IconButton, ButtonGroup } from '@opengov/cds-components'
-
-// Primary button (default)
-<Button variant="primary" size="md" onPress={handleSave}>
-  Save Changes
-</Button>
-
-// With icons
-<Button
-  variant="secondary"
-  size="md"
-  iconLeft={<AddIcon size={16} color={primitive.blurple700} />}
->
-  Add Item
-</Button>
-
-// Icon button
-<IconButton
+          }
+          code={`<IconButton
   variant="primary"
   size="md"
-  icon={<SearchIcon size={20} color="#FFFFFF" />}
+  icon={<SearchIcon size={20} color="#FFF" />}
   accessibilityLabel="Search"
 />
 
-// Button group
-<ButtonGroup spacing="default">
-  <Button variant="primary" size="sm">Save</Button>
-  <Button variant="tertiary" size="sm">Cancel</Button>
+<IconButton variant="secondary" size="sm" circular />
+<IconButton variant="destructive" size="lg" />`}
+          specs={
+            <SpecTable
+              headers={['Size', 'Dimensions', 'Touch Target', 'Shape']}
+              rows={[
+                ['sm', '36 × 36 px', '44pt via hitSlop', 'Square (4px) or Circular'],
+                ['md', '44 × 44 px', '44pt native', 'Square (4px) or Circular'],
+                ['lg', '48 × 48 px', '48pt native', 'Square (4px) or Circular'],
+              ]}
+            />
+          }
+        />
+      </DocSection>
+
+      {/* Button Group */}
+      <DocSection title="Button Group" description="Group buttons with consistent spacing. Compact mode connects borders.">
+        <DocShowcase
+          preview={
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 600, color: 'rgba(0,0,0,0.38)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>Default (8px gap)</div>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <Btn variant="secondary" size="sm">Left</Btn>
+                  <Btn variant="secondary" size="sm">Center</Btn>
+                  <Btn variant="secondary" size="sm">Right</Btn>
+                </div>
+              </div>
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 600, color: 'rgba(0,0,0,0.38)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>Action pair</div>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <Btn variant="primary">Confirm</Btn>
+                  <Btn variant="tertiaryAlt">Cancel</Btn>
+                </div>
+              </div>
+            </div>
+          }
+          code={`<ButtonGroup spacing="default">
+  <Button variant="secondary" size="sm">Left</Button>
+  <Button variant="secondary" size="sm">Center</Button>
+  <Button variant="secondary" size="sm">Right</Button>
 </ButtonGroup>
 
-// Disabled
-<Button variant="primary" disabled>Cannot Submit</Button>
+<ButtonGroup spacing="compact">
+  {/* Borders connect, shared corner radius */}
+</ButtonGroup>`}
+        />
+      </DocSection>
 
-// Loading
-<Button variant="primary" loading>Saving...</Button>
+      {/* API */}
+      <DocSection title="API Reference">
+        <PropsTable props={[
+          { name: 'variant', type: "'primary' | 'secondary' | 'secondaryAlt' | 'tertiary' | 'tertiaryAlt' | 'destructive' | 'destructiveAlt'", default: "'primary'", description: 'Visual style variant' },
+          { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Size preset (36/44/48px)' },
+          { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables interaction, applies 38% opacity' },
+          { name: 'loading', type: 'boolean', default: 'false', description: 'Shows spinner, disables interaction' },
+          { name: 'iconLeft', type: 'ReactNode', description: 'Icon rendered before label' },
+          { name: 'iconRight', type: 'ReactNode', description: 'Icon rendered after label' },
+          { name: 'fullWidth', type: 'boolean', default: 'false', description: 'Stretches to fill container' },
+          { name: 'onPress', type: '() => void', description: 'Press handler', required: true },
+          { name: 'children', type: 'ReactNode', description: 'Button label', required: true },
+          { name: 'accessibilityLabel', type: 'string', description: 'Screen reader label override' },
+        ]} />
+      </DocSection>
 
-// Full width
-<Button variant="primary" size="lg" fullWidth>
-  Submit Application
-</Button>`}
-      </pre>
-    </div>
+      {/* Guidelines */}
+      <DocSection title="Usage Guidelines">
+        <DoDont
+          dos={[
+            'Use one Primary button per screen section',
+            'Pair primary + tertiary for confirm/cancel',
+            'Keep labels to 1–3 words',
+            'Use Large size for main CTAs on mobile',
+          ]}
+          donts={[
+            'Use multiple Primary buttons in one section',
+            'Mix more than 2 variants in a button group',
+            'Use Destructive for non-destructive actions',
+            'Use Small size for primary CTAs on mobile',
+          ]}
+        />
+      </DocSection>
+    </DocPage>
   ),
 }
