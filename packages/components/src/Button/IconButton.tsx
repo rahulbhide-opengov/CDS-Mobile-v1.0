@@ -2,7 +2,7 @@
  * IconButton -- CDS 37 Figma-accurate icon-only button
  *
  * Same 7 type variants and 3 sizes as Button, but square/circular with no label.
- * Sizes: sm=28x28, md=32x32, lg=40x40 (matching Button heights).
+ * Sizes: sm=36x36, md=44x44, lg=48x48 (WCAG 2.5.8 mobile touch targets).
  * Border radius: 9999 for circular shape.
  * Disabled: 38% opacity on the entire button (Figma opacity: 0.38).
  *
@@ -126,27 +126,29 @@ const IconButtonFrame = styled(Stack, {
     },
 
     // -----------------------------------------------------------------------
-    // size -- fixed square dimensions matching CDS 37 button heights
-    // sm=28x28, md=32x32, lg=40x40
+    // size -- mobile-native WCAG 2.5.8 compliant touch targets
+    //   sm: 36x36 (hitSlop pads to 44pt)
+    //   md: 44x44 (WCAG AA minimum, default)
+    //   lg: 48x48 (MD3 recommended)
     // -----------------------------------------------------------------------
     size: {
       sm: {
-        width: 28,
-        height: 28,
-        minWidth: 28,
-        minHeight: 28,
+        width: 36,
+        height: 36,
+        minWidth: 36,
+        minHeight: 36,
       },
       md: {
-        width: 32,
-        height: 32,
-        minWidth: 32,
-        minHeight: 32,
+        width: 44,
+        height: 44,
+        minWidth: 44,
+        minHeight: 44,
       },
       lg: {
-        width: 40,
-        height: 40,
-        minWidth: 40,
-        minHeight: 40,
+        width: 48,
+        height: 48,
+        minWidth: 48,
+        minHeight: 48,
       },
     },
 
@@ -243,18 +245,14 @@ export const IconButton = React.memo(function IconButton({
     }
   }, [disabled, onLongPress])
 
-  // hitSlop ensures small buttons meet 44pt minimum touch target.
-  // sm=28px needs (44-28)/2=8, md=32px needs (44-32)/2=6
+  // hitSlop pads small icon buttons (36px) to WCAG 44pt minimum.
+  // md=44 and lg=48 already meet/exceed the requirement.
   const hitSlop = useMemo(() => {
     if (size === 'sm') {
-      const pad = Math.ceil((MIN_TOUCH_TARGET - 28) / 2)
+      const pad = Math.ceil((MIN_TOUCH_TARGET - 36) / 2) // (44-36)/2 = 4
       return { top: pad, bottom: pad, left: pad, right: pad }
     }
-    if (size === 'md') {
-      const pad = Math.ceil((MIN_TOUCH_TARGET - 32) / 2)
-      return { top: pad, bottom: pad, left: pad, right: pad }
-    }
-    return undefined // lg is 40px, close enough to 44
+    return undefined // md=44, lg=48 — both meet WCAG minimum
   }, [size])
 
   const a11yLabel = useMemo(() => {

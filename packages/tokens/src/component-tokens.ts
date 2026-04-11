@@ -15,23 +15,31 @@ export function createComponentTokens(
   return {
     // -------------------------------------------------------------------------
     // Button (Figma node: 17621:64726)
-    // Sizes: Small=28, Medium=32, Large=40
+    //
+    // CDS 37 Figma desktop sizes: Small=28, Medium=32, Large=40
+    // Mobile/Tablet WCAG 2.5.8: minimum 44px touch target
+    // Material Design 3: minimum 48dp touch target
+    //
+    // Mobile-native sizes ensure all buttons meet WCAG without hitSlop:
+    //   Small  → 36px visual + hitSlop to 44pt (dense UI, tables)
+    //   Medium → 44px (WCAG AA minimum, default)
+    //   Large  → 48px (MD3 recommended, primary CTAs)
     // -------------------------------------------------------------------------
     buttonRadius: p.radiusBase, // 4px
 
-    buttonSmHeight: 28,
-    buttonSmPaddingH: 8,
-    buttonSmPaddingV: 4,
-    buttonSmFontSize: 12,
-    buttonMdHeight: 32,
-    buttonMdPaddingH: 12,
-    buttonMdPaddingV: 4,
+    buttonSmHeight: 36,
+    buttonSmPaddingH: 12,
+    buttonSmPaddingV: 6,
+    buttonSmFontSize: 13,
+    buttonMdHeight: 44,
+    buttonMdPaddingH: 16,
+    buttonMdPaddingV: 10,
     buttonMdFontSize: 14,
-    buttonLgHeight: 40,
-    buttonLgPaddingH: 16,
-    buttonLgPaddingV: 8,
+    buttonLgHeight: 48,
+    buttonLgPaddingH: 24,
+    buttonLgPaddingV: 12,
     buttonLgFontSize: 16,
-    buttonGap: 4,
+    buttonGap: 8,
 
     // Primary: filled blurple
     buttonPrimaryBg: s.primaryMain,
@@ -80,9 +88,10 @@ export function createComponentTokens(
     textFieldHelperColor: s.textSecondary,
     textFieldErrorTextColor: s.errorColor,
 
-    textFieldSmHeight: 28,
-    textFieldMdHeight: 32,
-    textFieldLgHeight: 40,
+    // Mobile-native: all text fields meet 44px minimum touch target
+    textFieldSmHeight: 44,    // WCAG minimum (was 28)
+    textFieldMdHeight: 48,    // MD3 recommended (was 32)
+    textFieldLgHeight: 56,    // Comfortable large (was 40)
 
     // -------------------------------------------------------------------------
     // Card
@@ -96,9 +105,10 @@ export function createComponentTokens(
     // -------------------------------------------------------------------------
     chipRadius: p.radiusBase,
     chipGap: 4,
-    chipSmHeight: 28,
-    chipMdHeight: 32,
-    chipLgHeight: 40,
+    // Mobile-native: chips meet WCAG touch targets
+    chipSmHeight: 32,     // Dense, hitSlop to 44pt (was 28)
+    chipMdHeight: 36,     // Default, hitSlop to 44pt (was 32)
+    chipLgHeight: 44,     // WCAG minimum (was 40)
     chipDefaultBorder: s.chipDefaultEnabledBorder,
     chipDefaultHoverFill: s.chipDefaultHoverFill,
     chipDefaultFocusFill: s.chipDefaultFocusFill,

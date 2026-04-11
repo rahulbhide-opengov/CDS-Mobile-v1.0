@@ -68,10 +68,11 @@ const VARIANTS = {
   },
 }
 
+// Mobile-native WCAG 2.5.8 sizes (minimum 44px touch target)
 const SIZES = {
-  small: { height: 28, ph: 8, pv: 4, gap: 4, ...buttonStyles.small.mobile },
-  medium: { height: 32, ph: 12, pv: 4, gap: 4, ...buttonStyles.medium.mobile },
-  large: { height: 40, ph: 16, pv: 8, gap: 8, ...buttonStyles.large.mobile },
+  small: { height: 36, ph: 12, pv: 6, gap: 8, ...buttonStyles.small.mobile },
+  medium: { height: 44, ph: 16, pv: 10, gap: 8, ...buttonStyles.medium.mobile },
+  large: { height: 48, ph: 24, pv: 12, gap: 8, ...buttonStyles.large.mobile },
 }
 
 type VariantKey = keyof typeof VARIANTS
@@ -182,9 +183,9 @@ export const AllSizes: StoryObj = {
         ))}
       </div>
       <SpecTable title="Size Specifications" rows={[
-        { label: 'Small', value: 'h=28 | px=8 | py=4 | gap=4 | 13px Medium' },
-        { label: 'Medium', value: 'h=32 | px=12 | py=4 | gap=4 | 14px Medium' },
-        { label: 'Large', value: 'h=40 | px=16 | py=8 | gap=8 | 16px SemiBold' },
+        { label: 'Small', value: 'h=36 | px=12 | py=6 | gap=8 | 13px Medium (hitSlop→44pt)' },
+        { label: 'Medium', value: 'h=44 | px=16 | py=10 | gap=8 | 14px Medium (WCAG AA)' },
+        { label: 'Large', value: 'h=48 | px=24 | py=12 | gap=8 | 16px SemiBold (MD3)' },
       ]} />
     </div>
   ),
@@ -291,7 +292,7 @@ export const IconButtons: StoryObj = {
           <div>
             <p style={{ fontFamily: 'DM Sans, system-ui', fontSize: 12, fontWeight: 600, color: '#616365', marginBottom: 8 }}>Sizes</p>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              {[28, 32, 40].map(s => (
+              {[36, 44, 48].map(s => (
                 <div
                   key={s}
                   style={{
@@ -307,7 +308,7 @@ export const IconButtons: StoryObj = {
           <div>
             <p style={{ fontFamily: 'DM Sans, system-ui', fontSize: 12, fontWeight: 600, color: '#616365', marginBottom: 8 }}>Circular</p>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              {[28, 32, 40].map(s => (
+              {[36, 44, 48].map(s => (
                 <div
                   key={s}
                   style={{
@@ -322,9 +323,9 @@ export const IconButtons: StoryObj = {
           </div>
         </div>
         <SpecTable title="Icon Button Sizes" rows={[
-          { label: 'Small', value: '28 x 28 px (hitSlop to 44pt touch target)' },
-          { label: 'Medium', value: '32 x 32 px (hitSlop to 44pt touch target)' },
-          { label: 'Large', value: '40 x 40 px (meets 44pt with hitSlop 2)' },
+          { label: 'Small', value: '36 x 36 px (hitSlop pads to 44pt)' },
+          { label: 'Medium', value: '44 x 44 px (WCAG AA minimum)' },
+          { label: 'Large', value: '48 x 48 px (MD3 recommended)' },
         ]} />
       </div>
     )
