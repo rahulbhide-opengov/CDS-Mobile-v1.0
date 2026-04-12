@@ -2,7 +2,46 @@ import React, { useCallback, useRef, useState } from 'react'
 import { TextInput, type TextInputProps, Animated, Easing } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, HStack, VStack, Pressable } from '@opengov/cds-primitives'
-import { colors, primitive } from '@opengov/cds-tokens'
+import { primitive, inputSizes, inputStyles, cornerRadius } from '@opengov/cds-tokens'
+
+// ---------------------------------------------------------------------------
+// Size presets (Figma Mobile 390 column)
+// ---------------------------------------------------------------------------
+
+type TextFieldSize = 'sm' | 'md' | 'lg'
+
+const HEIGHT_MAP: Record<TextFieldSize, number> = {
+  sm: inputSizes.small.mobile,   // 32
+  md: inputSizes.medium.mobile,  // 40
+  lg: inputSizes.large.mobile,   // 48
+}
+
+/** Label typography per size (mobile column) */
+const LABEL_STYLE: Record<TextFieldSize, { fontSize: number; fontWeight: number; lineHeight: number }> = {
+  sm: inputStyles.labelSm.mobile,
+  md: inputStyles.labelMd.mobile,
+  lg: inputStyles.labelLg.mobile,
+}
+
+/** Value typography per size (mobile column) */
+const VALUE_STYLE: Record<TextFieldSize, { fontSize: number; fontWeight: number; lineHeight: number }> = {
+  sm: inputStyles.valueSm.mobile,
+  md: inputStyles.valueMd.mobile,
+  lg: inputStyles.valueLg.mobile,
+}
+
+/**
+ * Padding per size: [top, right, bottom, left]
+ * Figma specs: sm=4/12/4/8, md=4/12/4/8, lg=4/12/4/12
+ */
+const PADDING_MAP: Record<TextFieldSize, [number, number, number, number]> = {
+  sm: [4, 12, 4, 8],
+  md: [4, 12, 4, 8],
+  lg: [4, 12, 4, 12],
+}
+
+// Border radius: Figma corner radius "small" = 4px
+const INPUT_BORDER_RADIUS = cornerRadius.small // 4
 
 // ---------------------------------------------------------------------------
 // Styled primitives
@@ -11,56 +50,6 @@ import { colors, primitive } from '@opengov/cds-tokens'
 const TextFieldContainer = styled(VStack, {
   name: 'TextFieldContainer',
   gap: '$1',
-})
-
-const InputFrame = styled(Stack, {
-  name: 'TextFieldFrame',
-  borderRadius: '$md',
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: '$2',
-  minHeight: 44,
-
-  variants: {
-    variant: {
-      outlined: {
-        borderWidth: 1,
-        borderColor: '$borderColor',
-        backgroundColor: '$background',
-        paddingHorizontal: '$3',
-        paddingVertical: '$2',
-      },
-      filled: {
-        borderWidth: 0,
-        borderBottomWidth: 1,
-        borderColor: '$borderColor',
-        backgroundColor: '$backgroundStrong',
-        paddingHorizontal: '$3',
-        paddingVertical: '$2',
-        borderTopLeftRadius: '$md',
-        borderTopRightRadius: '$md',
-        borderBottomLeftRadius: 0,
-        borderBottomRightRadius: 0,
-      },
-    },
-    focused: {
-      true: {},
-    },
-    error: {
-      true: {},
-    },
-    disabled: {
-      true: {
-        backgroundColor: '$backgroundStrong',
-        borderColor: '$borderColorDisabled',
-        opacity: 0.6,
-      },
-    },
-  } as const,
-
-  defaultVariants: {
-    variant: 'outlined',
-  },
 })
 
 // ---------------------------------------------------------------------------
@@ -78,6 +67,8 @@ export interface TextFieldProps {
   onChangeText?: (text: string) => void
   /** Visual variant */
   variant?: 'outlined' | 'filled'
+  /** Size preset controlling height and typography. Defaults to "md". */
+  size?: TextFieldSize
   /** Whether the field is in an error state */
   error?: boolean
   /** Error message displayed below the input (also sets error state) */
@@ -136,6 +127,7 @@ export function TextField({
   value = '',
   onChangeText,
   variant = 'outlined',
+  size = 'md',
   error = false,
   errorText,
   helperText,
@@ -215,8 +207,8 @@ export function TextField({
   const animatedBorderColor = focusAnim.interpolate({
     inputRange: [0, 1],
     outputRange: [
-      hasError ? colors.red700 : primitive.neutral200, // neutral200 / red700
-      hasError ? colors.red700 : colors.primary,  // red700 / primary
+      hasError ? primitive.red600 : primitive.slate700, // Figma: error=red600, default=slate700
+      hasError ? primitive.red600 : primitive.blurple700, // Figma: error=red600, focused=blurple700
     ],
   })
 
@@ -237,8 +229,9 @@ export function TextField({
       {/* Label */}
       {label != null && (
         <Text
-          variant="body3"
-          fontWeight="$medium"
+          fontSize={LABEL_STYLE[size].fontSize}
+          fontWeight={LABEL_STYLE[size].fontWeight as any}
+          lineHeight={LABEL_STYLE[size].lineHeight}
           color={hasError ? '$errorColor' : disabled ? '$colorDisabled' : '$color'}
           marginBottom="$0.5"
         >
@@ -250,22 +243,26 @@ export function TextField({
       <Animated.View
         style={[
           {
-            borderRadius: variant === 'filled' ? 0 : 4,
-            borderTopLeftRadius: 4,
-            borderTopRightRadius: 4,
+            borderRadius: variant === 'filled' ? 0 : INPUT_BORDER_RADIUS,
+            borderTopLeftRadius: INPUT_BORDER_RADIUS,
+            borderTopRightRadius: INPUT_BORDER_RADIUS,
             borderWidth: variant === 'filled' ? 0 : animatedBorderWidth,
             borderBottomWidth: animatedBorderWidth,
             borderColor: animatedBorderColor,
             backgroundColor: disabled
-              ? primitive.neutral100 // neutral100
+              ? primitive.neutral100
               : variant === 'filled'
-                ? primitive.neutral100 // neutral100 / backgroundStrong
-                : colors.white,
+                ? primitive.neutral100
+                : primitive.white,
             flexDirection: 'row',
             alignItems: multiline ? 'flex-start' : 'center',
-            paddingHorizontal: 12,
-            paddingVertical: 8,
-            minHeight: multiline ? 44 * Math.max(numberOfLines, 1) : 44,
+            paddingTop: PADDING_MAP[size][0],
+            paddingRight: PADDING_MAP[size][1],
+            paddingBottom: PADDING_MAP[size][2],
+            paddingLeft: PADDING_MAP[size][3],
+            minHeight: multiline
+              ? HEIGHT_MAP[size] * Math.max(numberOfLines, 1)
+              : HEIGHT_MAP[size],
             gap: 8,
             opacity: disabled ? 0.6 : 1,
           },
@@ -284,13 +281,17 @@ export function TextField({
           ref={ref as React.RefObject<TextInput>}
           style={{
             flex: 1,
-            fontSize: 16,
+            fontSize: VALUE_STYLE[size].fontSize,
+            fontWeight: String(VALUE_STYLE[size].fontWeight) as '400' | '500',
+            lineHeight: VALUE_STYLE[size].lineHeight,
             fontFamily: 'DM Sans',
-            color: disabled ? primitive.neutral400 : primitive.neutral900, // neutral400 / neutral900
+            color: disabled ? primitive.neutral400 : primitive.neutral900,
             padding: 0,
             margin: 0,
             textAlignVertical: multiline ? 'top' : 'center',
-            minHeight: multiline ? 20 * Math.max(numberOfLines, 1) : undefined,
+            minHeight: multiline
+              ? VALUE_STYLE[size].lineHeight * Math.max(numberOfLines, 1)
+              : undefined,
           }}
           value={value}
           onChangeText={disabled ? undefined : onChangeText}
@@ -369,7 +370,9 @@ export function TextField({
           <Stack flex={1}>
             {errorText != null && (
               <Text
-                variant="caption"
+                fontSize={inputStyles.helper.mobile.fontSize}
+                fontWeight={inputStyles.helper.mobile.fontWeight as any}
+                lineHeight={inputStyles.helper.mobile.lineHeight}
                 color="$errorColor"
                 accessibilityLiveRegion="polite"
               >
@@ -377,14 +380,21 @@ export function TextField({
               </Text>
             )}
             {errorText == null && helperText != null && (
-              <Text variant="caption" color="$colorSecondary">
+              <Text
+                fontSize={inputStyles.description.mobile.fontSize}
+                fontWeight={inputStyles.description.mobile.fontWeight as any}
+                lineHeight={inputStyles.description.mobile.lineHeight}
+                color="$colorSecondary"
+              >
                 {helperText}
               </Text>
             )}
           </Stack>
           {showCharacterCount && maxLength != null && (
             <Text
-              variant="caption"
+              fontSize={inputStyles.helper.mobile.fontSize}
+              fontWeight={inputStyles.helper.mobile.fontWeight as any}
+              lineHeight={inputStyles.helper.mobile.lineHeight}
               color={characterCount >= maxLength ? '$errorColor' : '$colorSecondary'}
             >
               {characterCount}/{maxLength}

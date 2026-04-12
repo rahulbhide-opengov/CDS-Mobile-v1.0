@@ -1,11 +1,18 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 import { Animated, Easing } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, HStack } from '@opengov/cds-primitives'
-import { colors, primitive } from '@opengov/cds-tokens'
+import { primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
-// Size maps
+// Constants
+// ---------------------------------------------------------------------------
+
+/** WCAG 2.5.8 minimum touch target */
+const TOUCH_TARGET = 44
+
+// ---------------------------------------------------------------------------
+// Size maps (Figma CDS 37 -- Mobile 390 column)
 // ---------------------------------------------------------------------------
 
 const SIZE_MAP = {
@@ -101,15 +108,22 @@ export function Radio({
   }, [disabled, onSelect])
 
   // ---- Derived styles -------------------------------------------------------
-  const borderColor = selected ? colors.primary : primitive.neutral400 // primary / neutral400
-  const dotColor = colors.primary // primary
+  const borderColor = selected ? primitive.blurple700 : primitive.slate700
+  const dotColor = primitive.blurple700
+
+  // hitSlop expands the touch target to 44px without changing visual size
+  const hitSlop = useMemo(() => {
+    const pad = Math.max(0, (TOUCH_TARGET - dims.outer) / 2)
+    return { top: pad, bottom: pad, left: pad, right: pad }
+  }, [dims.outer])
 
   // ---- Render ---------------------------------------------------------------
 
   return (
     <RadioContainer
-      opacity={disabled ? 0.5 : 1}
+      opacity={disabled ? 0.38 : 1}
       onPress={handlePress}
+      hitSlop={hitSlop}
       accessibilityRole="radio"
       accessibilityState={{
         selected,

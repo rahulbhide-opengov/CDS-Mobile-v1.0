@@ -12,8 +12,9 @@ const SegmentedControlFrame = styled(Stack, {
   name: 'SegmentedControl',
   flexDirection: 'row',
   alignItems: 'center',
+  height: 36,
   backgroundColor: '$backgroundStrong',
-  borderRadius: 12,
+  borderRadius: 4,
   padding: 4,
   overflow: 'hidden',
 
@@ -35,9 +36,9 @@ const SegmentPressable = styled(Pressable, {
   flex: 1,
   alignItems: 'center',
   justifyContent: 'center',
-  height: 36,
-  minHeight: 36,
-  borderRadius: 8,
+  height: 28,
+  minHeight: 28,
+  borderRadius: 2,
   zIndex: 1,
 })
 
@@ -56,7 +57,7 @@ const SegmentLabel = styled(TamaguiText, {
   variants: {
     active: {
       true: {
-        fontWeight: '$semibold',
+        fontWeight: '$medium',
         color: '$color',
       },
       false: {
@@ -153,7 +154,7 @@ export function SegmentedControl({
           <SegmentPressable
             key={item.key}
             onPress={() => onSelect?.(item.key)}
-            hitSlop={{ top: 4, bottom: 4, left: 0, right: 0 }}
+            hitSlop={{ top: 8, bottom: 8, left: 0, right: 0 }}
             accessibilityRole="tab"
             accessibilityState={{ selected: isActive }}
             accessibilityLabel={item.label}
@@ -241,7 +242,7 @@ function SlidingIndicator({
             top: 0,
             bottom: 0,
             width: segmentPixelWidth,
-            borderRadius: 8,
+            borderRadius: 2,
             backgroundColor: colors.white,
             shadowColor: colors.black,
             shadowOffset: { width: 0, height: 1 },

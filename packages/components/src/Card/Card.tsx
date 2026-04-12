@@ -2,6 +2,7 @@ import React, { useCallback, useRef } from 'react'
 import { Animated } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Pressable, VStack } from '@opengov/cds-primitives'
+import { primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Padding map
@@ -9,7 +10,7 @@ import { Pressable, VStack } from '@opengov/cds-primitives'
 
 const PADDING_MAP = {
   none: 0,
-  sm: 8,
+  sm: 12,
   md: 16,
   lg: 24,
 } as const
@@ -21,7 +22,7 @@ const PADDING_MAP = {
 const CardFrame = styled(Stack, {
   name: 'Card',
   backgroundColor: '$background',
-  borderRadius: '$lg',
+  borderRadius: '$md',
   overflow: 'hidden',
 
   variants: {
@@ -40,7 +41,7 @@ const CardFrame = styled(Stack, {
         borderColor: '$borderColor',
       },
       filled: {
-        backgroundColor: '$backgroundStrong',
+        backgroundColor: primitive.gray50,
       },
     },
   } as const,

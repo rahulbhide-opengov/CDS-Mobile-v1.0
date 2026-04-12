@@ -1,16 +1,29 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { Animated, Easing } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, HStack } from '@opengov/cds-primitives'
-import { colors, primitive } from '@opengov/cds-tokens'
+import { primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
-// Size maps
+// Constants
+// ---------------------------------------------------------------------------
+
+/** WCAG 2.5.8 minimum touch target */
+const TOUCH_TARGET = 44
+
+/** CDS 37 animation: 150ms ease-out slide */
+const TOGGLE_DURATION = 150
+
+// ---------------------------------------------------------------------------
+// Size maps (Figma CDS 37 -- Mobile 390 column)
+//
+// md (default): track 34x14, thumb 20px -- per Figma spec
+// sm: proportionally smaller track 28x12, thumb 16px
 // ---------------------------------------------------------------------------
 
 const SIZE_MAP = {
-  sm: { trackWidth: 36, trackHeight: 20, thumbSize: 16, thumbTravel: 16, padding: 2 },
-  md: { trackWidth: 44, trackHeight: 24, thumbSize: 20, thumbTravel: 20, padding: 2 },
+  sm: { trackWidth: 28, trackHeight: 12, thumbSize: 16, thumbTravel: 12, padding: -2 },
+  md: { trackWidth: 34, trackHeight: 14, thumbSize: 20, thumbTravel: 14, padding: -3 },
 } as const
 
 type SwitchSize = keyof typeof SIZE_MAP
@@ -61,12 +74,12 @@ export function Switch({
   // Animated value drives thumb translation and track color
   const toggleAnim = useRef(new Animated.Value(checked ? 1 : 0)).current
 
-  // Keep the animation in sync with the checked prop
+  // Keep the animation in sync with the checked prop (CDS 37: 150ms ease-out)
   useEffect(() => {
-    Animated.spring(toggleAnim, {
+    Animated.timing(toggleAnim, {
       toValue: checked ? 1 : 0,
-      friction: 8,
-      tension: 300,
+      duration: TOGGLE_DURATION,
+      easing: Easing.out(Easing.ease),
       useNativeDriver: false, // backgroundColor cannot use native driver
     }).start()
   }, [checked, toggleAnim])
@@ -102,8 +115,16 @@ export function Switch({
   const trackBackgroundColor = toggleAnim.interpolate({
     inputRange: [0, 1],
     outputRange: [
-      primitive.neutral300, // neutral300 -- off track
-      colors.primary, // primary -- on track
+      primitive.gray300, // CDS 37: off track is gray300
+      primitive.blurple700, // CDS 37: on track is blurple700
+    ],
+  })
+
+  const thumbBackgroundColor = toggleAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [
+      primitive.gray50, // CDS 37: off thumb is gray50
+      primitive.white, // CDS 37: on thumb is white
     ],
   })
 
@@ -112,15 +133,20 @@ export function Switch({
     outputRange: [dims.padding, dims.thumbTravel + dims.padding],
   })
 
-  // Slight thumb size increase when pressed for tactile feedback
-  // (handled by scaleAnim on the entire track to keep it simple)
+  // hitSlop expands the touch target to 44px without changing visual size
+  const hitSlop = useMemo(() => {
+    const padV = Math.max(0, (TOUCH_TARGET - dims.thumbSize) / 2) // thumb is tallest element
+    const padH = Math.max(0, (TOUCH_TARGET - dims.trackWidth) / 2)
+    return { top: padV, bottom: padV, left: padH, right: padH }
+  }, [dims.thumbSize, dims.trackWidth])
 
   // ---- Render ---------------------------------------------------------------
 
   return (
     <SwitchContainer
-      opacity={disabled ? 0.5 : 1}
+      opacity={disabled ? 0.38 : 1}
       onPress={handlePress}
+      hitSlop={hitSlop}
       accessibilityRole="switch"
       accessibilityState={{
         checked,
@@ -152,9 +178,9 @@ export function Switch({
               width: dims.thumbSize,
               height: dims.thumbSize,
               borderRadius: dims.thumbSize / 2,
-              backgroundColor: colors.white,
-              // Subtle shadow for depth
-              shadowColor: colors.black,
+              backgroundColor: thumbBackgroundColor,
+              // Small shadow for depth (CDS 37)
+              shadowColor: primitive.black,
               shadowOffset: { width: 0, height: 1 },
               shadowOpacity: 0.2,
               shadowRadius: 2,

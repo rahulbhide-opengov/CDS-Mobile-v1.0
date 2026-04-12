@@ -28,8 +28,8 @@ export interface SkeletonLoaderProps {
 // Constants
 // ---------------------------------------------------------------------------
 
-const BASE_COLOR = primitive.neutral300 // neutral300
-const HIGHLIGHT_COLOR = primitive.neutral100 // neutral100
+const BASE_COLOR = primitive.gray300 // gray300
+const HIGHLIGHT_COLOR = primitive.gray100 // gray100
 
 const DEFAULT_HEIGHTS: Record<string, number> = {
   text: 16,
@@ -157,10 +157,10 @@ function SkeletonItem({
     variant === 'circular'
       ? (typeof resolvedWidth === 'number' ? resolvedWidth / 2 : resolvedHeight / 2)
       : variant === 'rounded'
-        ? 12
+        ? 8
         : variant === 'text'
           ? 4
-          : 4 // rectangular
+          : 8 // rectangular
 
   if (animation === 'wave') {
     return (

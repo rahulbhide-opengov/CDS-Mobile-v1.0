@@ -8,15 +8,15 @@ import { Text } from '@opengov/cds-primitives'
 // ---------------------------------------------------------------------------
 
 const SIZE_MAP = {
-  sm: 40,
-  md: 56,
-  lg: 72,
+  sm: 32,
+  md: 40,
+  lg: 50,
 } as const
 
 const ICON_SIZE_MAP = {
-  sm: 18,
-  md: 24,
-  lg: 28,
+  sm: 16,
+  md: 20,
+  lg: 24,
 } as const
 
 // ---------------------------------------------------------------------------
@@ -169,9 +169,9 @@ export function Fab({
         justifyContent="center"
         gap={showLabel ? 8 : 0}
         shadowColor="$shadowColor"
-        shadowOffset={{ width: 0, height: 4 }}
-        shadowOpacity={0.25}
-        shadowRadius={8}
+        shadowOffset={{ width: 0, height: 3 }}
+        shadowOpacity={0.3}
+        shadowRadius={6}
         borderWidth={color === 'secondary' ? 1 : 0}
         borderColor={color === 'secondary' ? '$borderColor' : undefined}
         onPress={disabled ? undefined : onPress}
@@ -200,7 +200,8 @@ export function Fab({
         {/* Extended label */}
         {showLabel && (
           <Text
-            variant="body3"
+            fontSize={16}
+            lineHeight={20}
             fontWeight="$semibold"
             color={
               color === 'primary' ? '$brandColor' : '$text'

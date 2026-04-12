@@ -2,28 +2,30 @@ import React, { useRef, useCallback, useMemo, useState } from 'react'
 import { Animated, PanResponder, View, LayoutChangeEvent, type DimensionValue } from 'react-native'
 import { Stack } from '@tamagui/core'
 import { Text } from '@opengov/cds-primitives'
-import { colors, primitive } from '@opengov/cds-tokens'
+import { primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
 
-const THUMB_SIZE = 24
-const THUMB_HIT_SLOP = 12 // extra pixels around the thumb for easier grabbing
-const TRACK_HEIGHT = 4
-const ACTIVE_TRACK_HEIGHT = 4
-const VALUE_LABEL_OFFSET = -32 // vertical offset above thumb for the value label
+const THUMB_SIZE = 20 // Figma: 20px diameter
+const TRACK_HEIGHT = 4 // Figma: 4px track height
+const TOUCH_TARGET = 44 // WCAG 2.5.8 minimum touch target
+const THUMB_HIT_SLOP = (TOUCH_TARGET - THUMB_SIZE) / 2 // 12px each side for 44px total
 
-const FILL_COLOR = colors.primary // primary
-const TRACK_COLOR = primitive.neutral300 // neutral300
-const THUMB_COLOR = colors.white
+const FILL_COLOR = primitive.blurple700 // Figma: blurple700
+const TRACK_COLOR = primitive.gray300 // Figma: gray300 (#C8C9CA)
+const THUMB_COLOR = primitive.white
 const THUMB_SHADOW = {
-  shadowColor: colors.black,
+  shadowColor: primitive.neutral900,
   shadowOffset: { width: 0, height: 2 },
   shadowOpacity: 0.2,
   shadowRadius: 4,
   elevation: 3,
 }
+
+/** Value label typography -- Figma: 13px Medium */
+const VALUE_LABEL_FONT_SIZE = 13
 
 // ---------------------------------------------------------------------------
 // Types
@@ -232,7 +234,7 @@ export const Slider = React.memo(function Slider({
           >
             <Text
               color="white"
-              fontSize={12}
+              fontSize={VALUE_LABEL_FONT_SIZE}
               fontWeight="$medium"
               textAlign="center"
             >
@@ -268,15 +270,15 @@ export const Slider = React.memo(function Slider({
           }}
         />
 
-        {/* Thumb */}
+        {/* Thumb -- touch area is TOUCH_TARGET (44px), visual thumb is THUMB_SIZE (20px) */}
         <View
           style={{
             position: 'absolute',
             left: thumbLeftPercent,
-            top: -(THUMB_SIZE - TRACK_HEIGHT) / 2,
-            marginLeft: -(THUMB_SIZE / 2),
-            width: THUMB_SIZE + THUMB_HIT_SLOP * 2,
-            height: THUMB_SIZE + THUMB_HIT_SLOP * 2,
+            top: -(TOUCH_TARGET - TRACK_HEIGHT) / 2,
+            marginLeft: -(TOUCH_TARGET / 2),
+            width: TOUCH_TARGET,
+            height: TOUCH_TARGET,
             alignItems: 'center',
             justifyContent: 'center',
           }}
@@ -288,8 +290,6 @@ export const Slider = React.memo(function Slider({
               height: THUMB_SIZE,
               borderRadius: THUMB_SIZE / 2,
               backgroundColor: thumbColor,
-              borderWidth: 2,
-              borderColor: fillColorProp,
               ...THUMB_SHADOW,
             }}
           />

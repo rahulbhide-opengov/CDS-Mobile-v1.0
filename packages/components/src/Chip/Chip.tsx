@@ -19,18 +19,18 @@ interface ChipColorScheme {
 
 const FILLED_COLORS: Record<ChipVariant, ChipColorScheme> = {
   neutral: { bg: primitive.neutral100, text: primitive.neutral700, border: 'transparent' }, // neutral100, neutral700
-  positive: { bg: colors.jade50, text: colors.jade700, border: 'transparent' }, // jade50, jade700
-  negative: { bg: colors.red50, text: colors.red700, border: 'transparent' }, // red50, red700
-  warning: { bg: primitive.amber50, text: colors.amber700, border: 'transparent' }, // amber50, amber700
-  strong: { bg: colors.primary, text: colors.white, border: 'transparent' }, // primary, white
+  positive: { bg: colors.jade50, text: colors.green700, border: 'transparent' }, // jade50, green700
+  negative: { bg: colors.red50, text: colors.red600, border: 'transparent' }, // red50, red600
+  warning: { bg: primitive.amber50, text: colors.yellow700, border: 'transparent' }, // amber50, yellow700
+  strong: { bg: colors.blurple700, text: colors.white, border: 'transparent' }, // blurple700, white
 }
 
 const OUTLINED_COLORS: Record<ChipVariant, ChipColorScheme> = {
-  neutral: { bg: 'transparent', text: primitive.neutral700, border: primitive.neutral300 }, // neutral700, neutral300
-  positive: { bg: 'transparent', text: colors.jade700, border: colors.jade500 }, // jade700, jade500
-  negative: { bg: 'transparent', text: colors.red700, border: primitive.red500 }, // red700, red500
-  warning: { bg: 'transparent', text: colors.amber700, border: colors.amber500 }, // amber700, amber500
-  strong: { bg: 'transparent', text: colors.primary, border: colors.primary }, // primary, primary
+  neutral: { bg: 'transparent', text: primitive.neutral700, border: primitive.gray400 }, // neutral700, gray400
+  positive: { bg: 'transparent', text: colors.green700, border: colors.green700 }, // green700
+  negative: { bg: 'transparent', text: colors.red600, border: colors.red600 }, // red600
+  warning: { bg: 'transparent', text: colors.yellow700, border: colors.yellow700 }, // yellow700
+  strong: { bg: 'transparent', text: colors.blurple700, border: colors.blurple700 }, // blurple700
 }
 
 // ---------------------------------------------------------------------------
@@ -49,9 +49,9 @@ interface ChipSizeConfig {
 }
 
 const SIZE_CONFIG: Record<ChipSize, ChipSizeConfig> = {
-  sm: { height: 24, paddingH: 8, fontSize: 12, lineHeight: 14, iconSize: 14, gap: 4 },
-  md: { height: 32, paddingH: 12, fontSize: 14, lineHeight: 18, iconSize: 16, gap: 6 },
-  lg: { height: 36, paddingH: 14, fontSize: 14, lineHeight: 20, iconSize: 18, gap: 6 },
+  sm: { height: 32, paddingH: 8, fontSize: 12, lineHeight: 18, iconSize: 14, gap: 4 },
+  md: { height: 36, paddingH: 12, fontSize: 13, lineHeight: 18, iconSize: 16, gap: 6 },
+  lg: { height: 44, paddingH: 14, fontSize: 14, lineHeight: 20, iconSize: 18, gap: 6 },
 }
 
 // ---------------------------------------------------------------------------
@@ -157,9 +157,9 @@ export function Chip({
 
   // WCAG touch-target compliance: expand effective touch area to 44pt minimum
   const hitSlopMap: Record<ChipSize, { top: number; bottom: number; left: number; right: number }> = {
-    sm: { top: 10, bottom: 10, left: 4, right: 4 },  // 24 + 20 = 44
-    md: { top: 6, bottom: 6, left: 4, right: 4 },    // 32 + 12 = 44
-    lg: { top: 4, bottom: 4, left: 4, right: 4 },    // 36 + 8 = 44
+    sm: { top: 6, bottom: 6, left: 4, right: 4 },    // 32 + 12 = 44
+    md: { top: 4, bottom: 4, left: 4, right: 4 },    // 36 + 8 = 44
+    lg: { top: 0, bottom: 0, left: 4, right: 4 },    // 44 + 0 = 44
   }
   const chipHitSlop = hitSlopMap[size]
 
@@ -169,7 +169,7 @@ export function Chip({
       height={sizeConfig.height}
       paddingHorizontal={sizeConfig.paddingH}
       backgroundColor={finalBg}
-      borderRadius={9999}
+      borderRadius={4}
       borderWidth={chipStyle === 'outlined' ? 1 : 0}
       borderColor={finalBorder}
       alignItems="center"
@@ -186,6 +186,7 @@ export function Chip({
         fontSize={sizeConfig.fontSize}
         lineHeight={sizeConfig.lineHeight}
         fontWeight="$medium"
+        letterSpacing={0.16}
         color={finalText}
         numberOfLines={1}
       >

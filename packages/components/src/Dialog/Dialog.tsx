@@ -182,7 +182,7 @@ export function Dialog({
           width={width}
           maxWidth="90%"
           backgroundColor="$background"
-          borderRadius={16}
+          borderRadius={8}
           padding={24}
           gap={12}
           shadowColor="$shadowColor"
@@ -195,7 +195,7 @@ export function Dialog({
           {/* Title */}
           {title != null && (
             <Text
-              variant="h4"
+              variant="h3"
               accessibilityRole="header"
             >
               {title}

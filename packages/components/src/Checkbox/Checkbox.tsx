@@ -1,17 +1,24 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 import { Animated, Easing } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, HStack, Pressable } from '@opengov/cds-primitives'
-import { colors, primitive } from '@opengov/cds-tokens'
+import { primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
-// Size maps
+// Constants
+// ---------------------------------------------------------------------------
+
+/** WCAG 2.5.8 minimum touch target */
+const TOUCH_TARGET = 44
+
+// ---------------------------------------------------------------------------
+// Size maps (Figma CDS 37 -- Mobile 390 column)
 // ---------------------------------------------------------------------------
 
 const SIZE_MAP = {
-  sm: { box: 18, checkWidth: 10, checkHeight: 6, borderWidth: 1.5, dashWidth: 8, dashHeight: 2 },
-  md: { box: 20, checkWidth: 12, checkHeight: 7, borderWidth: 2, dashWidth: 10, dashHeight: 2 },
-  lg: { box: 24, checkWidth: 14, checkHeight: 8, borderWidth: 2, dashWidth: 12, dashHeight: 2 },
+  sm: { box: 18, checkWidth: 10, checkHeight: 6, borderWidth: 1, checkStroke: 1.5, dashWidth: 8, dashHeight: 2 },
+  md: { box: 20, checkWidth: 12, checkHeight: 7, borderWidth: 1, checkStroke: 2, dashWidth: 10, dashHeight: 2 },
+  lg: { box: 24, checkWidth: 14, checkHeight: 8, borderWidth: 1, checkStroke: 2, dashWidth: 12, dashHeight: 2 },
 } as const
 
 type CheckboxSize = keyof typeof SIZE_MAP
@@ -37,7 +44,7 @@ function CheckIcon({ size }: { size: CheckboxSize }) {
   // Short bar = left leg, long bar = bottom leg.
   const shortLen = dims.checkHeight
   const longLen = dims.checkWidth
-  const strokeWidth = dims.borderWidth
+  const strokeWidth = dims.checkStroke
 
   return (
     <Stack
@@ -152,19 +159,26 @@ export function Checkbox({
   // ---- Derived styles -------------------------------------------------------
   const isActive = checked || indeterminate
   const borderColor = error && !isActive
-    ? colors.red700 // red700 / errorColor
+    ? primitive.red700
     : isActive
-      ? colors.primary // primary
-      : primitive.neutral400 // neutral400
+      ? primitive.blurple700
+      : primitive.slate700 // CDS 37: unchecked border is slate700, NOT gray
 
-  const backgroundColor = isActive ? colors.primary : 'transparent'
+  const backgroundColor = isActive ? primitive.blurple700 : 'transparent'
+
+  // hitSlop expands the touch target to 44px without changing visual size
+  const hitSlop = useMemo(() => {
+    const pad = Math.max(0, (TOUCH_TARGET - dims.box) / 2)
+    return { top: pad, bottom: pad, left: pad, right: pad }
+  }, [dims.box])
 
   // ---- Render ---------------------------------------------------------------
 
   return (
     <CheckboxContainer
-      opacity={disabled ? 0.5 : 1}
+      opacity={disabled ? 0.38 : 1}
       onPress={handlePress}
+      hitSlop={hitSlop}
       accessibilityRole="checkbox"
       accessibilityState={{
         checked: indeterminate ? 'mixed' : checked,

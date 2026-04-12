@@ -23,7 +23,7 @@ const TabFrame = styled(Pressable, {
   minHeight: MIN_TOUCH_TARGET,
   alignItems: 'center',
   justifyContent: 'center',
-  paddingHorizontal: 16,
+  paddingHorizontal: 12,
 
   pressStyle: {
     opacity: 0.7,
@@ -95,12 +95,12 @@ const TabLabelPrimary = styled(TamaguiText, {
   variants: {
     active: {
       true: {
-        fontWeight: '$semibold',
+        fontWeight: '$medium',
         color: '$brandBackground',
       },
       false: {
         fontWeight: '$regular',
-        color: primitive.neutral500, // neutral500
+        color: colors.slate700, // slate700
       },
     },
   } as const,
@@ -118,12 +118,12 @@ const TabLabelSecondary = styled(TamaguiText, {
   variants: {
     active: {
       true: {
-        fontWeight: '$semibold',
+        fontWeight: '$medium',
         color: 'white',
       },
       false: {
         fontWeight: '$regular',
-        color: primitive.neutral500, // neutral500
+        color: colors.slate700, // slate700
       },
     },
   } as const,
@@ -160,7 +160,7 @@ function TabBadge({ count, variant, active }: { count: number; variant: 'primary
         fontFamily="$body"
         fontSize={10}
         lineHeight={14}
-        fontWeight="$bold"
+        fontWeight="$semibold"
         color={textColor}
         textAlign="center"
       >
@@ -240,8 +240,8 @@ export const Tab = React.memo(function Tab({
       <HStack alignItems="center" justifyContent="center" gap={6} zIndex={1}>
         {icon && (
           <Stack
-            width={18}
-            height={18}
+            width={20}
+            height={20}
             alignItems="center"
             justifyContent="center"
             opacity={active ? 1 : 0.5}

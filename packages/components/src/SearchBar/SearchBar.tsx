@@ -8,23 +8,27 @@ import {
 } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, HStack, Pressable } from '@opengov/cds-primitives'
-import { colors, primitive } from '@opengov/cds-tokens'
+import { primitive, inputSizes, inputStyles, cornerRadius } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
-// Size presets (min-height in dp)
+// Size presets (Figma Mobile 390 column -- same as TextField)
 // ---------------------------------------------------------------------------
 
 const SIZE_MAP = {
-  sm: 36,
-  md: 44,
-  lg: 48,
+  sm: inputSizes.small.mobile,   // 32
+  md: inputSizes.medium.mobile,  // 40
+  lg: inputSizes.large.mobile,   // 48
 } as const
 
-const FONT_SIZE_MAP = {
-  sm: 14,
-  md: 16,
-  lg: 16,
+/** Value typography per size (mobile column) */
+const VALUE_STYLE_MAP = {
+  sm: inputStyles.valueSm.mobile,
+  md: inputStyles.valueMd.mobile,
+  lg: inputStyles.valueLg.mobile,
 } as const
+
+// Border radius: Figma corner radius "small" = 4px
+const SEARCH_BORDER_RADIUS = cornerRadius.small // 4
 
 // Cancel button width for animated slide-in
 const CANCEL_WIDTH = 64
@@ -148,7 +152,7 @@ export function SearchBar({
   const cancelAnim = useRef(new Animated.Value(showCancel ? 1 : 0)).current
 
   const minHeight = SIZE_MAP[size]
-  const fontSize = FONT_SIZE_MAP[size]
+  const valueStyle = VALUE_STYLE_MAP[size]
   const showClearButton = value.length > 0
   const shouldShowCancel = showCancel || isFocused
 
@@ -229,8 +233,8 @@ export function SearchBar({
   const animatedBorderColor = focusBorderAnim.interpolate({
     inputRange: [0, 1],
     outputRange: [
-      variant === 'outlined' ? primitive.neutral200 : 'transparent',
-      colors.primary,
+      variant === 'outlined' ? primitive.slate700 : 'transparent', // Figma: default=slate700
+      primitive.blurple700, // Figma: focused=blurple700
     ],
   })
 
@@ -262,12 +266,12 @@ export function SearchBar({
             backgroundColor: variant === 'filled' ? primitive.neutral100 : 'transparent',
             borderColor: animatedBorderColor,
             borderWidth: variant === 'outlined' ? animatedBorderWidth : 0,
-            borderRadius: minHeight / 2,
+            borderRadius: SEARCH_BORDER_RADIUS,
           },
         ]}
       >
         {/* Leading search icon */}
-        <SearchIcon color={isFocused ? colors.primary : primitive.neutral500} />
+        <SearchIcon color={isFocused ? primitive.blurple700 : primitive.neutral500} />
 
         {/* TextInput */}
         <TextInput
@@ -275,8 +279,9 @@ export function SearchBar({
           style={[
             styles.input,
             {
-              fontSize,
-              lineHeight: fontSize * 1.4,
+              fontSize: valueStyle.fontSize,
+              fontWeight: String(valueStyle.fontWeight) as '400' | '500',
+              lineHeight: valueStyle.lineHeight,
             },
           ]}
           value={value}
@@ -300,9 +305,9 @@ export function SearchBar({
             onPress={handleClear}
             accessibilityRole="button"
             accessibilityLabel="Clear search"
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-            minWidth={24}
-            minHeight={24}
+            hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+            minWidth={32}
+            minHeight={32}
             alignItems="center"
             justifyContent="center"
           >

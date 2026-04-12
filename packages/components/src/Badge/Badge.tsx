@@ -9,10 +9,10 @@ import { colors, primitive } from '@opengov/cds-tokens'
 
 const BADGE_BG: Record<string, string> = {
   default: primitive.neutral500, // neutral500
-  primary: colors.primary, // primary
+  primary: colors.blurple700, // blurple700
   error: colors.red600, // red600
-  success: colors.jade700, // jade700
-  warning: colors.amber700, // amber700
+  success: colors.green700, // green700
+  warning: colors.yellow700, // yellow700
 }
 
 // ---------------------------------------------------------------------------
@@ -54,8 +54,8 @@ const BadgeText = styled(Text, {
   name: 'BadgeText',
   color: 'white',
   fontSize: 12,
-  lineHeight: 14,
-  fontWeight: '$bold',
+  lineHeight: 16,
+  fontWeight: '$semibold',
   textAlign: 'center',
 })
 

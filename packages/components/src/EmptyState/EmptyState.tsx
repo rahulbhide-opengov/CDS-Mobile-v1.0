@@ -39,7 +39,7 @@ const ActionButton = styled(Stack, {
   borderRadius: '$md',
   paddingHorizontal: 16,
   paddingVertical: 8,
-  minHeight: 40,
+  minHeight: 36,
   alignItems: 'center',
   justifyContent: 'center',
 })
@@ -118,7 +118,7 @@ export const EmptyState = React.memo(function EmptyState({
       {/* Text content */}
       <VStack gap="$2" alignItems="center">
         <Text
-          variant={compact ? 'h5' : 'h4'}
+          variant={compact ? 'h5' : 'h3'}
           textAlign="center"
           color="$color"
         >

@@ -8,7 +8,7 @@ import { Text, HStack } from '@opengov/cds-primitives'
 
 const DividerLine = styled(Stack, {
   name: 'DividerLine',
-  backgroundColor: '$borderColor',
+  backgroundColor: '$divider',
   flexShrink: 1,
   flexGrow: 1,
 
@@ -64,7 +64,7 @@ export interface DividerProps {
   orientation?: 'horizontal' | 'vertical'
   /** Margin around the divider. */
   spacing?: 'none' | 'sm' | 'md' | 'lg'
-  /** Override the line color (defaults to `$borderColor`). */
+  /** Override the line color (defaults to `$divider` / rgba(0,0,0,0.12)). */
   color?: string
   /** Optional label text rendered centered within the divider line. */
   label?: string

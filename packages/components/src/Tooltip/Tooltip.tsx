@@ -9,13 +9,12 @@ import {
 } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, Pressable } from '@opengov/cds-primitives'
-import { colors, primitive } from '@opengov/cds-tokens'
-
 // ---------------------------------------------------------------------------
-// Arrow dimensions
+// Arrow dimensions & tooltip colors
 // ---------------------------------------------------------------------------
 
-const ARROW_SIZE = 6
+const TOOLTIP_BG = 'rgba(21,21,21,0.9)' // tooltipFill token
+const ARROW_SIZE = 5
 const TOOLTIP_MAX_WIDTH = 240
 const AUTO_DISMISS_MS = 3000
 
@@ -60,7 +59,7 @@ function Arrow({ placement }: { placement: 'top' | 'bottom' | 'left' | 'right' }
               borderTopWidth: ARROW_SIZE,
               borderLeftColor: 'transparent',
               borderRightColor: 'transparent',
-              borderTopColor: primitive.neutral900,
+              borderTopColor: TOOLTIP_BG,
             },
           ]}
         />
@@ -78,7 +77,7 @@ function Arrow({ placement }: { placement: 'top' | 'bottom' | 'left' | 'right' }
               borderBottomWidth: ARROW_SIZE,
               borderLeftColor: 'transparent',
               borderRightColor: 'transparent',
-              borderBottomColor: primitive.neutral900,
+              borderBottomColor: TOOLTIP_BG,
             },
           ]}
         />
@@ -96,7 +95,7 @@ function Arrow({ placement }: { placement: 'top' | 'bottom' | 'left' | 'right' }
               borderLeftWidth: ARROW_SIZE,
               borderTopColor: 'transparent',
               borderBottomColor: 'transparent',
-              borderLeftColor: primitive.neutral900,
+              borderLeftColor: TOOLTIP_BG,
             },
           ]}
         />
@@ -114,7 +113,7 @@ function Arrow({ placement }: { placement: 'top' | 'bottom' | 'left' | 'right' }
               borderRightWidth: ARROW_SIZE,
               borderTopColor: 'transparent',
               borderBottomColor: 'transparent',
-              borderRightColor: primitive.neutral900,
+              borderRightColor: TOOLTIP_BG,
             },
           ]}
         />
@@ -313,7 +312,9 @@ export function Tooltip({
         >
           <Text
             color="white"
-            variant="caption"
+            fontSize={12}
+            fontWeight="$medium"
+            lineHeight={16}
             textAlign="center"
           >
             {content}
@@ -364,10 +365,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   bubble: {
-    backgroundColor: primitive.neutral900,
+    backgroundColor: TOOLTIP_BG,
     borderRadius: 4,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
     maxWidth: TOOLTIP_MAX_WIDTH,
   },
 })

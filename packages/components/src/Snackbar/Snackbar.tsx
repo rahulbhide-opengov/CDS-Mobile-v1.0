@@ -8,18 +8,18 @@ import {
 } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, HStack, Pressable } from '@opengov/cds-primitives'
-import { colors, primitive } from '@opengov/cds-tokens'
+import { colors } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Variant color mapping
 // ---------------------------------------------------------------------------
 
 const VARIANT_COLORS = {
-  default: primitive.neutral900,   // neutral900
-  success: primitive.green700,   // green700
-  error: colors.red600,      // red600
-  warning: primitive.amber700,    // amber700
-  info: primitive.blue700,       // blue700
+  default: '#323232',              // snackbarFill
+  success: colors.green700,        // green700
+  error: colors.red600,            // red600
+  warning: colors.yellow700,       // yellow700
+  info: colors.cerulean700,        // cerulean700
 } as const
 
 // Swipe-to-dismiss threshold (px)
@@ -226,14 +226,13 @@ export function Snackbar({
     >
       <Stack
         backgroundColor={backgroundColor}
-        borderRadius={8}
+        borderRadius={4}
         paddingHorizontal={16}
         paddingVertical={12}
         flexDirection="row"
         alignItems="center"
         justifyContent="space-between"
         gap={12}
-        minHeight={48}
         shadowColor="$shadowColor"
         shadowOffset={{ width: 0, height: 4 }}
         shadowOpacity={0.2}
@@ -242,7 +241,9 @@ export function Snackbar({
         {/* Message */}
         <Text
           color="white"
-          variant="body3"
+          fontSize={14}
+          fontWeight="$medium"
+          lineHeight={18}
           flex={1}
           numberOfLines={2}
         >
@@ -260,10 +261,10 @@ export function Snackbar({
             minHeight={0}
           >
             <Text
-              color="white"
-              fontWeight="$bold"
-              variant="body3"
-              textDecorationLine="underline"
+              color={colors.blurple200}
+              fontWeight="$medium"
+              fontSize={14}
+              lineHeight={18}
             >
               {action.label}
             </Text>

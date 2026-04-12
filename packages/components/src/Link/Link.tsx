@@ -12,6 +12,7 @@ import { colors, primitive } from '@opengov/cds-tokens'
 const LinkText = styled(Text, {
   name: 'LinkText',
   fontFamily: '$body',
+  fontWeight: '$regular',
 
   variants: {
     variant: {
@@ -20,7 +21,7 @@ const LinkText = styled(Text, {
         textDecorationLine: 'underline',
       },
       subtle: {
-        color: '$colorSecondary',
+        color: '$brandBackground',
         textDecorationLine: 'none',
       },
       inline: {
@@ -35,7 +36,6 @@ const LinkText = styled(Text, {
     },
     disabled: {
       true: {
-        color: '$colorDisabled',
         textDecorationLine: 'none',
       },
     },
@@ -64,7 +64,7 @@ const LinkPressable = styled(Pressable, {
   variants: {
     disabled: {
       true: {
-        opacity: 0.5,
+        opacity: 0.38,
         cursor: 'not-allowed',
         pointerEvents: 'none',
       },
@@ -149,12 +149,10 @@ export function Link({
 
   // Resolve the icon tint to match the current text color
   const iconColor = disabled
-    ? (theme.colorDisabled?.val as string) ?? primitive.neutral400
-    : variant === 'default'
-      ? (theme.brandBackground?.val as string) ?? colors.primary
-      : variant === 'subtle'
-        ? (theme.colorSecondary?.val as string) ?? primitive.neutral500
-        : (theme.color?.val as string) ?? primitive.neutral900
+    ? (theme.brandBackground?.val as string) ?? colors.blurple700
+    : variant === 'default' || variant === 'subtle'
+      ? (theme.brandBackground?.val as string) ?? colors.blurple700
+      : (theme.color?.val as string) ?? primitive.neutral900
 
   const handlePress = useCallback(() => {
     if (disabled) return

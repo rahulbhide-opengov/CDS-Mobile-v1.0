@@ -9,9 +9,9 @@ import { colors, primitive } from '@opengov/cds-tokens'
 // ---------------------------------------------------------------------------
 
 const SIZE_MAP = {
-  sm: { dimension: 24, strokeWidth: 2, fontSize: 12 },
-  md: { dimension: 36, strokeWidth: 3, fontSize: 12 },
-  lg: { dimension: 48, strokeWidth: 4, fontSize: 12 },
+  sm: { dimension: 24, strokeWidth: 3, fontSize: 10 },
+  md: { dimension: 40, strokeWidth: 4, fontSize: 12 },
+  lg: { dimension: 56, strokeWidth: 4, fontSize: 14 },
 } as const
 
 type CircularProgressSize = keyof typeof SIZE_MAP
@@ -21,14 +21,14 @@ type CircularProgressSize = keyof typeof SIZE_MAP
 // ---------------------------------------------------------------------------
 
 const COLOR_MAP: Record<string, string> = {
-  primary: colors.primary,
-  success: colors.jade700,
+  primary: colors.blurple700,
+  success: colors.green700,
   error: colors.red600,
   warning: colors.amber700,
   neutral: primitive.neutral500,
 }
 
-const TRACK_COLOR = primitive.neutral300 // neutral300
+const TRACK_COLOR = primitive.gray200 // gray200
 
 // ---------------------------------------------------------------------------
 // Types

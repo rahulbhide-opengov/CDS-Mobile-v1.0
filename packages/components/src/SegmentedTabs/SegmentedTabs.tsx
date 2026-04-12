@@ -41,7 +41,7 @@ const TabsContainer = styled(Stack, {
   flexDirection: 'row',
   alignItems: 'center',
   backgroundColor: '$backgroundStrong', // #F2F2F2 in light theme
-  borderRadius: '$md',
+  borderRadius: 4,
   overflow: 'hidden',
 
   variants: {
@@ -67,7 +67,7 @@ const TabChipFrame = styled(Stack, {
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'center',
-  borderRadius: '$md',
+  borderRadius: 2,
 
   variants: {
     selected: {
@@ -131,10 +131,10 @@ const TabChipLabel = styled(TamaguiText, {
 const TabChipCount = styled(TamaguiText, {
   name: 'SegmentedTabCount',
   fontFamily: '$body',
-  fontSize: '$xs',
-  fontWeight: '$semibold',
-  lineHeight: 14,
-  letterSpacing: 0.16,
+  fontSize: 13,
+  fontWeight: '$regular',
+  lineHeight: 16,
+  letterSpacing: 0.17,
   textAlign: 'center',
 
   variants: {

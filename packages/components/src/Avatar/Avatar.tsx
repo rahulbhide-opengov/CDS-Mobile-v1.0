@@ -11,27 +11,35 @@ import { colors, primitive } from '@opengov/cds-tokens'
 type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
 const SIZE_MAP: Record<AvatarSize, number> = {
-  xs: 24,
-  sm: 32,
-  md: 40,
-  lg: 56,
-  xl: 72,
+  xs: 20,
+  sm: 24,
+  md: 32,
+  lg: 40,
+  xl: 56,
 }
 
 const FONT_SIZE_MAP: Record<AvatarSize, number> = {
-  xs: 10,
-  sm: 12,
-  md: 14,
-  lg: 20,
-  xl: 26,
+  xs: 8,
+  sm: 10,
+  md: 12,
+  lg: 16,
+  xl: 22,
+}
+
+const FONT_WEIGHT_MAP: Record<AvatarSize, string> = {
+  xs: '$regular',
+  sm: '$regular',
+  md: '$semibold',
+  lg: '$semibold',
+  xl: '$semibold',
 }
 
 const STATUS_DOT_SIZE: Record<AvatarSize, number> = {
-  xs: 6,
-  sm: 8,
-  md: 10,
-  lg: 14,
-  xl: 16,
+  xs: 5,
+  sm: 6,
+  md: 8,
+  lg: 10,
+  xl: 14,
 }
 
 const STATUS_BORDER: Record<AvatarSize, number> = {
@@ -189,6 +197,7 @@ export function Avatar({
   const dimension = SIZE_MAP[size]
   const borderRadius = SHAPE_RADIUS[shape]
   const fontSize = FONT_SIZE_MAP[size]
+  const fontWeight = FONT_WEIGHT_MAP[size]
 
   // Deterministic background based on the name string
   const backgroundColor = useMemo(() => {
@@ -227,7 +236,7 @@ export function Avatar({
           <Text
             color="white"
             fontSize={fontSize}
-            fontWeight="$semibold"
+            fontWeight={fontWeight as any}
             textAlign="center"
             accessibilityElementsHidden
           >
