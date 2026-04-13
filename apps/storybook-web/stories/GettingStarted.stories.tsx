@@ -49,11 +49,13 @@ export const Introduction: StoryObj = {
           <span style={{ fontSize: 22, fontWeight: 700, color: '#FFF', fontFamily: T.font }}>CDS</span>
         </div>
         <h1 style={{ fontSize: 40, fontWeight: 700, margin: '0 0 8px 0', letterSpacing: -0.8, lineHeight: 1.1 }}>
-          CDS Mobile
+          CDS — Mobile Library
         </h1>
-        <p style={{ fontSize: 18, color: T.textSecondary, margin: '0 0 16px 0', lineHeight: '28px', maxWidth: 600 }}>
-          OpenGov Component Design System for React Native. Built on Tamagui + Expo,
-          porting CDS 37 to native mobile and tablet.
+        <p style={{ fontSize: 18, color: T.textSecondary, margin: '0 0 16px 0', lineHeight: '28px', maxWidth: 640 }}>
+          OpenGov's Component Design System for native mobile and tablet apps.
+          35 production-ready React Native components + 8 compound patterns, built on
+          Tamagui and Expo — with 247 Foundation color tokens, responsive typography,
+          and full Figma-to-code alignment from CDS 37.
         </p>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {['v0.1.0', 'React Native', 'Tamagui', 'Expo SDK 52', 'DM Sans', 'WCAG 2.5.8'].map(tag => (

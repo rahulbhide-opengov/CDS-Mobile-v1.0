@@ -5,8 +5,9 @@ const cdsTheme = create({
   base: 'light',
 
   // Brand
-  brandTitle: 'CDS Mobile',
+  brandTitle: 'CDS — Mobile Library',
   brandUrl: 'https://github.com/rahulbhide-opengov/CDS-Mobile-v1.0',
+  brandTarget: '_blank',
 
   // Colors
   colorPrimary: '#4B3FFF',
