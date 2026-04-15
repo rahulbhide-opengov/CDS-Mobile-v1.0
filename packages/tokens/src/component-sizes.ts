@@ -27,7 +27,7 @@ export interface ResponsiveSize {
 
 export const buttonSizes = {
   small:  { desktop: 28, tablet: 32, mobile: 32 },
-  medium: { desktop: 32, tablet: 36, mobile: 36 },
+  medium: { desktop: 32, tablet: 36, mobile: 40 },
   large:  { desktop: 40, tablet: 48, mobile: 48 },
 } as const satisfies Record<string, ResponsiveSize>
 

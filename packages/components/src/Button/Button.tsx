@@ -149,10 +149,10 @@ const ButtonFrame = styled(Stack, {
         gap: 4,
       },
       md: {
-        paddingHorizontal: 12,
-        paddingVertical: 4,
-        height: 36,
-        minHeight: 36,
+        paddingHorizontal: 14,
+        paddingVertical: 6,
+        height: 40,
+        minHeight: 40,
         gap: 4,
       },
       lg: {
@@ -377,7 +377,7 @@ export const Button = React.memo(function Button({
       return { top: pad, bottom: pad, left: pad, right: pad }
     }
     if (size === 'md') {
-      const pad = Math.ceil((MIN_TOUCH_TARGET - 36) / 2) // (44-36)/2 = 4
+      const pad = Math.ceil((MIN_TOUCH_TARGET - 40) / 2) // (44-40)/2 = 2
       return { top: pad, bottom: pad, left: pad, right: pad }
     }
     return undefined // lg=48 meets WCAG minimum
