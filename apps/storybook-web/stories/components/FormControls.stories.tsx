@@ -121,12 +121,12 @@ function CdsCheckbox({ state = 'unchecked', disabled = false, label = 'Option' }
 }) {
   const filled = state !== 'unchecked'
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 12, opacity: disabled ? 0.38 : 1, fontFamily: FONT, minHeight: 44 }}>
-      <div style={{ width: 20, height: 20, borderRadius: 4, flexShrink: 0, backgroundColor: filled ? C.blurple700 : C.white, border: filled ? 'none' : `2px solid ${C.slate700}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        {state === 'checked' && Ico.check(C.white, 14)}
-        {state === 'indeterminate' && Ico.minus(C.white, 14)}
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8, opacity: disabled ? 0.38 : 1, fontFamily: FONT, minHeight: 44, paddingTop: 8, paddingBottom: 8 }}>
+      <div style={{ width: 18, height: 18, borderRadius: 2, flexShrink: 0, backgroundColor: filled ? C.blurple700 : C.white, border: filled ? 'none' : `1.5px solid ${C.radioUnselected}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {state === 'checked' && Ico.check(C.white, 12)}
+        {state === 'indeterminate' && Ico.minus(C.white, 12)}
       </div>
-      <span style={{ fontSize: 14, color: C.text87 }}>{label}</span>
+      <span style={{ fontSize: 16, fontWeight: 400, lineHeight: '20px', letterSpacing: 0.15, color: disabled ? C.text38 : C.text87 }}>{label}</span>
     </div>
   )
 }
@@ -316,13 +316,15 @@ export const Overview: StoryObj = {
 <Checkbox checked={isChecked} onChange={setIsChecked} label="Accept terms" />
 <Checkbox checked="indeterminate" onChange={handleToggle} label="Select all" />
 <Checkbox checked disabled label="Locked" />`} specs={<SpecTable headers={['Property', 'Value', 'Notes']} rows={[
-          ['Box size', '20 x 20 px', 'Visual checkbox element'],
-          ['Touch target', '44 x 44 px', 'WCAG 2.5.8 minimum'],
-          ['Border radius', '4px', 'Rounded square'],
-          ['Unchecked border', '2px solid slate700 (#546574)', 'Default'],
-          ['Checked fill', 'blurple700 (#4B3FFF)', 'White check mark'],
-          ['Indeterminate fill', 'blurple700 (#4B3FFF)', 'White minus icon'],
-          ['Label gap', '12px', 'Between box and text'],
+          ['Box size', '18 x 18 px', 'Visual checkbox element'],
+          ['Touch target', '44 x 44 px', 'WCAG 2.5.8 via hitSlop'],
+          ['Border radius', '2px', 'Subtle rounding (not 4px)'],
+          ['Unchecked border', '1.5px solid rgba(0,0,0,0.6)', 'Figma standard border'],
+          ['Checked fill', 'blurple700 (#4B3FFF)', 'White check mark 12px'],
+          ['Indeterminate fill', 'blurple700 (#4B3FFF)', 'White minus icon 12px'],
+          ['Label font', '16px / 400 / Regular', 'DM Sans, letterSpacing 0.15'],
+          ['Label gap', '8px', 'Between box and text'],
+          ['Vertical padding', 'py = 8px', 'Per checkbox row'],
         ]} />} />
       </DocSection>
 
