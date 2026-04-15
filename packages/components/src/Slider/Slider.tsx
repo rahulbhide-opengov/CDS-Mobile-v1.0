@@ -3,6 +3,7 @@ import { Animated, PanResponder, View, LayoutChangeEvent, type DimensionValue } 
 import { Stack } from '@tamagui/core'
 import { Text } from '@opengov/cds-primitives'
 import { primitive } from '@opengov/cds-tokens'
+import { useHaptics } from '../hooks'
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -91,7 +92,9 @@ export const Slider = React.memo(function Slider({
 }: SliderProps) {
   // -- State & refs ----------------------------------------------------------
 
+  const haptics = useHaptics()
   const trackWidth = useRef(0)
+  const lastSnappedValue = useRef(value)
   const [isDragging, setIsDragging] = useState(false)
 
   // Convert value to a 0-1 fraction for positioning
@@ -132,6 +135,10 @@ export const Slider = React.memo(function Slider({
         },
         onPanResponderMove: (evt) => {
           const newValue = resolveValue(evt.nativeEvent.pageX, trackStartX.current)
+          if (newValue !== lastSnappedValue.current) {
+            haptics.selection()
+            lastSnappedValue.current = newValue
+          }
           onValueChange?.(newValue)
         },
         onPanResponderRelease: (evt) => {
@@ -144,7 +151,7 @@ export const Slider = React.memo(function Slider({
           setIsDragging(false)
         },
       }),
-    [disabled, clampedFraction, resolveValue, onValueChange, onSlidingComplete],
+    [disabled, clampedFraction, resolveValue, onValueChange, onSlidingComplete, haptics],
   )
 
   // -- Track press handler (tap to set value) --------------------------------
@@ -157,12 +164,16 @@ export const Slider = React.memo(function Slider({
       trackRef.current?.measureInWindow((x) => {
         if (x != null) {
           const newValue = resolveValue(event.nativeEvent.pageX, x)
+          if (newValue !== lastSnappedValue.current) {
+            haptics.selection()
+            lastSnappedValue.current = newValue
+          }
           onValueChange?.(newValue)
           onSlidingComplete?.(newValue)
         }
       })
     },
-    [disabled, resolveValue, onValueChange, onSlidingComplete],
+    [disabled, resolveValue, onValueChange, onSlidingComplete, haptics],
   )
 
   // -- Accessibility ---------------------------------------------------------

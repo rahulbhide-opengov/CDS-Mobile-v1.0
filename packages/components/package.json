@@ -13,7 +13,23 @@
   },
   "peerDependencies": {
     "react": ">=18.0.0",
-    "react-native": ">=0.74.0"
+    "react-native": ">=0.74.0",
+    "expo-haptics": ">=13.0.0",
+    "@react-native-community/datetimepicker": ">=8.0.0",
+    "@expo/react-native-action-sheet": ">=4.0.0",
+    "@gorhom/bottom-sheet": ">=4.0.0",
+    "@react-native-picker/picker": ">=2.0.0",
+    "react-native-gesture-handler": ">=2.0.0",
+    "react-native-reanimated": ">=3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "expo-haptics": { "optional": true },
+    "@react-native-community/datetimepicker": { "optional": true },
+    "@expo/react-native-action-sheet": { "optional": true },
+    "@gorhom/bottom-sheet": { "optional": true },
+    "@react-native-picker/picker": { "optional": true },
+    "react-native-gesture-handler": { "optional": true },
+    "react-native-reanimated": { "optional": true }
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

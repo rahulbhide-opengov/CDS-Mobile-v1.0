@@ -640,6 +640,46 @@ export function ColorSwatch({ name, hex, token }: { name: string; hex: string; t
 }
 
 // ---------------------------------------------------------------------------
+// PlatformBadge — Custom vs Platform-Native indicator
+// ---------------------------------------------------------------------------
+export function PlatformBadge({ type, ios, android }: {
+  type: 'custom' | 'platform-native'
+  ios?: string
+  android?: string
+}) {
+  const isNative = type === 'platform-native'
+  const bg = isNative ? T.brandLight : T.bgTertiary
+  const color = isNative ? T.brand : T.textSecondary
+  const label = isNative ? 'Platform-Native' : 'Custom'
+
+  return (
+    <span
+      style={{
+        display: 'inline-flex', alignItems: 'center', gap: 6,
+        fontSize: 11, fontWeight: 600, fontFamily: T.mono, textTransform: 'uppercase',
+        padding: '3px 10px', borderRadius: 20,
+        backgroundColor: bg, color,
+        letterSpacing: 0.5, position: 'relative',
+        cursor: isNative && (ios || android) ? 'help' : 'default',
+      }}
+      title={
+        isNative && (ios || android)
+          ? `iOS: ${ios || 'N/A'} / Android: ${android || 'N/A'}`
+          : undefined
+      }
+    >
+      {isNative && (
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0 }}>
+          <rect x="5" y="1" width="14" height="22" rx="3" stroke={color} strokeWidth="2" />
+          <line x1="9" y1="19" x2="15" y2="19" stroke={color} strokeWidth="2" strokeLinecap="round" />
+        </svg>
+      )}
+      {label}
+    </span>
+  )
+}
+
+// ---------------------------------------------------------------------------
 // ColorScale
 // ---------------------------------------------------------------------------
 export function ColorScale({ title, description, swatches }: {

@@ -1,12 +1,29 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import {
   Animated,
   Dimensions,
   Modal,
   PanResponder,
+  Platform,
   StyleSheet,
 } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
+import { primitive } from '@opengov/cds-tokens'
+
+// ---------------------------------------------------------------------------
+// Optional native bottom sheet (peer dependency -- may not be installed)
+// ---------------------------------------------------------------------------
+
+let GorhomBottomSheet: React.ComponentType<any> | null = null
+let GorhomBottomSheetView: React.ComponentType<any> | null = null
+try {
+  const mod = require('@gorhom/bottom-sheet')
+  GorhomBottomSheet = mod.default ?? mod.BottomSheet ?? null
+  GorhomBottomSheetView = mod.BottomSheetView ?? null
+} catch {
+  // @gorhom/bottom-sheet is not installed -- native mode will fall back to
+  // the custom PanResponder-based implementation.
+}
 
 // ---------------------------------------------------------------------------
 // Snap-point height percentages
@@ -57,6 +74,14 @@ export interface BottomSheetProps {
   showBackdrop?: boolean
   /** Content rendered inside the bottom sheet. */
   children: React.ReactNode
+  /**
+   * When true, attempts to use `@gorhom/bottom-sheet` for a native-gesture-
+   * driven bottom sheet with smooth reanimated transitions. Falls back to the
+   * custom PanResponder implementation when the library is not installed.
+   *
+   * @default false
+   */
+  native?: boolean
 }
 
 // ---------------------------------------------------------------------------
@@ -70,6 +95,9 @@ export interface BottomSheetProps {
  * sheet height is driven by snap points (25%, 50%, 75%, 90% of screen).
  * Supports swipe-down-to-dismiss via PanResponder and backdrop press dismiss.
  * Uses `Animated.spring` for smooth entrance and exit transitions.
+ *
+ * @platform Platform-Native (iOS/Android: `@gorhom/bottom-sheet` with
+ *   Reanimated-powered gestures and smooth snap-point transitions)
  */
 export function BottomSheet({
   visible,
@@ -78,7 +106,10 @@ export function BottomSheet({
   showHandle = true,
   showBackdrop = true,
   children,
+  native = false,
 }: BottomSheetProps) {
+  // Resolve whether the native bottom sheet is actually usable
+  const useNativeSheet = native && GorhomBottomSheet != null && Platform.OS !== 'web'
   const screenHeight = Dimensions.get('window').height
   const sheetHeight = screenHeight * SNAP_POINTS[snapPoint]
 
@@ -186,7 +217,55 @@ export function BottomSheet({
     }),
   ).current
 
-  // ---- Render --------------------------------------------------------------
+  // ---- Snap points for @gorhom/bottom-sheet --------------------------------
+  const gorhomSnapPoints = useMemo(() => {
+    const pct = `${Math.round(SNAP_POINTS[snapPoint] * 100)}%`
+    return [pct]
+  }, [snapPoint])
+
+  // Ref for the gorhom bottom sheet imperative API
+  const gorhomRef = useRef<any>(null)
+
+  // Open/close the gorhom sheet when visibility changes
+  useEffect(() => {
+    if (!useNativeSheet || !gorhomRef.current) return
+    if (visible) {
+      gorhomRef.current.snapToIndex(0)
+    } else {
+      gorhomRef.current.close()
+    }
+  }, [visible, useNativeSheet])
+
+  // ---- Render (native @gorhom/bottom-sheet path) --------------------------
+
+  if (useNativeSheet && GorhomBottomSheet) {
+    const NativeSheet = GorhomBottomSheet
+    const NativeView = GorhomBottomSheetView
+
+    return (
+      <NativeSheet
+        ref={gorhomRef}
+        index={visible ? 0 : -1}
+        snapPoints={gorhomSnapPoints}
+        enablePanDownToClose
+        onClose={onClose}
+        handleIndicatorStyle={{ backgroundColor: primitive.gray300 }}
+        backgroundStyle={{ backgroundColor: primitive.white }}
+        enableHandlePanningGesture={showHandle}
+        accessibilityLabel="Bottom sheet"
+      >
+        {NativeView ? (
+          <NativeView style={{ flex: 1 }}>
+            {children}
+          </NativeView>
+        ) : (
+          children
+        )}
+      </NativeSheet>
+    )
+  }
+
+  // ---- Render (custom PanResponder path) ----------------------------------
 
   return (
     <Modal

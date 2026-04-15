@@ -3,6 +3,7 @@ import { Animated, Easing } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, HStack } from '@opengov/cds-primitives'
 import { primitive } from '@opengov/cds-tokens'
+import { useHaptics } from '../hooks'
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -70,6 +71,7 @@ export function Switch({
   accessibilityLabel,
 }: SwitchProps) {
   const dims = SIZE_MAP[size]
+  const haptics = useHaptics()
 
   // Animated value drives thumb translation and track color
   const toggleAnim = useRef(new Animated.Value(checked ? 1 : 0)).current
@@ -107,8 +109,9 @@ export function Switch({
 
   const handlePress = useCallback(() => {
     if (disabled) return
+    haptics.impact('medium')
     onChange?.(!checked)
-  }, [disabled, onChange, checked])
+  }, [disabled, onChange, checked, haptics])
 
   // ---- Interpolated styles --------------------------------------------------
 

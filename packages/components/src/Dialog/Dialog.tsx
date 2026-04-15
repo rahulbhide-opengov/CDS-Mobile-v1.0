@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useRef } from 'react'
-import { Animated, Easing, Modal, StyleSheet } from 'react-native'
+import { Alert, Animated, Easing, Modal, Platform, StyleSheet } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, HStack } from '@opengov/cds-primitives'
+import { primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Size presets (width in dp)
@@ -16,6 +17,24 @@ const SIZE_MAP = {
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
+
+/**
+ * Configuration for a button rendered in the native `Alert.alert()` dialog.
+ * Used only when `useNativeAlert={true}`.
+ */
+export interface DialogNativeButton {
+  /** Button label text. */
+  text: string
+  /** Called when the button is pressed. */
+  onPress?: () => void
+  /**
+   * Button style hint for the native alert.
+   * - "default" -- standard button
+   * - "cancel"  -- bold cancel button (iOS)
+   * - "destructive" -- red destructive button (iOS)
+   */
+  style?: 'default' | 'cancel' | 'destructive'
+}
 
 export interface DialogProps {
   /** Controls visibility of the dialog. */
@@ -34,6 +53,23 @@ export interface DialogProps {
   closeOnBackdrop?: boolean
   /** Arbitrary content rendered between description and actions. */
   children?: React.ReactNode
+  /**
+   * When true, uses React Native's built-in `Alert.alert()` for a platform-
+   * native dialog experience (iOS UIAlertController / Android AlertDialog).
+   * Only works for simple title + description + button dialogs. Custom
+   * `children` content is ignored in native mode.
+   *
+   * Provide `nativeButtons` to define the alert buttons; otherwise a single
+   * "OK" button that calls `onClose` is used.
+   *
+   * @default false
+   */
+  useNativeAlert?: boolean
+  /**
+   * Buttons to display when `useNativeAlert={true}`. Each entry maps to a
+   * native `Alert.alert()` button with an optional style hint.
+   */
+  nativeButtons?: DialogNativeButton[]
 }
 
 // ---------------------------------------------------------------------------
@@ -47,6 +83,10 @@ export interface DialogProps {
  * Supports title, description, custom children, and an action button row.
  * Entrance is an animated scale + fade; exit reverses the animation before
  * invoking `onClose`.
+ *
+ * @platform Platform-Native (iOS: UIAlertController, Android: AlertDialog)
+ *   When `useNativeAlert={true}`, uses React Native's built-in `Alert.alert()`
+ *   for simple title + description + buttons dialogs.
  */
 export function Dialog({
   visible,
@@ -57,7 +97,53 @@ export function Dialog({
   actions,
   closeOnBackdrop = true,
   children,
+  useNativeAlert = false,
+  nativeButtons,
 }: DialogProps) {
+  // ---- Native Alert.alert() intercept -------------------------------------
+  // When useNativeAlert is enabled, we show the platform's native alert
+  // dialog instead of rendering the custom Modal. This effect fires when
+  // visible becomes true and short-circuits the rest of the component.
+
+  const nativeAlertShown = useRef(false)
+
+  useEffect(() => {
+    if (!useNativeAlert || !visible) {
+      nativeAlertShown.current = false
+      return
+    }
+
+    // Avoid showing multiple alerts for the same visibility cycle
+    if (nativeAlertShown.current) return
+    nativeAlertShown.current = true
+
+    const alertButtons: Array<{
+      text: string
+      onPress?: () => void
+      style?: 'default' | 'cancel' | 'destructive'
+    }> = nativeButtons
+      ? nativeButtons.map((btn) => ({
+          text: btn.text,
+          onPress: () => {
+            btn.onPress?.()
+            onClose()
+          },
+          style: btn.style ?? 'default',
+        }))
+      : [{ text: 'OK', onPress: onClose, style: 'default' as const }]
+
+    Alert.alert(title ?? '', description ?? '', alertButtons, {
+      cancelable: closeOnBackdrop,
+      onDismiss: onClose,
+    })
+  }, [visible, useNativeAlert, title, description, nativeButtons, closeOnBackdrop, onClose])
+
+  // When using native alert, do not render the custom Modal at all
+  if (useNativeAlert) {
+    return null
+  }
+
+  // ---- Custom Modal implementation ----------------------------------------
   const scaleAnim = useRef(new Animated.Value(0.85)).current
   const opacityAnim = useRef(new Animated.Value(0)).current
   const backdropOpacity = useRef(new Animated.Value(0)).current

@@ -101,6 +101,70 @@ export const Introduction: StoryObj = {
         </div>
       </section>
 
+      {/* Component Types */}
+      <section style={{ marginBottom: 48 }}>
+        <h2 style={{ fontSize: 22, fontWeight: 600, margin: '0 0 12px 0', letterSpacing: -0.3 }}>Component Types</h2>
+        <p style={{ fontSize: 14, color: T.textSecondary, marginBottom: 16, lineHeight: '20px' }}>
+          CDS Mobile components are classified into two platform behavior types.
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+          {/* Custom */}
+          <div style={{
+            border: `1px solid ${T.border}`, borderRadius: T.radius, padding: 20,
+            borderTop: `3px solid ${T.textSecondary}`,
+          }}>
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: 4,
+              fontSize: 11, fontWeight: 600, fontFamily: T.mono, textTransform: 'uppercase',
+              padding: '2px 8px', borderRadius: 12,
+              backgroundColor: T.bgSecondary, color: T.textSecondary,
+              letterSpacing: 0.4, marginBottom: 12,
+            }}>
+              Custom
+            </div>
+            <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 6, color: T.text }}>47 components</div>
+            <div style={{ fontSize: 13, color: T.textSecondary, lineHeight: '18px' }}>
+              Render identically on iOS and Android for brand consistency. Built with React Native Views and Tamagui styled components.
+            </div>
+          </div>
+
+          {/* Platform-Native */}
+          <div style={{
+            border: `1px solid ${T.brand}33`, borderRadius: T.radius, padding: 20,
+            borderTop: `3px solid ${T.brand}`,
+          }}>
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: 4,
+              fontSize: 11, fontWeight: 600, fontFamily: T.mono, textTransform: 'uppercase',
+              padding: '2px 8px', borderRadius: 12,
+              backgroundColor: T.brandLight, color: T.brand,
+              letterSpacing: 0.4, marginBottom: 12,
+            }}>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
+                <rect x="5" y="1" width="14" height="22" rx="3" stroke={T.brand} strokeWidth="2.5" />
+                <line x1="9" y1="19" x2="15" y2="19" stroke={T.brand} strokeWidth="2.5" strokeLinecap="round" />
+              </svg>
+              Platform-Native
+            </div>
+            <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 6, color: T.text }}>10 components</div>
+            <div style={{ fontSize: 13, color: T.textSecondary, lineHeight: '18px', marginBottom: 12 }}>
+              Use native OS controls for familiar interaction patterns, with CDS theming applied via accentColor and tintColor.
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+              {['Switch', 'DatePicker', 'TimePicker', 'ActionSheet', 'Alert', 'Haptics', 'StatusBar', 'NavigationBar', 'TabBar', 'SegmentedControl'].map(name => (
+                <code key={name} style={{
+                  fontFamily: T.mono, fontSize: 11, fontWeight: 500,
+                  padding: '2px 8px', borderRadius: 4,
+                  backgroundColor: T.brandLight, color: T.brand,
+                }}>
+                  {name}
+                </code>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Packages */}
       <section style={{ marginBottom: 48 }}>
         <h2 style={{ fontSize: 22, fontWeight: 600, margin: '0 0 16px 0', letterSpacing: -0.3 }}>Packages</h2>

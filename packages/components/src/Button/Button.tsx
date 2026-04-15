@@ -16,6 +16,7 @@ import React, { useCallback, useMemo } from 'react'
 import { ActivityIndicator } from 'react-native'
 import { styled, Stack, Text as TamaguiText } from '@tamagui/core'
 import { primitive, buttonStyles } from '@opengov/cds-tokens'
+import { useHaptics } from '../hooks'
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -348,12 +349,16 @@ export const Button = React.memo(function Button({
   testID,
 }: ButtonProps) {
   const isDisabled = disabled || loading
+  const haptics = useHaptics()
 
   const handlePress = useCallback(() => {
     if (!isDisabled && onPress) {
+      // Destructive variants get medium haptic; all others get light
+      const isDestructive = variant === 'destructive' || variant === 'destructiveAlt'
+      haptics.impact(isDestructive ? 'medium' : 'light')
       onPress()
     }
-  }, [isDisabled, onPress])
+  }, [isDisabled, onPress, variant, haptics])
 
   // Derive the label string for accessibility
   const a11yLabel = useMemo(() => {

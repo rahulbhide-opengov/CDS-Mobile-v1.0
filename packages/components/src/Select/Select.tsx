@@ -10,19 +10,40 @@
  *   Large:  48px
  *
  * All colors reference `primitive.*` from @opengov/cds-tokens.
+ *
+ * @platform Platform-Native (iOS: `@react-native-picker/picker` native wheel
+ *   for small option lists on iOS when `native={true}` and options.length <= 10.
+ *   The trigger always remains the custom CDS TextField-style control.)
  */
 
 import React, { useCallback, useMemo, useState } from 'react'
 import {
   FlatList,
   Modal,
+  Platform,
   StyleSheet,
   TouchableOpacity,
   useWindowDimensions,
+  View,
 } from 'react-native'
 import { Stack } from '@tamagui/core'
 import { Text, VStack, HStack, Pressable } from '@opengov/cds-primitives'
 import { primitive, inputSizes, inputStyles, cornerRadius } from '@opengov/cds-tokens'
+
+// ---------------------------------------------------------------------------
+// Optional native picker (peer dependency -- may not be installed)
+// ---------------------------------------------------------------------------
+
+let NativePicker: React.ComponentType<any> | null = null
+let NativePickerItem: React.ComponentType<any> | null = null
+try {
+  const pickerMod = require('@react-native-picker/picker')
+  NativePicker = pickerMod.Picker ?? null
+  NativePickerItem = pickerMod.Picker?.Item ?? null
+} catch {
+  // @react-native-picker/picker is not installed -- native mode will fall
+  // back to the custom CDS dropdown implementation.
+}
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -145,11 +166,24 @@ export interface SelectProps {
   accessibilityLabel?: string
   /** Test ID for testing. */
   testID?: string
+  /**
+   * When true, on iOS with 10 or fewer options (single-select only), uses
+   * `@react-native-picker/picker` to render a native iOS wheel picker.
+   * The trigger control always stays as the custom CDS TextField-style.
+   * Falls back to the custom dropdown when the library is not installed,
+   * on Android, on web, or for multiple-select / large option sets.
+   *
+   * @default false
+   */
+  native?: boolean
 }
 
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
+
+/** Maximum options count for native iOS wheel picker */
+const NATIVE_PICKER_MAX_OPTIONS = 10
 
 export const Select = React.memo(function Select({
   value,
@@ -166,7 +200,16 @@ export const Select = React.memo(function Select({
   multiple = false,
   accessibilityLabel,
   testID,
+  native = false,
 }: SelectProps) {
+  // Resolve whether the native iOS picker should be used
+  const useNativePicker =
+    native &&
+    !multiple &&
+    Platform.OS === 'ios' &&
+    NativePicker != null &&
+    NativePickerItem != null &&
+    options.length <= NATIVE_PICKER_MAX_OPTIONS
   const [isOpen, setIsOpen] = useState(false)
   const { width: windowWidth, height: windowHeight } = useWindowDimensions()
 
@@ -224,6 +267,15 @@ export const Select = React.memo(function Select({
       }
     },
     [multiple, selectedValues, onValueChange],
+  )
+
+  // Handler for native iOS picker value change
+  const handleNativePickerChange = useCallback(
+    (itemValue: string) => {
+      onValueChange?.(itemValue)
+      setIsOpen(false)
+    },
+    [onValueChange],
   )
 
   // ---- hitSlop for small trigger sizes ------------------------------------
@@ -388,39 +440,73 @@ export const Select = React.memo(function Select({
             shadowOffset={{ width: 0, height: 4 }}
             shadowOpacity={0.15}
             shadowRadius={12}
-            /* elevation={8} — Android shadow via shadowColor/Offset/Opacity */
+            /* elevation={8} -- Android shadow via shadowColor/Offset/Opacity */
           >
-            {/* Dropdown header for multiple select */}
-            {multiple && selectedValues.length > 0 && (
-              <HStack
-                paddingHorizontal={16}
-                paddingVertical={12}
-                borderBottomWidth={1}
-                borderBottomColor={primitive.gray200}
-                alignItems="center"
-              >
-                <Text
-                  fontSize={13}
-                  fontWeight="600"
-                  lineHeight={16}
-                  color={primitive.slate700}
-                  fontFamily="DM Sans"
+            {/* Native iOS wheel picker path */}
+            {useNativePicker && NativePicker && NativePickerItem ? (
+              <View style={{ paddingVertical: 8 }}>
+                <NativePicker
+                  selectedValue={selectedValues[0] ?? ''}
+                  onValueChange={handleNativePickerChange}
+                  itemStyle={{
+                    color: primitive.slate900,
+                    fontSize: 16,
+                  }}
+                  testID={testID ? `${testID}-native-picker` : undefined}
+                  accessibilityLabel={`${a11yLabel} picker`}
                 >
-                  {selectedValues.length} selected
-                </Text>
-              </HStack>
-            )}
+                  {/* Placeholder item */}
+                  <NativePickerItem
+                    label={placeholder}
+                    value=""
+                    color={primitive.slate500}
+                  />
+                  {options.map((opt) => (
+                    <NativePickerItem
+                      key={opt.value}
+                      label={opt.label}
+                      value={opt.value}
+                      enabled={!opt.disabled}
+                      color={opt.disabled ? primitive.gray400 : primitive.slate900}
+                    />
+                  ))}
+                </NativePicker>
+              </View>
+            ) : (
+              <>
+                {/* Dropdown header for multiple select */}
+                {multiple && selectedValues.length > 0 && (
+                  <HStack
+                    paddingHorizontal={16}
+                    paddingVertical={12}
+                    borderBottomWidth={1}
+                    borderBottomColor={primitive.gray200}
+                    alignItems="center"
+                  >
+                    <Text
+                      fontSize={13}
+                      fontWeight="600"
+                      lineHeight={16}
+                      color={primitive.slate700}
+                      fontFamily="DM Sans"
+                    >
+                      {selectedValues.length} selected
+                    </Text>
+                  </HStack>
+                )}
 
-            {/* Options list */}
-            <FlatList
-              data={options}
-              renderItem={renderOption}
-              keyExtractor={keyExtractor}
-              bounces={false}
-              showsVerticalScrollIndicator
-              accessibilityRole="menu"
-              accessibilityLabel={`${a11yLabel} options`}
-            />
+                {/* Options list */}
+                <FlatList
+                  data={options}
+                  renderItem={renderOption}
+                  keyExtractor={keyExtractor}
+                  bounces={false}
+                  showsVerticalScrollIndicator
+                  accessibilityRole="menu"
+                  accessibilityLabel={`${a11yLabel} options`}
+                />
+              </>
+            )}
           </Stack>
         </Pressable>
       </Modal>

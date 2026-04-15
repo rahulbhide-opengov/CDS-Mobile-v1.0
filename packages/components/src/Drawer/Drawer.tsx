@@ -1,13 +1,30 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import {
   Animated,
   Dimensions,
   Easing,
   Modal,
   PanResponder,
+  Platform,
   StyleSheet,
 } from 'react-native'
 import { Stack, type GetProps } from '@tamagui/core'
+import { primitive } from '@opengov/cds-tokens'
+
+// ---------------------------------------------------------------------------
+// Optional native gesture handler (peer dependency -- may not be installed)
+// ---------------------------------------------------------------------------
+
+let GestureDetector: React.ComponentType<any> | null = null
+let GestureModule: any = null
+try {
+  const ghModule = require('react-native-gesture-handler')
+  GestureDetector = ghModule.GestureDetector ?? null
+  GestureModule = ghModule.Gesture ?? null
+} catch {
+  // react-native-gesture-handler is not installed -- native mode will fall
+  // back to the built-in PanResponder implementation.
+}
 
 // ---------------------------------------------------------------------------
 // Width presets (dp)
@@ -38,6 +55,14 @@ export interface DrawerProps {
   width?: 'sm' | 'md' | 'lg'
   /** Content rendered inside the drawer panel. */
   children: React.ReactNode
+  /**
+   * When true, attempts to use `react-native-gesture-handler` Gesture.Pan()
+   * for smoother, more responsive swipe-to-dismiss instead of the built-in
+   * PanResponder. Falls back to PanResponder when the library is not installed.
+   *
+   * @default false
+   */
+  native?: boolean
 }
 
 // ---------------------------------------------------------------------------
@@ -51,6 +76,9 @@ export interface DrawerProps {
  * width is controlled by size presets. Supports swipe-to-dismiss in the
  * anchor direction and backdrop press dismiss. Uses `Animated.spring` for
  * natural slide transitions.
+ *
+ * @platform Platform-Native (iOS/Android: `react-native-gesture-handler`
+ *   Gesture.Pan() for hardware-accelerated gesture recognition)
  */
 export function Drawer({
   visible,
@@ -58,6 +86,7 @@ export function Drawer({
   anchor = 'left',
   width = 'md',
   children,
+  native = false,
 }: DrawerProps) {
   const drawerWidth = WIDTH_MAP[width]
 
@@ -126,7 +155,43 @@ export function Drawer({
     })
   }, [slideOut, onClose])
 
-  // ---- PanResponder for swipe-to-dismiss ----------------------------------
+  // ---- Resolve whether native gesture handler is available -----------------
+  const useNativeGesture = native && GestureDetector != null && GestureModule != null && Platform.OS !== 'web'
+
+  // ---- Native Gesture.Pan() for swipe-to-dismiss --------------------------
+  const nativeGesture = useMemo(() => {
+    if (!useNativeGesture || !GestureModule) return null
+
+    return GestureModule.Pan()
+      .activeOffsetX(anchor === 'left' ? -8 : 8)
+      .onUpdate((event: any) => {
+        if (anchor === 'left' && event.translationX < 0) {
+          translateX.setValue(event.translationX)
+        } else if (anchor === 'right' && event.translationX > 0) {
+          translateX.setValue(event.translationX)
+        }
+      })
+      .onEnd((event: any) => {
+        const absDistance = Math.abs(event.translationX)
+        const absVelocity = Math.abs(event.velocityX) / 1000 // px/s -> px/ms
+
+        if (
+          absVelocity > DISMISS_VELOCITY ||
+          absDistance > drawerWidth * DISMISS_DISTANCE_RATIO
+        ) {
+          handleDismiss()
+        } else {
+          Animated.spring(translateX, {
+            toValue: onScreen,
+            useNativeDriver: true,
+            damping: 22,
+            stiffness: 200,
+          }).start()
+        }
+      })
+  }, [useNativeGesture, anchor, translateX, drawerWidth, onScreen, handleDismiss])
+
+  // ---- PanResponder for swipe-to-dismiss (fallback) -----------------------
 
   const panResponder = useRef(
     PanResponder.create({
@@ -178,6 +243,37 @@ export function Drawer({
       ? { left: 0 }
       : { right: 0 }
 
+  // Wrap the drawer panel in either GestureDetector or PanResponder handlers
+  const drawerPanel = (
+    <Animated.View
+      style={[
+        styles.drawer,
+        drawerPositionStyle,
+        {
+          width: drawerWidth,
+          transform: [{ translateX }],
+        },
+      ]}
+      accessibilityRole="menu"
+      accessibilityLabel={`${anchor === 'left' ? 'Left' : 'Right'} drawer`}
+      {...(!useNativeGesture ? panResponder.panHandlers : {})}
+    >
+      <Stack
+        flex={1}
+        backgroundColor="$background"
+        shadowColor="$shadowColor"
+        shadowOffset={{
+          width: anchor === 'left' ? 4 : -4,
+          height: 0,
+        }}
+        shadowOpacity={0.15}
+        shadowRadius={16}
+      >
+        {children}
+      </Stack>
+    </Animated.View>
+  )
+
   return (
     <Modal
       visible={visible}
@@ -204,34 +300,14 @@ export function Drawer({
         />
       </Animated.View>
 
-      {/* Drawer panel */}
-      <Animated.View
-        style={[
-          styles.drawer,
-          drawerPositionStyle,
-          {
-            width: drawerWidth,
-            transform: [{ translateX }],
-          },
-        ]}
-        accessibilityRole="menu"
-        accessibilityLabel={`${anchor === 'left' ? 'Left' : 'Right'} drawer`}
-        {...panResponder.panHandlers}
-      >
-        <Stack
-          flex={1}
-          backgroundColor="$background"
-          shadowColor="$shadowColor"
-          shadowOffset={{
-            width: anchor === 'left' ? 4 : -4,
-            height: 0,
-          }}
-          shadowOpacity={0.15}
-          shadowRadius={16}
-        >
-          {children}
-        </Stack>
-      </Animated.View>
+      {/* Drawer panel: wrapped in GestureDetector when native, raw otherwise */}
+      {useNativeGesture && GestureDetector && nativeGesture ? (
+        <GestureDetector gesture={nativeGesture}>
+          {drawerPanel}
+        </GestureDetector>
+      ) : (
+        drawerPanel
+      )}
     </Modal>
   )
 }

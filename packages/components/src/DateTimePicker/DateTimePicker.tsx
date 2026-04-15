@@ -11,6 +11,12 @@
  *   Small: 32px, Medium: 40px, Large: 48px
  *
  * All colors reference `primitive.*` from @opengov/cds-tokens.
+ *
+ * @platform Platform-Native (iOS: UIDatePicker wheel, Android: Material DatePicker)
+ *   When `native={true}` and the platform is not web, attempts to use
+ *   `@react-native-community/datetimepicker` for a fully native date/time
+ *   picker experience. Falls back to the custom CDS calendar/wheel UI if the
+ *   native library is not installed.
  */
 
 import React, { useCallback, useMemo, useRef, useState } from 'react'
@@ -18,6 +24,7 @@ import {
   Animated,
   Easing,
   Modal,
+  Platform,
   Pressable as RNPressable,
   ScrollView,
   TextInput,
@@ -25,6 +32,18 @@ import {
 } from 'react-native'
 import { styled, Stack, Text as TamaguiText } from '@tamagui/core'
 import { primitive } from '@opengov/cds-tokens'
+
+// ---------------------------------------------------------------------------
+// Optional native picker (peer dependency -- may not be installed)
+// ---------------------------------------------------------------------------
+
+let RNDateTimePicker: React.ComponentType<any> | null = null
+try {
+  RNDateTimePicker = require('@react-native-community/datetimepicker').default
+} catch {
+  // @react-native-community/datetimepicker is not installed -- native mode
+  // will fall back to the custom CDS picker implementation.
+}
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -102,6 +121,15 @@ export interface DateTimePickerProps {
   accessibilityLabel?: string
   /** Test ID for testing */
   testID?: string
+  /**
+   * When true and on a native platform (iOS/Android), uses
+   * `@react-native-community/datetimepicker` for the platform-native picker
+   * experience. Falls back to the custom CDS implementation when the library
+   * is not installed or when running on web.
+   *
+   * @default false
+   */
+  native?: boolean
 }
 
 // ---------------------------------------------------------------------------
@@ -460,7 +488,10 @@ export const DateTimePicker = React.memo(function DateTimePicker({
   errorText,
   accessibilityLabel,
   testID,
+  native = false,
 }: DateTimePickerProps) {
+  // Resolve whether the native picker is actually usable
+  const useNativePicker = native && Platform.OS !== 'web' && RNDateTimePicker != null
   // ---- State ---------------------------------------------------------------
   const [isOpen, setIsOpen] = useState(false)
   const [viewDate, setViewDate] = useState(() => value ?? new Date())
@@ -568,6 +599,40 @@ export const DateTimePicker = React.memo(function DateTimePicker({
     onChange?.(result)
     closePicker()
   }, [mode, pendingDate, pendingHour, pendingMinute, onChange, closePicker])
+
+  // Handler for the native @react-native-community/datetimepicker onChange
+  const handleNativeChange = useCallback(
+    (_event: any, selectedDate?: Date) => {
+      if (Platform.OS === 'android') {
+        // Android fires onChange on confirm AND dismiss; dismiss sends undefined
+        closePicker()
+        if (selectedDate) {
+          onChange?.(selectedDate)
+        }
+      } else {
+        // iOS: update pending date inline (user confirms with the Confirm button)
+        if (selectedDate) {
+          setPendingDate(selectedDate)
+          setPendingHour(selectedDate.getHours())
+          setPendingMinute(selectedDate.getMinutes())
+        }
+      }
+    },
+    [closePicker, onChange],
+  )
+
+  // Confirm handler specifically for the native iOS picker (wraps pending state)
+  const handleNativeConfirm = useCallback(() => {
+    const result = new Date(
+      pendingDate.getFullYear(),
+      pendingDate.getMonth(),
+      pendingDate.getDate(),
+      pendingHour,
+      pendingMinute,
+    )
+    onChange?.(result)
+    closePicker()
+  }, [pendingDate, pendingHour, pendingMinute, onChange, closePicker])
 
   const handleDayPress = useCallback(
     (day: Date) => {
@@ -705,231 +770,296 @@ export const DateTimePicker = React.memo(function DateTimePicker({
             // Prevent press-through to the backdrop
             onPress={() => {}}
           >
-            {/* ---- Calendar section ---- */}
-            {(mode === 'date' || mode === 'datetime') && (
-              <View style={{ padding: 16 }}>
-                {/* Month/year navigation */}
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginBottom: 16,
-                  }}
-                >
-                  <RNPressable
-                    onPress={() => navigateMonth(-1)}
-                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                    accessibilityRole="button"
-                    accessibilityLabel="Previous month"
-                    style={{
-                      width: 40,
-                      height: 40,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderRadius: 20,
-                    }}
-                  >
-                    <ChevronLeft color={primitive.slate700} />
-                  </RNPressable>
-
-                  <TamaguiText
-                    fontSize={16}
-                    fontWeight="600"
-                    lineHeight={20}
-                    color={primitive.slate900}
-                  >
-                    {MONTH_NAMES[viewDate.getMonth()]} {viewDate.getFullYear()}
-                  </TamaguiText>
-
-                  <RNPressable
-                    onPress={() => navigateMonth(1)}
-                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                    accessibilityRole="button"
-                    accessibilityLabel="Next month"
-                    style={{
-                      width: 40,
-                      height: 40,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderRadius: 20,
-                    }}
-                  >
-                    <ChevronRight color={primitive.slate700} />
-                  </RNPressable>
+            {/* ---- Native picker path ---- */}
+            {useNativePicker && RNDateTimePicker ? (
+              <>
+                <View style={{ padding: 16, alignItems: 'center' }}>
+                  <RNDateTimePicker
+                    value={pendingDate}
+                    mode={mode === 'datetime' ? 'datetime' : mode}
+                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                    minimumDate={minDate}
+                    maximumDate={maxDate}
+                    onChange={handleNativeChange}
+                    accentColor={primitive.blurple700}
+                    textColor={primitive.slate900}
+                    testID={testID ? `${testID}-native-picker` : undefined}
+                  />
                 </View>
 
-                {/* Day-of-week headers */}
-                <View style={{ flexDirection: 'row' }}>
-                  {DAYS_OF_WEEK.map((day, i) => (
-                    <View
-                      key={`header-${i}`}
+                {/* iOS needs explicit confirm/cancel since display="spinner" is inline */}
+                {Platform.OS === 'ios' && (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'flex-end',
+                      gap: 8,
+                      padding: 16,
+                      borderTopWidth: 1,
+                      borderTopColor: primitive.gray200,
+                    }}
+                  >
+                    <RNPressable
+                      onPress={closePicker}
+                      accessibilityRole="button"
+                      accessibilityLabel="Cancel"
                       style={{
-                        flex: 1,
-                        height: DAY_CELL_SIZE,
-                        alignItems: 'center',
-                        justifyContent: 'center',
+                        paddingHorizontal: 16,
+                        paddingVertical: 8,
+                        borderRadius: TRIGGER_RADIUS,
                       }}
                     >
-                      <TamaguiText
-                        fontSize={12}
-                        fontWeight="500"
-                        color={primitive.gray500}
-                        textAlign="center"
-                      >
-                        {day}
+                      <TamaguiText fontSize={14} fontWeight="500" color={primitive.slate700}>
+                        Cancel
                       </TamaguiText>
-                    </View>
-                  ))}
-                </View>
-
-                {/* Calendar grid -- 6 rows x 7 columns */}
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                  {calendarGrid.map((cell, idx) => {
-                    if (!cell) {
-                      return (
-                        <View
-                          key={`empty-${idx}`}
-                          style={{ width: `${100 / 7}%`, height: DAY_CELL_SIZE }}
-                        />
-                      )
-                    }
-
-                    const isSelected = isSameDay(cell, pendingDate)
-                    const isTodayCell = isToday(cell)
-                    const inRange = isDateInRange(cell, minDate, maxDate)
-
-                    return (
-                      <View
-                        key={`day-${cell.getDate()}-${idx}`}
-                        style={{ width: `${100 / 7}%`, height: DAY_CELL_SIZE, alignItems: 'center', justifyContent: 'center' }}
+                    </RNPressable>
+                    <RNPressable
+                      onPress={handleNativeConfirm}
+                      accessibilityRole="button"
+                      accessibilityLabel="Confirm selection"
+                      style={{
+                        paddingHorizontal: 16,
+                        paddingVertical: 8,
+                        borderRadius: TRIGGER_RADIUS,
+                        backgroundColor: primitive.blurple700,
+                      }}
+                    >
+                      <TamaguiText fontSize={14} fontWeight="500" color={primitive.white}>
+                        Confirm
+                      </TamaguiText>
+                    </RNPressable>
+                  </View>
+                )}
+              </>
+            ) : (
+              <>
+                {/* ---- Custom CDS calendar section ---- */}
+                {(mode === 'date' || mode === 'datetime') && (
+                  <View style={{ padding: 16 }}>
+                    {/* Month/year navigation */}
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        marginBottom: 16,
+                      }}
+                    >
+                      <RNPressable
+                        onPress={() => navigateMonth(-1)}
+                        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                        accessibilityRole="button"
+                        accessibilityLabel="Previous month"
+                        style={{
+                          width: 40,
+                          height: 40,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          borderRadius: 20,
+                        }}
                       >
-                        <RNPressable
-                          onPress={() => handleDayPress(cell)}
-                          disabled={!inRange}
-                          accessibilityRole="button"
-                          accessibilityLabel={`${MONTH_NAMES[cell.getMonth()]} ${cell.getDate()}, ${cell.getFullYear()}`}
-                          accessibilityState={{ selected: isSelected, disabled: !inRange }}
+                        <ChevronLeft color={primitive.slate700} />
+                      </RNPressable>
+
+                      <TamaguiText
+                        fontSize={16}
+                        fontWeight="600"
+                        lineHeight={20}
+                        color={primitive.slate900}
+                      >
+                        {MONTH_NAMES[viewDate.getMonth()]} {viewDate.getFullYear()}
+                      </TamaguiText>
+
+                      <RNPressable
+                        onPress={() => navigateMonth(1)}
+                        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                        accessibilityRole="button"
+                        accessibilityLabel="Next month"
+                        style={{
+                          width: 40,
+                          height: 40,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          borderRadius: 20,
+                        }}
+                      >
+                        <ChevronRight color={primitive.slate700} />
+                      </RNPressable>
+                    </View>
+
+                    {/* Day-of-week headers */}
+                    <View style={{ flexDirection: 'row' }}>
+                      {DAYS_OF_WEEK.map((day, i) => (
+                        <View
+                          key={`header-${i}`}
                           style={{
-                            width: DAY_CELL_SIZE,
+                            flex: 1,
                             height: DAY_CELL_SIZE,
-                            borderRadius: DAY_CELL_SIZE / 2,
                             alignItems: 'center',
                             justifyContent: 'center',
-                            backgroundColor: isSelected
-                              ? primitive.blurple700
-                              : isTodayCell
-                                ? primitive.blurple50
-                                : 'transparent',
-                            opacity: inRange ? 1 : DISABLED_OPACITY,
                           }}
                         >
                           <TamaguiText
-                            fontSize={14}
-                            fontWeight={isSelected || isTodayCell ? '600' : '400'}
-                            color={
-                              isSelected
-                                ? primitive.white
-                                : isTodayCell
-                                  ? primitive.blurple700
-                                  : primitive.slate900
-                            }
+                            fontSize={12}
+                            fontWeight="500"
+                            color={primitive.gray500}
+                            textAlign="center"
                           >
-                            {cell.getDate()}
+                            {day}
                           </TamaguiText>
-                        </RNPressable>
-                      </View>
-                    )
-                  })}
+                        </View>
+                      ))}
+                    </View>
+
+                    {/* Calendar grid -- 6 rows x 7 columns */}
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                      {calendarGrid.map((cell, idx) => {
+                        if (!cell) {
+                          return (
+                            <View
+                              key={`empty-${idx}`}
+                              style={{ width: `${100 / 7}%`, height: DAY_CELL_SIZE }}
+                            />
+                          )
+                        }
+
+                        const isSelected = isSameDay(cell, pendingDate)
+                        const isTodayCell = isToday(cell)
+                        const inRange = isDateInRange(cell, minDate, maxDate)
+
+                        return (
+                          <View
+                            key={`day-${cell.getDate()}-${idx}`}
+                            style={{ width: `${100 / 7}%`, height: DAY_CELL_SIZE, alignItems: 'center', justifyContent: 'center' }}
+                          >
+                            <RNPressable
+                              onPress={() => handleDayPress(cell)}
+                              disabled={!inRange}
+                              accessibilityRole="button"
+                              accessibilityLabel={`${MONTH_NAMES[cell.getMonth()]} ${cell.getDate()}, ${cell.getFullYear()}`}
+                              accessibilityState={{ selected: isSelected, disabled: !inRange }}
+                              style={{
+                                width: DAY_CELL_SIZE,
+                                height: DAY_CELL_SIZE,
+                                borderRadius: DAY_CELL_SIZE / 2,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                backgroundColor: isSelected
+                                  ? primitive.blurple700
+                                  : isTodayCell
+                                    ? primitive.blurple50
+                                    : 'transparent',
+                                opacity: inRange ? 1 : DISABLED_OPACITY,
+                              }}
+                            >
+                              <TamaguiText
+                                fontSize={14}
+                                fontWeight={isSelected || isTodayCell ? '600' : '400'}
+                                color={
+                                  isSelected
+                                    ? primitive.white
+                                    : isTodayCell
+                                      ? primitive.blurple700
+                                      : primitive.slate900
+                                }
+                              >
+                                {cell.getDate()}
+                              </TamaguiText>
+                            </RNPressable>
+                          </View>
+                        )
+                      })}
+                    </View>
+                  </View>
+                )}
+
+                {/* ---- Divider between date and time ---- */}
+                {mode === 'datetime' && (
+                  <View
+                    style={{
+                      height: 1,
+                      backgroundColor: primitive.gray200,
+                      marginHorizontal: 16,
+                    }}
+                  />
+                )}
+
+                {/* ---- Time section ---- */}
+                {(mode === 'time' || mode === 'datetime') && (
+                  <View
+                    style={{
+                      padding: 16,
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      gap: 24,
+                      alignItems: 'flex-start',
+                    }}
+                  >
+                    <TimeWheel
+                      values={hours}
+                      selectedValue={pendingHour}
+                      onSelect={setPendingHour}
+                      label="Hour"
+                      testID={testID ? `${testID}-hour-wheel` : undefined}
+                    />
+                    <View style={{ justifyContent: 'center', paddingTop: 28, height: 40 * 5 + 28 }}>
+                      <TamaguiText fontSize={24} fontWeight="600" color={primitive.slate700}>
+                        :
+                      </TamaguiText>
+                    </View>
+                    <TimeWheel
+                      values={minutes}
+                      selectedValue={pendingMinute}
+                      onSelect={setPendingMinute}
+                      label="Minute"
+                      testID={testID ? `${testID}-minute-wheel` : undefined}
+                    />
+                  </View>
+                )}
+
+                {/* ---- Action row ---- */}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'flex-end',
+                    gap: 8,
+                    padding: 16,
+                    borderTopWidth: 1,
+                    borderTopColor: primitive.gray200,
+                  }}
+                >
+                  <RNPressable
+                    onPress={closePicker}
+                    accessibilityRole="button"
+                    accessibilityLabel="Cancel"
+                    style={{
+                      paddingHorizontal: 16,
+                      paddingVertical: 8,
+                      borderRadius: TRIGGER_RADIUS,
+                    }}
+                  >
+                    <TamaguiText fontSize={14} fontWeight="500" color={primitive.slate700}>
+                      Cancel
+                    </TamaguiText>
+                  </RNPressable>
+                  <RNPressable
+                    onPress={handleConfirm}
+                    accessibilityRole="button"
+                    accessibilityLabel="Confirm selection"
+                    style={{
+                      paddingHorizontal: 16,
+                      paddingVertical: 8,
+                      borderRadius: TRIGGER_RADIUS,
+                      backgroundColor: primitive.blurple700,
+                    }}
+                  >
+                    <TamaguiText fontSize={14} fontWeight="500" color={primitive.white}>
+                      Confirm
+                    </TamaguiText>
+                  </RNPressable>
                 </View>
-              </View>
+              </>
             )}
-
-            {/* ---- Divider between date and time ---- */}
-            {mode === 'datetime' && (
-              <View
-                style={{
-                  height: 1,
-                  backgroundColor: primitive.gray200,
-                  marginHorizontal: 16,
-                }}
-              />
-            )}
-
-            {/* ---- Time section ---- */}
-            {(mode === 'time' || mode === 'datetime') && (
-              <View
-                style={{
-                  padding: 16,
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  gap: 24,
-                  alignItems: 'flex-start',
-                }}
-              >
-                <TimeWheel
-                  values={hours}
-                  selectedValue={pendingHour}
-                  onSelect={setPendingHour}
-                  label="Hour"
-                  testID={testID ? `${testID}-hour-wheel` : undefined}
-                />
-                <View style={{ justifyContent: 'center', paddingTop: 28, height: 40 * 5 + 28 }}>
-                  <TamaguiText fontSize={24} fontWeight="600" color={primitive.slate700}>
-                    :
-                  </TamaguiText>
-                </View>
-                <TimeWheel
-                  values={minutes}
-                  selectedValue={pendingMinute}
-                  onSelect={setPendingMinute}
-                  label="Minute"
-                  testID={testID ? `${testID}-minute-wheel` : undefined}
-                />
-              </View>
-            )}
-
-            {/* ---- Action row ---- */}
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                gap: 8,
-                padding: 16,
-                borderTopWidth: 1,
-                borderTopColor: primitive.gray200,
-              }}
-            >
-              <RNPressable
-                onPress={closePicker}
-                accessibilityRole="button"
-                accessibilityLabel="Cancel"
-                style={{
-                  paddingHorizontal: 16,
-                  paddingVertical: 8,
-                  borderRadius: TRIGGER_RADIUS,
-                }}
-              >
-                <TamaguiText fontSize={14} fontWeight="500" color={primitive.slate700}>
-                  Cancel
-                </TamaguiText>
-              </RNPressable>
-              <RNPressable
-                onPress={handleConfirm}
-                accessibilityRole="button"
-                accessibilityLabel="Confirm selection"
-                style={{
-                  paddingHorizontal: 16,
-                  paddingVertical: 8,
-                  borderRadius: TRIGGER_RADIUS,
-                  backgroundColor: primitive.blurple700,
-                }}
-              >
-                <TamaguiText fontSize={14} fontWeight="500" color={primitive.white}>
-                  Confirm
-                </TamaguiText>
-              </RNPressable>
-            </View>
           </RNPressable>
         </RNPressable>
       </Modal>

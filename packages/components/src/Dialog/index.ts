@@ -1,1 +1,1 @@
-export { Dialog, type DialogProps } from './Dialog'
+export { Dialog, type DialogProps, type DialogNativeButton } from './Dialog'

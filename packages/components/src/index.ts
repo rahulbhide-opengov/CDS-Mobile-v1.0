@@ -27,7 +27,7 @@ export { Tab, type TabProps } from './Tab'
 export { TabBar, type TabBarProps } from './Tab'
 
 // Feedback
-export { Dialog, type DialogProps } from './Dialog'
+export { Dialog, type DialogProps, type DialogNativeButton } from './Dialog'
 export { Snackbar, type SnackbarProps } from './Snackbar'
 export { Backdrop, type BackdropProps } from './Backdrop'
 export { Tooltip, type TooltipProps } from './Tooltip'
@@ -140,3 +140,6 @@ export { OTPInput, type OTPInputProps, type OTPInputSize, type OTPInputVariant }
 export { StatusBar, type StatusBarProps } from './StatusBar'
 export { SafeAreaWrapper, type SafeAreaWrapperProps } from './SafeArea'
 export { KeyboardAvoidingWrapper, type KeyboardAvoidingWrapperProps } from './KeyboardAvoiding'
+
+// Hooks
+export { useHaptics, type HapticsAPI } from './hooks'

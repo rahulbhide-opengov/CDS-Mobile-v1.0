@@ -9,6 +9,7 @@ import {
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, HStack, Pressable } from '@opengov/cds-primitives'
 import { colors } from '@opengov/cds-tokens'
+import { useHaptics } from '../hooks'
 
 // ---------------------------------------------------------------------------
 // Variant color mapping
@@ -66,6 +67,7 @@ export function Snackbar({
   onDismiss,
   action,
 }: SnackbarProps) {
+  const haptics = useHaptics()
   const screenHeight = Dimensions.get('window').height
   // Offset: slides 100px off the visible edge
   const offScreenOffset = position === 'top' ? -100 : 100
@@ -127,6 +129,12 @@ export function Snackbar({
 
   useEffect(() => {
     if (visible) {
+      // Trigger variant-appropriate haptic feedback on appearance
+      if (variant === 'success') haptics.notification('success')
+      else if (variant === 'error') haptics.notification('error')
+      else if (variant === 'warning') haptics.notification('warning')
+      // info and default: no haptic
+
       animateIn()
 
       // Auto-dismiss timer
@@ -144,7 +152,7 @@ export function Snackbar({
     }
 
     return clearTimer
-  }, [visible, duration, animateIn, animateOut, clearTimer, onDismiss])
+  }, [visible, duration, animateIn, animateOut, clearTimer, onDismiss, variant, haptics])
 
   // ---- Swipe-to-dismiss PanResponder --------------------------------------
 
