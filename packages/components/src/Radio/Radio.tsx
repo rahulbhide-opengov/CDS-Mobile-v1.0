@@ -1,36 +1,77 @@
 import React, { useCallback, useMemo, useRef } from 'react'
 import { Animated, Easing } from 'react-native'
-import { styled, Stack, type GetProps } from '@tamagui/core'
-import { Text, HStack } from '@opengov/cds-primitives'
+import { styled, Stack, Text as TamaguiText, type GetProps } from '@tamagui/core'
+import { HStack } from '@opengov/cds-primitives'
 import { primitive } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
-// Constants
+// Constants -- Figma CDS 37, node 1479:32615
 // ---------------------------------------------------------------------------
 
 /** WCAG 2.5.8 minimum touch target */
 const TOUCH_TARGET = 44
 
+/**
+ * Figma exact color values for Radio states
+ *
+ * text/primary:   rgba(0,0,0,0.87)
+ * text/secondary: rgba(0,0,0,0.6)
+ * text/disabled:  rgba(0,0,0,0.38)
+ * error/main:     #D33423 (primitive.red600)
+ * action/active:  blurple700 (#4B3FFF)
+ */
+const FIGMA_TEXT_PRIMARY = 'rgba(0,0,0,0.87)'
+const FIGMA_TEXT_DISABLED = 'rgba(0,0,0,0.38)'
+const FIGMA_BORDER_UNSELECTED = 'rgba(0,0,0,0.6)'
+
 // ---------------------------------------------------------------------------
-// Size maps (Figma CDS 37 -- Mobile 390 column)
+// Size maps (Figma CDS 37 -- Radio circle dimensions)
+//
+// Figma spec: Radio circle is a 24px container with SVG icon inside.
+// We provide sm/md/lg but the Figma default is 24px (lg in old code, now md).
 // ---------------------------------------------------------------------------
 
 const SIZE_MAP = {
-  sm: { outer: 18, inner: 8, borderWidth: 2 },
-  md: { outer: 20, inner: 10, borderWidth: 2 },
-  lg: { outer: 24, inner: 12, borderWidth: 2 },
+  sm: { outer: 20, inner: 10, borderWidth: 2 },
+  md: { outer: 24, inner: 12, borderWidth: 2 },
+  lg: { outer: 28, inner: 14, borderWidth: 2 },
 } as const
 
 type RadioSize = keyof typeof SIZE_MAP
 
 // ---------------------------------------------------------------------------
-// Styled primitives
+// RadioContainer -- Figma layout: row, gap 8px, py=8px, px=0
 // ---------------------------------------------------------------------------
 
 const RadioContainer = styled(HStack, {
   name: 'RadioContainer',
   alignItems: 'center',
-  gap: '$2',
+  gap: 8,
+  paddingVertical: 8,
+  paddingHorizontal: 0,
+})
+
+// ---------------------------------------------------------------------------
+// RadioLabel -- Figma: Inputs/Label lg = DM Sans Regular, 16px, lh 20px,
+//               letterSpacing 0.15px
+// ---------------------------------------------------------------------------
+
+const RadioLabel = styled(TamaguiText, {
+  name: 'RadioLabel',
+  fontFamily: '$body',
+  fontSize: 16,
+  fontWeight: '400',
+  lineHeight: 20,
+  letterSpacing: 0.15,
+  color: FIGMA_TEXT_PRIMARY,
+
+  variants: {
+    disabled: {
+      true: {
+        color: FIGMA_TEXT_DISABLED,
+      },
+    },
+  } as const,
 })
 
 // ---------------------------------------------------------------------------
@@ -42,9 +83,9 @@ export interface RadioProps {
   selected?: boolean
   /** Called when the user selects this radio */
   onSelect?: () => void
-  /** Visual size */
+  /** Visual size. Defaults to "md" (24px circle per Figma). */
   size?: RadioSize
-  /** Disabled state */
+  /** Disabled state -- 38% opacity on entire row per Figma */
   disabled?: boolean
   /** Optional label displayed beside the radio */
   label?: string
@@ -108,7 +149,9 @@ export function Radio({
   }, [disabled, onSelect])
 
   // ---- Derived styles -------------------------------------------------------
-  const borderColor = selected ? primitive.blurple700 : primitive.slate700
+  // Figma: selected = blurple700 filled circle; unselected = outlined circle
+  // in standard border color (text/secondary = rgba(0,0,0,0.6))
+  const borderColor = selected ? primitive.blurple700 : FIGMA_BORDER_UNSELECTED
   const dotColor = primitive.blurple700
 
   // hitSlop expands the touch target to 44px without changing visual size
@@ -159,13 +202,12 @@ export function Radio({
       </Animated.View>
 
       {label != null && (
-        <Text
-          variant="body2"
-          color={disabled ? '$colorDisabled' : '$color'}
+        <RadioLabel
+          disabled={disabled || undefined}
           onPress={disabled ? undefined : handlePress}
         >
           {label}
-        </Text>
+        </RadioLabel>
       )}
     </RadioContainer>
   )

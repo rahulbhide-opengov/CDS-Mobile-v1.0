@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import { styled, Stack, type GetProps } from '@tamagui/core'
 import { Text, HStack, Pressable } from '@opengov/cds-primitives'
-import { primitive, inputSizes, inputStyles, cornerRadius } from '@opengov/cds-tokens'
+import { primitive, inputSizes, inputStyles, cornerRadius, semantic } from '@opengov/cds-tokens'
 
 // ---------------------------------------------------------------------------
 // Size presets (Figma Mobile 390 column -- same as TextField)
@@ -27,8 +27,16 @@ const VALUE_STYLE_MAP = {
   lg: inputStyles.valueLg.mobile,
 } as const
 
-// Border radius: Figma corner radius "small" = 4px
-const SEARCH_BORDER_RADIUS = cornerRadius.small // 4
+// Border radius: Figma PLC Mobile node 966:41393 -- pill / capsule shape
+// Figma class: rounded-[100px], NOT the standard 4px cornerRadius.small
+const SEARCH_BORDER_RADIUS = 100
+
+// Figma semantic border colors for SearchBar
+const BORDER_IDLE = semantic.outlinedEnabledBorder       // rgba(0,0,0,0.12)
+const BORDER_FOCUSED = primitive.blurple700              // #4B3FFF
+
+// Figma text/disabled for placeholder
+const PLACEHOLDER_COLOR = semantic.textDisabled           // rgba(0,0,0,0.38)
 
 // Cancel button width for animated slide-in
 const CANCEL_WIDTH = 64
@@ -230,17 +238,19 @@ export function SearchBar({
 
   // ---- Derived animated styles --------------------------------------------
 
+  // Figma: idle border = outlined/enabledBorder rgba(0,0,0,0.12), focus = blurple700
   const animatedBorderColor = focusBorderAnim.interpolate({
     inputRange: [0, 1],
     outputRange: [
-      variant === 'outlined' ? primitive.slate700 : 'transparent', // Figma: default=slate700
-      primitive.blurple700, // Figma: focused=blurple700
+      BORDER_IDLE,       // rgba(0,0,0,0.12) -- Figma outlined/enabledBorder
+      BORDER_FOCUSED,    // #4B3FFF -- Figma blurple700
     ],
   })
 
+  // Outlined always has a 1px border; focused gets 2px. Filled has no border.
   const animatedBorderWidth = focusBorderAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: [variant === 'outlined' ? 1 : 0, 2],
+    outputRange: [1, 2],
   })
 
   const cancelWidth = cancelAnim.interpolate({
@@ -263,9 +273,10 @@ export function SearchBar({
           styles.inputContainer,
           {
             minHeight,
-            backgroundColor: variant === 'filled' ? primitive.neutral100 : 'transparent',
+            // Figma: SearchBar background is always white
+            backgroundColor: primitive.white,
             borderColor: animatedBorderColor,
-            borderWidth: variant === 'outlined' ? animatedBorderWidth : 0,
+            borderWidth: animatedBorderWidth,
             borderRadius: SEARCH_BORDER_RADIUS,
           },
         ]}
@@ -287,7 +298,7 @@ export function SearchBar({
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
-          placeholderTextColor={primitive.neutral400}
+          placeholderTextColor={PLACEHOLDER_COLOR} // Figma text/disabled rgba(0,0,0,0.38)
           onFocus={handleFocus}
           onBlur={handleBlur}
           autoFocus={autoFocus}
@@ -353,7 +364,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
+    paddingHorizontal: 16, // Figma: px=16
+    paddingVertical: 4,    // Figma: py=4
     gap: 8,
   },
   input: {
