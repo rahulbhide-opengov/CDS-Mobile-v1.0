@@ -136,8 +136,8 @@ function CdsRadio({ selected = false, disabled = false, label = 'Option' }: {
 }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8, opacity: disabled ? 0.38 : 1, fontFamily: FONT, minHeight: 44, paddingTop: 8, paddingBottom: 8 }}>
-      <div style={{ width: 24, height: 24, borderRadius: 12, flexShrink: 0, border: `2px solid ${selected ? C.blurple700 : C.radioUnselected}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        {selected && <div style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: C.blurple700 }} />}
+      <div style={{ width: 24, height: 24, borderRadius: '50%', flexShrink: 0, border: `2px solid ${selected ? C.blurple700 : C.radioUnselected}`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxSizing: 'border-box' }}>
+        {selected && <div style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: C.blurple700 }} />}
       </div>
       <span style={{ fontSize: 16, fontWeight: 400, lineHeight: '20px', letterSpacing: 0.15, color: disabled ? C.text38 : C.text87 }}>{label}</span>
     </div>
