@@ -679,20 +679,221 @@ export const Overview: StoryObj = {
       {/* ================================================================= */}
       <DocSection
         title="ButtonGroup"
-        description="Horizontal or vertical grouping of related button actions."
+        description="Toolbar container for grouped buttons. 3 visual variants (Contained, Outlined, Text), 7 color themes, horizontal/vertical orientations, and compact/default/loose spacing modes. Uses accessibilityRole='toolbar' per WAI-ARIA."
       >
-        <div style={{
-          border: '1px dashed rgba(0,0,0,0.12)',
-          borderRadius: 12,
-          padding: '32px 24px',
-          textAlign: 'center',
-          color: 'rgba(0,0,0,0.38)',
-          fontFamily: FONT,
-          fontSize: 14,
-          lineHeight: '22px',
-        }}>
-          <div style={{ fontSize: 24, marginBottom: 8 }}>&#9203;</div>
-          ButtonGroup Figma spec pending — documentation will be added when the Figma link is provided.
+        {/* --- 3 Variants --- */}
+        <DocShowcase
+          label="3 Variants"
+          preview={
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+              {/* Contained */}
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 600, color: 'rgba(0,0,0,0.38)', marginBottom: 10, textTransform: 'uppercase', letterSpacing: 0.5, fontFamily: MONO }}>
+                  Contained
+                </div>
+                <div style={{ display: 'inline-flex', borderRadius: 4, overflow: 'hidden' }}>
+                  {['One', 'Two', 'Three'].map((lbl, i) => (
+                    <button key={lbl} style={{ height: 44, padding: '0 16px', backgroundColor: '#4B3FFF', color: '#FFFFFF', border: 'none', borderRight: i < 2 ? '1px solid #19009B' : 'none', fontFamily: FONT, fontSize: 14, fontWeight: 500, cursor: 'pointer', borderRadius: i === 0 ? '4px 0 0 4px' : i === 2 ? '0 4px 4px 0' : 0 }}>{lbl}</button>
+                  ))}
+                </div>
+              </div>
+              {/* Outlined */}
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 600, color: 'rgba(0,0,0,0.38)', marginBottom: 10, textTransform: 'uppercase', letterSpacing: 0.5, fontFamily: MONO }}>
+                  Outlined
+                </div>
+                <div style={{ display: 'inline-flex' }}>
+                  {['One', 'Two', 'Three'].map((lbl, i) => (
+                    <button key={lbl} style={{ height: 44, padding: '0 16px', backgroundColor: 'transparent', color: '#4B3FFF', border: '1px solid #4B3FFF', borderRight: i < 2 ? 'none' : '1px solid #4B3FFF', fontFamily: FONT, fontSize: 14, fontWeight: 500, cursor: 'pointer', borderRadius: i === 0 ? '4px 0 0 4px' : i === 2 ? '0 4px 4px 0' : 0 }}>{lbl}</button>
+                  ))}
+                </div>
+              </div>
+              {/* Text */}
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 600, color: 'rgba(0,0,0,0.38)', marginBottom: 10, textTransform: 'uppercase', letterSpacing: 0.5, fontFamily: MONO }}>
+                  Text
+                </div>
+                <div style={{ display: 'inline-flex', gap: 0 }}>
+                  {['One', 'Two', 'Three'].map((lbl, i) => (
+                    <button key={lbl} style={{ height: 44, padding: '0 16px', backgroundColor: 'transparent', color: '#4B3FFF', border: 'none', fontFamily: FONT, fontSize: 14, fontWeight: 500, cursor: 'pointer', borderRadius: i === 0 ? '4px 0 0 4px' : i === 2 ? '0 4px 4px 0' : 0 }}>{lbl}</button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          }
+          code={`import { ButtonGroup, Button } from '@opengov/cds-components'
+
+{/* Contained (default) */}
+<ButtonGroup variant="contained" color="primary">
+  <Button>One</Button>
+  <Button>Two</Button>
+  <Button>Three</Button>
+</ButtonGroup>
+
+{/* Outlined */}
+<ButtonGroup variant="outlined" color="primary">
+  <Button>One</Button>
+  <Button>Two</Button>
+  <Button>Three</Button>
+</ButtonGroup>
+
+{/* Text */}
+<ButtonGroup variant="text" color="primary">
+  <Button>One</Button>
+  <Button>Two</Button>
+  <Button>Three</Button>
+</ButtonGroup>`}
+          specs={
+            <SpecTable
+              headers={['Variant', 'Background', 'Text Color', 'Border', 'Divider']}
+              rows={[
+                ['Contained', 'Color fill (e.g. blurple700)', 'white', 'none', '1px divider between buttons'],
+                ['Outlined',  'transparent', 'Color (e.g. blurple700)', '1px solid color', 'Shared borders (no doubling)'],
+                ['Text',      'transparent', 'Color (e.g. blurple700)', 'none', 'none'],
+              ]}
+            />
+          }
+        />
+
+        {/* --- 7 Color options (Contained variant) --- */}
+        <DocShowcase
+          label="7 Colors (Contained)"
+          preview={
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              {[
+                { name: 'Primary',   bg: '#4B3FFF', div: '#19009B' },
+                { name: 'Secondary', bg: '#546574', div: '#374958' },
+                { name: 'Error',     bg: '#D33423', div: '#B12525' },
+                { name: 'Warning',   bg: '#885604', div: '#6E4503' },
+                { name: 'Info',      bg: '#0E6F7F', div: '#0A5A66' },
+                { name: 'Success',   bg: '#037730', div: '#026226' },
+                { name: 'Inherit',   bg: '#F2F2F2', div: '#DDDEDE', text: 'rgba(0,0,0,0.87)' },
+              ].map(({ name, bg, div, text }) => (
+                <div key={name} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <span style={{ fontSize: 11, fontWeight: 600, color: 'rgba(0,0,0,0.38)', textTransform: 'uppercase', letterSpacing: 0.5, fontFamily: MONO, minWidth: 80 }}>{name}</span>
+                  <div style={{ display: 'inline-flex', borderRadius: 4, overflow: 'hidden' }}>
+                    {['A', 'B', 'C'].map((lbl, i) => (
+                      <button key={lbl} style={{ height: 36, padding: '0 12px', backgroundColor: bg, color: text || '#FFFFFF', border: 'none', borderRight: i < 2 ? `1px solid ${div}` : 'none', fontFamily: FONT, fontSize: 13, fontWeight: 500, cursor: 'pointer', borderRadius: i === 0 ? '4px 0 0 4px' : i === 2 ? '0 4px 4px 0' : 0 }}>{lbl}</button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          }
+          code={`<ButtonGroup variant="contained" color="primary">...</ButtonGroup>
+<ButtonGroup variant="contained" color="secondary">...</ButtonGroup>
+<ButtonGroup variant="contained" color="error">...</ButtonGroup>
+<ButtonGroup variant="contained" color="warning">...</ButtonGroup>
+<ButtonGroup variant="contained" color="info">...</ButtonGroup>
+<ButtonGroup variant="contained" color="success">...</ButtonGroup>
+<ButtonGroup variant="contained" color="inherit">...</ButtonGroup>`}
+          specs={
+            <SpecTable
+              headers={['Color', 'Contained Bg', 'Outlined/Text Color', 'Divider Color']}
+              rows={[
+                ['primary',   'blurple700 (#4B3FFF)', 'blurple700', 'blurple900 (#19009B)'],
+                ['secondary', 'slate700 (#546574)',   'slate700',   'slate900'],
+                ['error',     'red600 (#D33423)',     'red600',     'red700 (#B12525)'],
+                ['warning',   'yellow700 (#885604)',  'yellow700',  'yellow800'],
+                ['info',      'cerulean700 (#0E6F7F)','cerulean700','cerulean800'],
+                ['success',   'green700 (#037730)',   'green700',   'green800'],
+                ['inherit',   'gray100 (#F2F2F2)',    'rgba(0,0,0,0.87)', 'gray300 (#DDDEDE)'],
+              ]}
+            />
+          }
+        />
+
+        {/* --- Orientations --- */}
+        <DocShowcase
+          label="Horizontal vs Vertical"
+          preview={
+            <div style={{ display: 'flex', gap: 48, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+              {/* Horizontal */}
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 600, color: 'rgba(0,0,0,0.38)', marginBottom: 10, textTransform: 'uppercase', letterSpacing: 0.5, fontFamily: MONO }}>
+                  Horizontal
+                </div>
+                <div style={{ display: 'inline-flex', borderRadius: 4, overflow: 'hidden' }}>
+                  {['Left', 'Center', 'Right'].map((lbl, i) => (
+                    <button key={lbl} style={{ height: 44, padding: '0 16px', backgroundColor: '#4B3FFF', color: '#FFFFFF', border: 'none', borderRight: i < 2 ? '1px solid #19009B' : 'none', fontFamily: FONT, fontSize: 14, fontWeight: 500, cursor: 'pointer', borderRadius: i === 0 ? '4px 0 0 4px' : i === 2 ? '0 4px 4px 0' : 0 }}>{lbl}</button>
+                  ))}
+                </div>
+              </div>
+              {/* Vertical */}
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 600, color: 'rgba(0,0,0,0.38)', marginBottom: 10, textTransform: 'uppercase', letterSpacing: 0.5, fontFamily: MONO }}>
+                  Vertical
+                </div>
+                <div style={{ display: 'inline-flex', flexDirection: 'column', borderRadius: 4, overflow: 'hidden' }}>
+                  {['Top', 'Middle', 'Bottom'].map((lbl, i) => (
+                    <button key={lbl} style={{ height: 44, padding: '0 24px', backgroundColor: '#4B3FFF', color: '#FFFFFF', border: 'none', borderBottom: i < 2 ? '1px solid #19009B' : 'none', fontFamily: FONT, fontSize: 14, fontWeight: 500, cursor: 'pointer', borderRadius: i === 0 ? '4px 4px 0 0' : i === 2 ? '0 0 4px 4px' : 0 }}>{lbl}</button>
+                  ))}
+                </div>
+              </div>
+              {/* Vertical Outlined */}
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 600, color: 'rgba(0,0,0,0.38)', marginBottom: 10, textTransform: 'uppercase', letterSpacing: 0.5, fontFamily: MONO }}>
+                  Vertical Outlined
+                </div>
+                <div style={{ display: 'inline-flex', flexDirection: 'column' }}>
+                  {['Top', 'Middle', 'Bottom'].map((lbl, i) => (
+                    <button key={lbl} style={{ height: 44, padding: '0 24px', backgroundColor: 'transparent', color: '#4B3FFF', border: '1px solid #4B3FFF', borderBottom: i < 2 ? 'none' : '1px solid #4B3FFF', fontFamily: FONT, fontSize: 14, fontWeight: 500, cursor: 'pointer', borderRadius: i === 0 ? '4px 4px 0 0' : i === 2 ? '0 0 4px 4px' : 0 }}>{lbl}</button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          }
+          code={`{/* Horizontal (default) */}
+<ButtonGroup orientation="horizontal" variant="contained">
+  <Button>Left</Button>
+  <Button>Center</Button>
+  <Button>Right</Button>
+</ButtonGroup>
+
+{/* Vertical */}
+<ButtonGroup orientation="vertical" variant="contained">
+  <Button>Top</Button>
+  <Button>Middle</Button>
+  <Button>Bottom</Button>
+</ButtonGroup>
+
+{/* Vertical Outlined */}
+<ButtonGroup orientation="vertical" variant="outlined">
+  <Button>Top</Button>
+  <Button>Middle</Button>
+  <Button>Bottom</Button>
+</ButtonGroup>`}
+          specs={
+            <SpecTable
+              headers={['Property', 'Value', 'Notes']}
+              rows={[
+                ['orientation', "'horizontal' | 'vertical'", 'Default: horizontal'],
+                ['spacing (compact)', '0px gap', 'Connected borders, radius merging'],
+                ['spacing (default)', '8px gap', 'Standard separation'],
+                ['spacing (loose)', '16px gap', 'Wide separation'],
+                ['Border radius', '4px on outer corners', 'Inner corners: 0px in compact mode'],
+                ['Compact contained', 'No individual borders', '1px divider between buttons'],
+                ['Compact outlined', '1px border', 'Inner borders collapsed (no doubling)'],
+                ['Compact text', 'No borders', 'Buttons flush against each other'],
+                ['ARIA role', 'toolbar', 'WAI-ARIA toolbar pattern'],
+              ]}
+            />
+          }
+        />
+
+        {/* --- ButtonGroup API Reference --- */}
+        <div style={{ marginTop: 24 }}>
+          <h3 style={{ fontSize: 16, fontWeight: 600, margin: '0 0 16px 0', fontFamily: FONT, color: 'rgba(0,0,0,0.87)' }}>
+            ButtonGroup
+          </h3>
+          <PropsTable props={[
+            { name: 'variant',     type: "'contained' | 'outlined' | 'text'",  default: "'contained'", description: 'Visual style applied to all child buttons' },
+            { name: 'color',       type: "'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success' | 'inherit'", default: "'primary'", description: 'Color theme applied to all child buttons' },
+            { name: 'orientation', type: "'horizontal' | 'vertical'",          default: "'horizontal'", description: 'Layout direction of the button group' },
+            { name: 'spacing',     type: "'compact' | 'default' | 'loose'",   default: "'compact'", description: 'Gap between buttons (0/8/16px)' },
+            { name: 'children',    type: 'ReactNode',                                                  description: 'Button components to group', required: true },
+            { name: 'testID',      type: 'string',                                                     description: 'Test identifier for automation' },
+          ]} />
         </div>
       </DocSection>
 
